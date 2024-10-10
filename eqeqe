@@ -1,4 +1,6 @@
-
+if not _G.Key or _G.Key and _G.Key.z8b9c3 ~= "I LOVE APHIXE" then -- Check if users didnt try exec by any other source
+	return
+end
 
 if _G.Injected and _G.Injected == true then
 	return  
