@@ -80,7 +80,7 @@ do
 	Flags["AutoShoot"] = false
 end
 
-local Version = "1.0.0"
+local Version = "1.0.1"
 
 local function getS(service)
 	if cloneref then
@@ -1158,9 +1158,9 @@ local function esp(player)
 	local highlight = INew("Highlight")
 
 	highlight.Name = "ohkay"
-	highlight.FillTransparency = 0.8
+	highlight.FillTransparency = 0.7
 	highlight.OutlineTransparency = 0
-	highlight.FillColor = Color3.fromRGB(128, 0, 128) 
+	highlight.FillColor = Color3.fromRGB(170, 85, 235) 
 	highlight.OutlineColor = Color3.fromRGB(255, 255, 255) 
 
 	bgui.Name = "wl"
@@ -1635,9 +1635,9 @@ do -- // Loops
 	end);
 end
 
-local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4</font> | 1.0.0"})
+local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "made by @odennnie"})
+local aimbot = window:Page({Name = "patch notes ("..Version..") : you no longer need auto shoot to silent aim\n".."AutoShoot Is now toggeable"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
@@ -1650,43 +1650,43 @@ local label = aimbot_section:Label(
 
 --local label2 = aimbot_section:Label({Name = "Q To Lock On", Offset = 16})
 
-local toggle = aimbot_section:Toggle({Name = "Aimlock FOV", Default = true, 
+local toggle = aimbot_section:Toggle({Name = "{ Aimlock FOV }", Default = true, 
 	Callback = function(val) 
 		Circle.Visible = val 
 		createNotification("Aimlock FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "Aimlock FOV Size", Default = 250, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Aimlock FOV Size }", Default = 250, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
 	Callback = function(val) 
 		Circle.Radius = val 
 	end})
 
-local slider = aimbot_section:Slider({Name = "Aimlock Prediction", Default = _G.Prediction, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = _G.Prediction, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["Prediction"] = val
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "Triggerbot FOV", Default = true, 
+local toggle = aimbot_section:Toggle({Name = "{ Triggerbot FOV }", Default = true, 
 	Callback = function(val) 
 		Circle2.Visible = val 
 		createNotification("Triggerbot FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "Triggerbot FOV Size", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
 	Callback = function(val) 
 		Circle2.Radius = val
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Auto Reset", Default = _G.AutoReset, 
+local toggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = _G.AutoReset, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
 		createNotification("Auto Reset : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local toggle = aimbot_section2:Toggle({Name = "Glock Launch Boost", Default = _G.GlockBoost, 
+local toggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = _G.GlockBoost, 
 	Callback = function(val) 
 		Flags["GlockBoost"] = val 
 		createNotification("Glock Launch Boost : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section2:Slider({Name = "Glock Boost Slider", Default = _G.GlockBoostAmount, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
+local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = _G.GlockBoostAmount, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
@@ -1702,21 +1702,21 @@ local slider = aimbot_section2:Slider({Name = "Glock Boost Slider", Default = _G
 --local slider = aimbot_section:Slider({Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
 --local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
-local slider = aimbot_section:Slider({Name = "Smoothness", Default = _G.Smoothing, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "{ Smoothing }", Default = _G.Smoothing, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["Smoothing"] = val 
 	end})
-local slider = aimbot_section:Slider({Name = "Air Shot Scale", Default = _G.AirShotScale , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = _G.AirShotScale , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
-local toggle = aimbot_section:Toggle({Name = "Blatant Aimlock (tracks airshots)", Default = _G.Blatant, 
+local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = _G.Blatant, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
 		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
 	end})
 
-local slider = aimbot_section:Slider({Name = "Y Offset", Default = _G.YOffset, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = _G.YOffset, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
@@ -1725,25 +1725,25 @@ local label = aimbot_section2:Label(
 	{Name = "Spawn GamePass", Offset = 16}
 )
 
-local toggle = aimbot_section2:Toggle({Name = "Spawn Gamepass", Default = _G.SpawnGamePass, 
+local toggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = _G.SpawnGamePass, 
 	Callback = function(val) 
 		Flags["SpawnGamepass"] = val
 		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local button = aimbot_section2:Button({Name = "Back Spawn", 
+local button = aimbot_section2:Button({Name = "{ Back Spawn }", 
 	Callback = function() 
 		Flags["SpawnLocation"] = "back"
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 
 	end})
 
-local button = aimbot_section2:Button({Name = "Front Spawn", 
+local button = aimbot_section2:Button({Name = "{ Front Spawn }", 
 	Callback = function() 
 		Flags["SpawnLocation"] = "front"
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Infinite Stamina", Default = _G.InfiniteStamina, 
+local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = _G.InfiniteStamina, 
 	Callback = function(val) 
 		Flags["InfiniteStamina"] = val
 		if getChar() and getChar():FindFirstChildOfClass("Humanoid") then
@@ -1752,7 +1752,7 @@ local toggle = aimbot_section2:Toggle({Name = "Infinite Stamina", Default = _G.I
 		end
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Anti Ground Hit", Default = _G.AntiGroundHit, 
+local toggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = _G.AntiGroundHit, 
 	Callback = function(val) 
 		Flags["AntiGroundHit"] = val
 		createNotification("Anti Ground Hit : "..tostring(val), 4, RGB(170, 85, 235))		
@@ -1769,19 +1769,19 @@ local label = aimbot_section:Label(
 	{Name = "TRIGGERBOT", Offset = 16}
 )
 
-local toggle = aimbot_section:Toggle({Name = "AutoShoot", Default = false, 
+local toggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true, 
 	Callback = function(val) 
 		Flags["AutoShoot"] = val
 		createNotification("AutoShoot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "Triggerbot", Default = _G.Triggerbot, 
+local toggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = _G.Triggerbot, 
 	Callback = function(val) 
 		Flags["Triggerbot"] = val
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "KO Check", Default = _G.KOCheck, 
+local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = _G.KOCheck, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
 		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
