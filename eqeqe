@@ -77,7 +77,7 @@ do
 	Flags["ESPHealth"] = false
 	Flags["ESPVest"] = false
 	Flags["SpawnLocation"] = "Front"
-	Flags["AutoShoot"] = false
+	Flags["AutoShoot"] = true
 end
 
 local Version = "1.0.1"
