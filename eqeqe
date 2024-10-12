@@ -77,6 +77,7 @@ do
 	Flags["ESPHealth"] = false
 	Flags["ESPVest"] = false
 	Flags["SpawnLocation"] = "Front"
+	Flags["AutoShoot"] = false
 end
 
 local Version = "1.0.0"
@@ -1398,17 +1399,20 @@ local function ShootAnim()
 end
 
 local function Lol()
-	while Flags["Firing"] do
-		local weaponType = ShootAnim();
-		if (weaponType == "Glock") then
-			task.wait(Flags["GlockAutoShootDelay"]);
-		elseif (weaponType == "Shotty") then
-			task.wait(Flags["ShottyAutoShootDelay"]);
+	if Flags["AutoShoot"] then
+		while Flags["Firing"] do
+			local weaponType = ShootAnim();
+			if (weaponType == "Glock") then
+				task.wait(Flags["GlockAutoShootDelay"]);
+			elseif (weaponType == "Shotty") then
+				task.wait(Flags["ShottyAutoShootDelay"]);
+			end
+			Loops["Stepped"]:Wait()
 		end
-		Loops["Stepped"]:Wait()
+	elseif not Flags["AutoShoot"] then
+		ShootAnim();
 	end
 end
-
 
 function AutoShootTriggerbot()
 	while true do
@@ -1565,7 +1569,7 @@ end
 
 do
 	LocalPlayer.CharacterAdded:Connect(function(char)
-		task.wait(.7)
+		task.wait(.2)
 		loadspawn(char);
 		Inf()
 		AntiGroundHit();
@@ -1764,6 +1768,12 @@ local toggle = aimbot_section2:Toggle({Name = "Chat Spy", Default = false,
 local label = aimbot_section:Label(
 	{Name = "TRIGGERBOT", Offset = 16}
 )
+
+local toggle = aimbot_section:Toggle({Name = "AutoShoot", Default = false, 
+	Callback = function(val) 
+		Flags["AutoShoot"] = val
+		createNotification("AutoShoot : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
 
 local toggle = aimbot_section:Toggle({Name = "Triggerbot", Default = _G.Triggerbot, 
 	Callback = function(val) 
