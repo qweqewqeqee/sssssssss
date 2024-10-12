@@ -1,5 +1,8 @@
+game:GetService('TestService'):Message("Hello world")
+
+
 if not _G.Key or _G.Key and _G.Key.z8b9c3 ~= "I LOVE APHIXE" then -- Check if users didnt try exec by any other source
-	return
+	--return
 end
 
 if _G.Injected and _G.Injected == true then
@@ -7,6 +10,8 @@ if _G.Injected and _G.Injected == true then
 end 
 
 _G.Injected = true;
+
+
 
 Drawing = Drawing;
 
@@ -70,6 +75,7 @@ do
 	Flags["ESPName"] = false
 	Flags["ESPHealth"] = false
 	Flags["ESPVest"] = false
+	Flags["SpawnLocation"] = "Front"
 end
 
 local Version = "1.0.0"
@@ -95,173 +101,9 @@ local CoreGui 				=		getS("CoreGui");
 local TestService 		= 		getS("TestService");
 local TeleportService   = 		getS("TeleportService");
 
-local TweenService = getS("TweenService")
 local Camera = workspace.CurrentCamera
 
-local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local blurEffect = Instance.new("BlurEffect")
-blurEffect.Size = 0 
-blurEffect.Parent = Camera
-
-local blurTweenInfo = TweenInfo.new(
-	3, 
-	Enum.EasingStyle.Quad,
-	Enum.EasingDirection.Out
-)
-
-local blurGoal = { Size = 24 }
-local blurTween = TweenService:Create(blurEffect, blurTweenInfo, blurGoal)
-blurTween:Play() 
-
-local Converted = {
-	["_ScreenGui"] = Instance.new("ScreenGui"),
-	["_TextLabel"] = Instance.new("TextLabel"),
-	["_TextLabel1"] = Instance.new("TextLabel"),
-	["_TextLabel2"] = Instance.new("TextLabel"),
-	["_TextLabel3"] = Instance.new("TextLabel"),
-	["_TextLabel4"] = Instance.new("TextLabel"),
-}
-
-Converted["_ScreenGui"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Converted["_ScreenGui"].Parent = playerGui 
-
-Converted["_TextLabel"].Font = Enum.Font.IndieFlower
-Converted["_TextLabel"].TextColor3 = Color3.fromRGB(255, 255, 255)
-Converted["_TextLabel"].TextSize = 18
-Converted["_TextLabel"].Text = "Loading Library . . ."
-Converted["_TextLabel"].FontFace.Weight = Enum.FontWeight.Bold
-Converted["_TextLabel"].BackgroundTransparency = 1
-Converted["_TextLabel"].Position = UDim2.new(0.31, 0,0.532, 0)
-Converted["_TextLabel"].Size = UDim2.new(0, 200, 0, 50)
-Converted["_TextLabel"].TextTransparency = 1 
-Converted["_TextLabel"].Parent = Converted["_ScreenGui"]
-
-Converted["_TextLabel3"].Font = Enum.Font.IndieFlower
-Converted["_TextLabel3"].TextColor3 = Color3.fromRGB(255, 255, 255)
-Converted["_TextLabel3"].TextSize = 18
-Converted["_TextLabel3"].Text = "Loading Toggles' . . ."
-Converted["_TextLabel3"].FontFace.Weight = Enum.FontWeight.Bold
-Converted["_TextLabel3"].BackgroundTransparency = 1
-Converted["_TextLabel3"].Position = UDim2.new(0.356, 0,0.59, 0) 
-Converted["_TextLabel3"].Size = UDim2.new(0, 131, 0, 50)
-Converted["_TextLabel3"].TextTransparency = 1 
-Converted["_TextLabel3"].Parent = Converted["_ScreenGui"]
-
-Converted["_TextLabel4"].Font = Enum.Font.GrenzeGotisch
-Converted["_TextLabel4"].LineHeight = 3
-Converted["_TextLabel4"].Text = "(1/2)"
-Converted["_TextLabel4"].TextColor3 = Color3.fromRGB(255, 255, 255)
-Converted["_TextLabel4"].TextSize = 20
-Converted["_TextLabel4"].TextTruncate = Enum.TextTruncate.SplitWord
-Converted["_TextLabel4"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Converted["_TextLabel4"].BackgroundTransparency = 1
-Converted["_TextLabel4"].BorderColor3 = Color3.fromRGB(0, 0, 0)
-Converted["_TextLabel4"].BorderSizePixel = 0
-Converted["_TextLabel4"].Position = UDim2.new(0.409, 0,0.554, 0)
-Converted["_TextLabel4"].Size = UDim2.new(0, 131, 0, 50)
-Converted["_TextLabel4"].TextTransparency = 1 
-Converted["_TextLabel4"].Parent = Converted["_ScreenGui"]
-
-Converted["_TextLabel1"].Font = Enum.Font.IndieFlower
-Converted["_TextLabel1"].Text = "prison scripts .mp4"
-Converted["_TextLabel1"].TextColor3 = Color3.fromRGB(231, 231, 231)
-Converted["_TextLabel1"].TextSize = 40
-Converted["_TextLabel1"].BackgroundTransparency = 1
-Converted["_TextLabel1"].Position = UDim2.new(0.398, 0,0.355, 0)
-Converted["_TextLabel1"].Size = UDim2.new(0, 267, 0, 137)
-Converted["_TextLabel1"].TextTransparency = 1 
-Converted["_TextLabel1"].Parent = Converted["_ScreenGui"]
-
-Converted["_TextLabel2"].Font = Enum.Font.Kalam
-Converted["_TextLabel2"].Text = "( 1.0.0 )"
-Converted["_TextLabel2"].TextColor3 = Color3.fromRGB(250, 250, 250)
-Converted["_TextLabel2"].TextSize = 30
-Converted["_TextLabel2"].TextWrapped = true
-Converted["_TextLabel2"].BackgroundTransparency = 1
-Converted["_TextLabel2"].Position = UDim2.new(0.301, 0,0.469, 0)
-Converted["_TextLabel2"].Size = UDim2.new(0, 644, 0, 50)
-Converted["_TextLabel2"].TextTransparency = 1 
-Converted["_TextLabel2"].Parent = Converted["_ScreenGui"]
-
-local function fadeInLabel(label, duration)
-	local goal = { TextTransparency = 0 } 
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	local tween = TweenService:Create(label, tweenInfo, goal)
-	tween:Play()
-end
-
-
-local function simulateLoading(label, duration)
-	local count = 0
-	local loadingText = "(1/2)"
-
-	while true do
-		label.Text = loadingText .. string.rep(".", count)
-
-		count = count + 1
-		if count > 3 then
-			count = 0
-			if loadingText == "(1/2)" then
-				loadingText = "(2/2)"
-			else
-				break
-			end
-		end
-
-		wait(duration) 
-	end
-end
-
-local function fadeOutLabel(label, duration)
-	local goal = { TextTransparency = 1 } 
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	local tween = TweenService:Create(label, tweenInfo, goal)
-	tween:Play()
-	return tween
-end
-
-local function skibidi()
-	for _, labels in pairs(Converted) do
-		labels:Destroy();
-	end;
-
-	blurEffect:Destroy();
-
-	wait(3)
-end
-
-
-wait(1.5)
-fadeInLabel(Converted["_TextLabel2"], 1) 
-wait(2) 
-fadeInLabel(Converted["_TextLabel1"], 1) 
-wait(2) 
-fadeInLabel(Converted["_TextLabel"], 1) 
-wait(2)
-fadeInLabel(Converted["_TextLabel3"], 1)
-wait(.5)
-fadeInLabel(Converted["_TextLabel4"], 1)
-
-simulateLoading(Converted["_TextLabel4"], .5)
-
-wait(2)
-
-fadeOutLabel(Converted["_TextLabel"], 1)
-fadeOutLabel(Converted["_TextLabel1"], 1)
-fadeOutLabel(Converted["_TextLabel2"], 1)
-fadeOutLabel(Converted["_TextLabel3"], 1)
-fadeOutLabel(Converted["_TextLabel4"], 1)
-
-local blurTweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-local blurGoal = { Size = 0 }
-local blurTween = TweenService:Create(blurEffect, blurTweenInfo, blurGoal)
-blurTween:Play()
-
-
-
-task.wait(1)
-skibidi()
 
 Loops["RenderStepped"] = RunService.RenderStepped;
 Loops["Heartbeat"] = RunService.Heartbeat;
@@ -312,7 +154,6 @@ local BackSpawns = {
 	B2 = CFNew(-522, 4, 119)
 }
 
-local spawnLocation = "Front"
 
 -- // Notif System
 
@@ -1323,45 +1164,45 @@ local function esp(player)
 	tlab.ZIndex = 10
 	tlab.Font = Enum.Font.ArialBold
 	tlab.TextSize = 14
-    tlab.Text = ""
+	tlab.Text = ""
 	tlab.TextColor3 = Color3.fromRGB(255, 255, 255)
 	tlab.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
 	tlab.TextStrokeTransparency = 1
 
-    spawn(function()
-        while true do
-            pcall(function()
-                local playerCharacter = Players[player].Character
-                if playerCharacter and playerCharacter:FindFirstChild("Head") then
-                    bgui.Parent = playerCharacter.Head
-                    highlight.Parent = playerCharacter
-                    bgui.Adornee = Players[player].Character:FindFirstChild("Head")
+	spawn(function()
+		while true do
+			pcall(function()
+				local playerCharacter = Players[player].Character
+				if playerCharacter and playerCharacter:FindFirstChild("Head") then
+					bgui.Parent = playerCharacter.Head
+					highlight.Parent = playerCharacter
+					bgui.Adornee = Players[player].Character:FindFirstChild("Head")
 
-                    -- Reset the text label before appending text
-                    tlab.Text = ""
+					-- Reset the text label before appending text
+					tlab.Text = ""
 
-                    -- Add display name if the option is enabled
-                    if Flags["ESPName"] then
-                        tlab.Text = Players[player].DisplayName
-                    end
+					-- Add display name if the option is enabled
+					if Flags["ESPName"] then
+						tlab.Text = Players[player].DisplayName
+					end
 
-                    -- Add vest information if the option is enabled
-                    if Flags["ESPVest"] then
-                        tlab.Text = tlab.Text .. " Vested: " .. tostring(vested(Players[player]))
-                    end
+					-- Add vest information if the option is enabled
+					if Flags["ESPVest"] then
+						tlab.Text = tlab.Text .. " Vested: " .. tostring(vested(Players[player]))
+					end
 
-                    -- Add health information if the option is enabled
-                    if Flags["ESPHealth"] then
-                        local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
-                        if humanoid then
-                            tlab.Text = tlab.Text .. " Health: " .. tostring(math.floor(humanoid.Health))
-                        end
-                    end
-                end
-            end)
-            task.wait()
-        end
-    end)
+					-- Add health information if the option is enabled
+					if Flags["ESPHealth"] then
+						local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
+						if humanoid then
+							tlab.Text = tlab.Text .. " Health: " .. tostring(math.floor(humanoid.Health))
+						end
+					end
+				end
+			end)
+			task.wait()
+		end
+	end)
 end
 
 
@@ -1445,8 +1286,6 @@ local function updateCameraLock()
 					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity / Flags["Prediction"] + targetHead.Velocity  / math.huge
 					local FixedY = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
 					targetPosition = V3New(targetPosition.X, FixedY, targetPosition.Z)
-				elseif (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y > 100 then
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
 				else
 					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
 				end
@@ -1494,8 +1333,6 @@ local function ShootAnim()
 						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) 
 						local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
 						targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
-					elseif (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y > 100 then
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  /Flags["Prediction"] + targetHead.Velocity  / math.huge
 					else
 						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
 					end
@@ -1518,30 +1355,33 @@ local function ShootAnim()
 		fireCFrame = Mouse.Hit
 	end
 
-	if tostring(fires.Parent) == "Glock" then
-		if tool.Ammo.Value <= 0 then
-			return
-		end
-		if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
-			return
-		end
-		animationTrack = humanoid:LoadAnimation(fires)
-		Flags["holding"] = "Glock"
-		ShootRemote:FireServer(fireCFrame)
-		animationTrack:Play(.1,1,2)
-	elseif tostring(fires.Parent) == "Shotty" then
-		if tool.Ammo.Value <= 0 then
-			return
-		end
-		if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
-			return
-		end
-		animationTrack = humanoid:LoadAnimation(fires)
-		Flags["holding"] = "Shotty"
-		tool.ManualActivationOnly = true
-		ShootRemote:FireServer(fireCFrame)
-		animationTrack:Play(.1,1,2)
+	if tool.Ammo.Value <= 0 then
 		tool.ManualActivationOnly = false
+		return
+	end
+	if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
+		return
+	end
+
+	local ShouldLoad = true;
+	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+		if (x.Animation.AnimationId == fires.AnimationId) then
+			x:Stop(0);
+		end
+	end
+
+	tool.ManualActivationOnly = true;
+
+	animationTrack = humanoid:LoadAnimation(fires)
+	if tostring(tool) == "Glock" then
+		Flags["holding"] = "Glock"
+	elseif tostring(tool) == "Shotty" then
+		Flags["holding"] = "Shotty"
+	end
+
+	ShootRemote:FireServer(fireCFrame)
+	if (ShouldLoad) then
+		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
 	end
 	return Flags["holding"]
 end
@@ -1621,7 +1461,7 @@ end
 local function loadspawn(character)
 	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-	local normalizedLocation = spawnLocation:lower()
+	local normalizedLocation = Flags["SpawnLocation"]:lower()
 
 	local spawnTable
 	if normalizedLocation:lower() == "random" then
@@ -1632,7 +1472,7 @@ local function loadspawn(character)
 		spawnTable = BackSpawns
 	else
 		spawnTable = FrontSpawns -- Just for default
-		warn("Invalid spawn location: " .. spawnLocation)
+		warn("Invalid spawn location: " .. Flags["SpawnLocation"])
 		return
 	end
 
@@ -1800,7 +1640,7 @@ local toggle = aimbot_section:Toggle({Name = "Triggerbot FOV", Default = true,
 		Circle2.Visible = val 
 		createNotification("Triggerbot FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "Triggerbot FOV Size", Default = 70, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "Triggerbot FOV Size", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
 	Callback = function(val) 
 		Circle2.Radius = val
 	end})
@@ -1836,7 +1676,7 @@ local slider = aimbot_section:Slider({Name = "Smoothness", Default = 87, Minimum
 	Callback = function(val) 
 		Flags["Smoothing"] = val 
 	end})
-local slider = aimbot_section:Slider({Name = "Air Shot Scale", Default = 0, Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "Air Shot Scale", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
@@ -1861,14 +1701,14 @@ local toggle = aimbot_section2:Toggle({Name = "Spawn Gamepass", Default = false,
 	end})
 local button = aimbot_section2:Button({Name = "Back Spawn", 
 	Callback = function() 
-		spawnLocation = "back"
+		Flags["SpawnLocation"] = "back"
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 
 	end})
 
 local button = aimbot_section2:Button({Name = "Front Spawn", 
 	Callback = function() 
-		spawnLocation = "front"
+		Flags["SpawnLocation"] = "front"
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
@@ -1904,7 +1744,7 @@ local toggle = aimbot_section:Toggle({Name = "Triggerbot", Default = false,
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "KO Check", Default = false, 
+local toggle = aimbot_section:Toggle({Name = "KO Check", Default = true, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
 		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1944,6 +1784,9 @@ local toggle = aimbot_section:Toggle({Name = "Health", Default = false,
 local label = aimbot_section2:Label(
 	{Name = "Open Doors : X", Offset = 16}
 )
+
+
+
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
