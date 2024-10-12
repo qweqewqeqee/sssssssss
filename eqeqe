@@ -44,16 +44,17 @@ local Circle2 = Drawing_new("Circle", {Radius=50,
 }); -- Triggerbot circle
 
 local Flags = {};
+local DefaultSettings = {};
 local Loops = {};
 local Notifications = {};
 
 do
-	Flags["Prediction"] = 8.6712312831;
+	Flags["Prediction"] = 8;
 	Flags["Smoothing"] = 87;
 	Flags["KOCheck"] = true;
 	Flags["GlockAutoShootDelay"] = 0.27;
 	Flags["ShottyAutoShootDelay"] = 0.18;
-	Flags["GlockBoostAmount"] = 115;
+	Flags["GlockBoostAmount"] = 90;
 	Flags["GlockBoost"] = false
 	Flags["YOffset"] = -8.1;
 	Flags["InfiniteStamina"] = false
@@ -103,6 +104,19 @@ local TeleportService   = 		getS("TeleportService");
 
 local Camera = workspace.CurrentCamera
 
+_G.Prediction = 8
+_G.Smoothing = 87
+_G.KOCheck = true
+_G.YOffset = -7
+_G.InfiniteStamina = false
+_G.AutoReset = false
+_G.AirShotScale = 0
+_G.TriggerbotFovSize = 70
+_G.Triggerbot = false
+_G.AntiGroundHit = false
+_G.Blatant = false
+_G.SpawnGamePass = false
+_G.GlockBoostAmount = 90
 
 
 Loops["RenderStepped"] = RunService.RenderStepped;
@@ -1356,7 +1370,6 @@ local function ShootAnim()
 	end
 
 	if tool.Ammo.Value <= 0 then
-		tool.ManualActivationOnly = false
 		return
 	end
 	if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
@@ -1369,8 +1382,6 @@ local function ShootAnim()
 			x:Stop(0);
 		end
 	end
-
-	tool.ManualActivationOnly = true;
 
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
@@ -1602,6 +1613,21 @@ do -- // Loops
 
 			Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
 		end);
+		
+		task.spawn(function() -- // Aimbot
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool") then
+				local Tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
+				if tostring(Tool) == "Shotty" or tostring(Tool) == "Glock" then
+					if Tool.Ammo.Value <= 0 then
+						Tool.ManualActivationOnly = false
+					elseif Tool.Ammo.Value >= 0 then
+						Tool.ManualActivationOnly = true
+						-- cont
+					end
+				end
+			end
+		end);
+		
 	end);
 end
 
@@ -1630,7 +1656,7 @@ local slider = aimbot_section:Slider({Name = "Aimlock FOV Size", Default = 250, 
 		Circle.Radius = val 
 	end})
 
-local slider = aimbot_section:Slider({Name = "Aimlock Prediction", Default = 8, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "Aimlock Prediction", Default = _G.Prediction, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["Prediction"] = val
 	end})
@@ -1645,18 +1671,18 @@ local slider = aimbot_section:Slider({Name = "Triggerbot FOV Size", Default = 80
 		Circle2.Radius = val
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Auto Reset", Default = false, 
+local toggle = aimbot_section2:Toggle({Name = "Auto Reset", Default = _G.AutoReset, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
 		createNotification("Auto Reset : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local toggle = aimbot_section2:Toggle({Name = "Glock Launch Boost", Default = false, 
+local toggle = aimbot_section2:Toggle({Name = "Glock Launch Boost", Default = _G.GlockBoost, 
 	Callback = function(val) 
 		Flags["GlockBoost"] = val 
 		createNotification("Glock Launch Boost : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section2:Slider({Name = "Glock Boost Slider", Default = 90, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
+local slider = aimbot_section2:Slider({Name = "Glock Boost Slider", Default = _G.GlockBoostAmount, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
@@ -1672,20 +1698,21 @@ local slider = aimbot_section2:Slider({Name = "Glock Boost Slider", Default = 90
 --local slider = aimbot_section:Slider({Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
 --local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
-local slider = aimbot_section:Slider({Name = "Smoothness", Default = 87, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "Smoothness", Default = _G.Smoothing, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["Smoothing"] = val 
 	end})
-local slider = aimbot_section:Slider({Name = "Air Shot Scale", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "Air Shot Scale", Default = _G.AirShotScale , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
-local toggle = aimbot_section:Toggle({Name = "Blatant Aimlock (tracks airshots)", Default = false, 
+local toggle = aimbot_section:Toggle({Name = "Blatant Aimlock (tracks airshots)", Default = _G.Blatant, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
+		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
 	end})
 
-local slider = aimbot_section:Slider({Name = "Y Offset", Default = -7, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "Y Offset", Default = _G.YOffset, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
@@ -1694,7 +1721,7 @@ local label = aimbot_section2:Label(
 	{Name = "Spawn GamePass", Offset = 16}
 )
 
-local toggle = aimbot_section2:Toggle({Name = "Spawn Gamepass", Default = false, 
+local toggle = aimbot_section2:Toggle({Name = "Spawn Gamepass", Default = _G.SpawnGamePass, 
 	Callback = function(val) 
 		Flags["SpawnGamepass"] = val
 		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1712,7 +1739,7 @@ local button = aimbot_section2:Button({Name = "Front Spawn",
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Infinite Stamina", Default = false, 
+local toggle = aimbot_section2:Toggle({Name = "Infinite Stamina", Default = _G.InfiniteStamina, 
 	Callback = function(val) 
 		Flags["InfiniteStamina"] = val
 		if getChar() and getChar():FindFirstChildOfClass("Humanoid") then
@@ -1721,7 +1748,7 @@ local toggle = aimbot_section2:Toggle({Name = "Infinite Stamina", Default = fals
 		end
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Anti Ground Hit", Default = false, 
+local toggle = aimbot_section2:Toggle({Name = "Anti Ground Hit", Default = _G.AntiGroundHit, 
 	Callback = function(val) 
 		Flags["AntiGroundHit"] = val
 		createNotification("Anti Ground Hit : "..tostring(val), 4, RGB(170, 85, 235))		
@@ -1738,13 +1765,13 @@ local label = aimbot_section:Label(
 	{Name = "TRIGGERBOT", Offset = 16}
 )
 
-local toggle = aimbot_section:Toggle({Name = "Triggerbot", Default = false, 
+local toggle = aimbot_section:Toggle({Name = "Triggerbot", Default = _G.Triggerbot, 
 	Callback = function(val) 
 		Flags["Triggerbot"] = val
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "KO Check", Default = true, 
+local toggle = aimbot_section:Toggle({Name = "KO Check", Default = _G.KOCheck, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
 		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1784,9 +1811,6 @@ local toggle = aimbot_section:Toggle({Name = "Health", Default = false,
 local label = aimbot_section2:Label(
 	{Name = "Open Doors : X", Offset = 16}
 )
-
-
-
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
