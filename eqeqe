@@ -1740,6 +1740,12 @@ local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = _G.
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
+local toggle = aimbot_section:Toggle({Name = " { Hit Closest Part }", Default = false, 
+	Callback = function(val) 
+		Flags["ClosestPart"] = val
+		createNotification("Closest Aimlock Part : "..tostring(Flags["ClosestPart"]), 6, RGB(170, 85, 235)))
+	end})
+
 local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = _G.Blatant, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
