@@ -1375,9 +1375,13 @@ local function ShootAnim()
 			if targetHead then
 				if not Flags["Blatant"] then
 					if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) 
-						local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-						targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
+						if Flags["CameraOffset"] > 5.43 then
+							targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) 
+							local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
+							targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
+						elseif Flags["CameraOffset"] <= 5.43 then
+							targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						end
 					else
 						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
 					end
@@ -1743,13 +1747,13 @@ local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = _G.
 local toggle = aimbot_section:Toggle({Name = " { Hit Closest Part }", Default = false, 
 	Callback = function(val) 
 		Flags["ClosestPart"] = val
-		createNotification("Closest Aimlock Part : "..tostring(Flags["ClosestPart"]), 6, RGB(170, 85, 235)))
+		createNotification("Closest Aimlock Part : "..tostring(Flags["ClosestPart"]), 6, RGB(170, 85, 235))
 	end})
 
 local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = _G.Blatant, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
-		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
+		createNotification("Blatant : "..tostring(Flags["Blatant"]), 6, RGB(170, 85, 235))
 	end})
 
 local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = 0, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
