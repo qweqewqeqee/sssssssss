@@ -1624,7 +1624,7 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "note: Left Shift To Open/Close UI"})
+local aimbot = window:Page({Name = "note: Right Shift To Open/Close UI"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
