@@ -56,7 +56,7 @@ do
 	Flags["ShottyAutoShootDelay"] = 0.18;
 	Flags["GlockBoostAmount"] = 90;
 	Flags["GlockBoost"] = false
-	Flags["YOffset"] = 0;
+	Flags["YOffset"] = -5.5;
 	Flags["InfiniteStamina"] = false
 	Flags["AutoReset"] = false
 	Flags["targetPlayer"] = nil
@@ -1231,6 +1231,7 @@ local function GetClosestPart(player)
 		Head = player.Character:FindFirstChild("Head"),
 		["Left Arm"] = player.Character:FindFirstChild("Left Arm"),
 		["Right Arm"] = player.Character:FindFirstChild("Right Arm"),
+		Torso = player.Character:FindFirstChild("Torso") -- Add Torso to the body parts
 	}
 
 	for partName, part in pairs(bodyParts) do
@@ -1241,13 +1242,19 @@ local function GetClosestPart(player)
 				if distance < closestDistance then
 					closestDistance = distance
 					closestPartName = partName -- Store the name of the closest part
+
+					-- If the closest part is the torso, set closestPartName to "Head"
+					if partName == "Torso" then
+						closestPartName = "Head"
+					end
 				end
 			end
 		end
 	end
 
-	return closestPartName -- Return the name of the closest part
+	return closestPartName -- Return the name of the closest part or "Head" if torso is closest
 end
+
 
 
 local function GetHead(player)
@@ -1782,7 +1789,7 @@ local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = f
 		createNotification("Blatant : "..tostring(Flags["Blatant"]), 6, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = 0, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -5.5, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
