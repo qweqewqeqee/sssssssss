@@ -50,13 +50,13 @@ local Notifications = {};
 
 do
 	Flags["Prediction"] = 8;
-	Flags["Smoothing"] = 87;
+	Flags["Smoothing"] = 0.1;
 	Flags["KOCheck"] = true;
 	Flags["GlockAutoShootDelay"] = 0.27;
 	Flags["ShottyAutoShootDelay"] = 0.18;
 	Flags["GlockBoostAmount"] = 90;
 	Flags["GlockBoost"] = false
-	Flags["YOffset"] = -8.1;
+	Flags["YOffset"] = 0;
 	Flags["InfiniteStamina"] = false
 	Flags["AutoReset"] = false
 	Flags["targetPlayer"] = nil
@@ -78,6 +78,7 @@ do
 	Flags["ESPVest"] = false
 	Flags["SpawnLocation"] = "Front"
 	Flags["AutoShoot"] = true
+	Flags["ClosestPart"] = false
 end
 
 local Version = "1.0.1"
@@ -105,19 +106,6 @@ local TeleportService   = 		getS("TeleportService");
 
 local Camera = workspace.CurrentCamera
 
-_G.Prediction = 8
-_G.Smoothing = 87
-_G.KOCheck = true
-_G.YOffset = -7
-_G.InfiniteStamina = false
-_G.AutoReset = false
-_G.AirShotScale = 0
-_G.TriggerbotFovSize = 70
-_G.Triggerbot = false
-_G.AntiGroundHit = false
-_G.Blatant = false
-_G.SpawnGamePass = false
-_G.GlockBoostAmount = 90
 
 
 Loops["RenderStepped"] = RunService.RenderStepped;
@@ -1233,6 +1221,35 @@ local function getSmoothingValue(percentage)
 	return 1 - (percentage / 100);
 end
 
+local function GetClosestPart(player)
+	local mousePos = UserInputService:GetMouseLocation()
+	local closestPartName = nil
+	local closestDistance = math.huge  
+
+	-- R6 body parts
+	local bodyParts = {
+		Head = player.Character:FindFirstChild("Head"),
+		["Left Arm"] = player.Character:FindFirstChild("Left Arm"),
+		["Right Arm"] = player.Character:FindFirstChild("Right Arm"),
+	}
+
+	for partName, part in pairs(bodyParts) do
+		if part then
+			local partScreenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+			if onScreen then
+				local distance = (Vector2.new(partScreenPos.X, partScreenPos.Y) - mousePos).Magnitude
+				if distance < closestDistance then
+					closestDistance = distance
+					closestPartName = partName -- Store the name of the closest part
+				end
+			end
+		end
+	end
+
+	return closestPartName -- Return the name of the closest part
+end
+
+
 local function GetHead(player)
 	if (player and player.Character) then
 		return player.Character:FindFirstChild("Head");
@@ -1298,11 +1315,33 @@ local function updateCameraLock()
 		if targetHead then
 			if not Flags["Blatant"] then
 				if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity / Flags["Prediction"] + targetHead.Velocity  / math.huge
-					local FixedY = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-					targetPosition = V3New(targetPosition.X, FixedY, targetPosition.Z)
+					if Flags["ClosestPart"] then
+						local ClosestPart = GetClosestPart(Flags["targetPlayer"])
+						if ClosestPart == "Right Arm" then
+							targetPosition = (targetHead.Position + V3New(1.5, (Flags["YOffset"] / 10), 0))
+						elseif ClosestPart == "Left Arm" then
+							targetPosition = (targetHead.Position + V3New(-1.5, (Flags["YOffset"] / 10), 0))
+						elseif ClosestPart == "Head" then
+							targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0))
+						end
+					else
+						targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0))
+						local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
+						targetPosition = V3New(targetPosition.X, FixedY2, targetPosition.Z)
+					end
 				else
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+					if Flags["ClosestPart"] then
+						local ClosestPart = GetClosestPart(Flags["targetPlayer"])
+						if ClosestPart == "Right Arm" then
+							targetPosition = (targetHead.Position + V3New(1.5, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						elseif ClosestPart == "Left Arm" then
+							targetPosition = (targetHead.Position + V3New(-1.5, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						elseif ClosestPart == "Head" then
+							targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						end
+					else
+						targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+					end 
 				end
 			elseif Flags["Blatant"] then
 				targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1345,11 +1384,33 @@ local function ShootAnim()
 			if targetHead then
 				if not Flags["Blatant"] then
 					if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) 
-						local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-						targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
+						if Flags["ClosestPart"] then
+							local ClosestPart = GetClosestPart(Flags["targetPlayer"])
+							if ClosestPart == "Right Arm" then
+								targetPosition2 = (targetHead.Position + V3New(1.5, (Flags["YOffset"] / 10), 0))
+							elseif ClosestPart == "Left Arm" then
+								targetPosition2 = (targetHead.Position + V3New(-1.5, (Flags["YOffset"] / 10), 0))
+							elseif ClosestPart == "Head" then
+								targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0))
+							end
+						else
+							targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0))
+							local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
+							targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
+						end
 					else
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						if Flags["ClosestPart"] then
+							local ClosestPart = GetClosestPart(Flags["targetPlayer"])
+							if ClosestPart == "Right Arm" then
+								targetPosition2 = (targetHead.Position + V3New(1.5, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+							elseif ClosestPart == "Left Arm" then
+								targetPosition2 = (targetHead.Position + V3New(-1.5, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+							elseif ClosestPart == "Head" then
+								targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+							end
+						else
+							targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+						end 
 					end
 				elseif Flags["Blatant"] then
 					targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1617,7 +1678,7 @@ do -- // Loops
 
 			Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
 		end);
-		
+
 		task.spawn(function() -- // Aimbot
 			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool") then
 				local Tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -1631,13 +1692,13 @@ do -- // Loops
 				end
 			end
 		end);
-		
+
 	end);
 end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "note: Left Shift To Open/Close UI"})
+local aimbot = window:Page({Name = "note: Right Shift To Open/Close UI"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
@@ -1660,7 +1721,7 @@ local slider = aimbot_section:Slider({Name = "{ Aimlock FOV Size }", Default = 2
 		Circle.Radius = val 
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = _G.Prediction, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = 8, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["Prediction"] = val
 	end})
@@ -1675,18 +1736,18 @@ local slider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default 
 		Circle2.Radius = val
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = _G.AutoReset, 
+local toggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
 		createNotification("Auto Reset : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local toggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = _G.GlockBoost, 
+local toggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = false, 
 	Callback = function(val) 
 		Flags["GlockBoost"] = val 
 		createNotification("Glock Launch Boost : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = _G.GlockBoostAmount, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
+local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = 90, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
@@ -1702,21 +1763,26 @@ local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default 
 --local slider = aimbot_section:Slider({Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
 --local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
-local slider = aimbot_section:Slider({Name = "{ Smoothing }", Default = _G.Smoothing, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "{ Smoothing }", Default = 0.1, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["Smoothing"] = val 
 	end})
-local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = _G.AirShotScale , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
-local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = _G.Blatant, 
+local toggle = aimbot_section:Toggle({Name = " { Silent Aim Closest Part }", Default = false, 
+	Callback = function(val) 
+		Flags["ClosestPart"] = val
+		createNotification("Blatant : "..tostring(Flags["ClosestPart"]), 6, RGB(170, 85, 235))
+	end})
+local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = false, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
-		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
+		createNotification("Blatant : "..tostring(Flags["Blatant"]), 6, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = _G.YOffset, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = 0, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
@@ -1725,7 +1791,7 @@ local label = aimbot_section2:Label(
 	{Name = "Spawn GamePass", Offset = 16}
 )
 
-local toggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = _G.SpawnGamePass, 
+local toggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = false, 
 	Callback = function(val) 
 		Flags["SpawnGamepass"] = val
 		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1743,7 +1809,7 @@ local button = aimbot_section2:Button({Name = "{ Front Spawn }",
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = _G.InfiniteStamina, 
+local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = false, 
 	Callback = function(val) 
 		Flags["InfiniteStamina"] = val
 		if getChar() and getChar():FindFirstChildOfClass("Humanoid") then
@@ -1752,7 +1818,7 @@ local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = 
 		end
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = _G.AntiGroundHit, 
+local toggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
 	Callback = function(val) 
 		Flags["AntiGroundHit"] = val
 		createNotification("Anti Ground Hit : "..tostring(val), 4, RGB(170, 85, 235))		
@@ -1775,13 +1841,13 @@ local toggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true,
 		createNotification("AutoShoot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = _G.Triggerbot, 
+local toggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = false, 
 	Callback = function(val) 
 		Flags["Triggerbot"] = val
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = _G.KOCheck, 
+local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
 		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
