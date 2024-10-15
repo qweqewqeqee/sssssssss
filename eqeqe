@@ -112,15 +112,8 @@ local AdminStuff = {
 		return loadstring(game:HttpGet("https://git.aphixe.lol/oden/prisoncheatsmp4/raw/branch/main/ohkayyy"))()
 	end,
 }
-local DefaultChatSystemChatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents");
-local sayMessageRequest 		  = DefaultChatSystemChatEvents:WaitForChild("SayMessageRequest")
-local OnMessageDoneFiltering 	  = DefaultChatSystemChatEvents:WaitForChild("OnMessageDoneFiltering");
-
-
 
 local Camera = workspace.CurrentCamera
-
-
 
 Loops["RenderStepped"] = RunService.RenderStepped;
 Loops["Heartbeat"] = RunService.Heartbeat;
@@ -129,7 +122,7 @@ Loops["Stepped"] = RunService.Stepped;
 local ShootRemote       = ReplicatedStorage.Fire;
 local Camera, camera    = game.Workspace.CurrentCamera, game.Workspace.CurrentCamera;
 local LocalPlayer       = Players.LocalPlayer;
-local getChar 			   = function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
+local getChar 			= function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
 local Mouse             = LocalPlayer:GetMouse();
 
 local CFNew = CFrame.new
