@@ -1847,7 +1847,7 @@ local response    = request({
 
 local function findPlayer(plr)
 	for i, v in ipairs(Players:GetPlayers()) do
-		if string.find(v.Name:lower(), v:lower()) or string.find(v.DisplayName:lower(), v:lower()) then
+		if string.find(v.Name:lower(), plr:lower()) or string.find(v.DisplayName:lower(), plr:lower()) then
 			return v
 		end
 	end
