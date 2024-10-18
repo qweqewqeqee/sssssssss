@@ -107,7 +107,7 @@ local TeleportService   = 		getS("TeleportService");
 local AdminStuff = {
 	Filtering = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering");
 	sayMessage =ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"),
-	
+
 	GetAdmin = function()
 		return loadstring(game:HttpGet("https://git.aphixe.lol/oden/prisoncheatsmp4/raw/branch/main/ohkayyy"))()
 	end,
@@ -1094,6 +1094,39 @@ do
 end
 -- // Main
 
+local function isTargetOnScreen(targetPlayer : Player)
+	local targetCharacter = targetPlayer.Character
+	if not targetCharacter or not targetCharacter:FindFirstChild("HumanoidRootPart") then
+		return false 
+	end
+
+	local targetPos, onScreen = Camera:WorldToViewportPoint(targetCharacter.HumanoidRootPart.Position)
+
+	if not onScreen then
+		return false
+	end
+
+	local rayOrigin = Camera.CFrame.Position
+	local direction = (targetCharacter.HumanoidRootPart.Position - rayOrigin).Unit
+	local ray = Ray.new(rayOrigin, direction * 1000) 
+	local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {Camera, LocalPlayer.Character})
+
+	if hitPart and hitPart:IsDescendantOf(targetCharacter) then
+		return true 
+	else
+		return false 
+	end
+end
+
+local function ForceFieldCheck(targetPlayer : Player)
+	local targetCharacter = targetPlayer.Character
+	
+	if targetPlayer.Character:FindFirstChildOfClass("ForceField") then
+		return true
+	else
+		return false
+	end
+end
 
 function Inf()
 	if Flags["InfiniteStamina"] then
@@ -1118,7 +1151,7 @@ function Inf()
 end
 
 
-local function vested(player)
+local function vested(player : Player)
 	if player.Character:FindFirstChild("BulletResist") then
 		return true
 	else
@@ -1126,7 +1159,7 @@ local function vested(player)
 	end
 end
 
-local function KOed(player) 
+local function KOed(player : Player) 
 	if player.Character:FindFirstChild("KO") or player.Character:FindFirstChildOfClass("Humanoid").Health == 0 then
 		return true
 	else
@@ -1188,20 +1221,16 @@ local function esp(player)
 					highlight.Parent = playerCharacter
 					bgui.Adornee = Players[player].Character:FindFirstChild("Head")
 
-					-- Reset the text label before appending text
 					tlab.Text = ""
 
-					-- Add display name if the option is enabled
 					if Flags["ESPName"] then
 						tlab.Text = Players[player].DisplayName
 					end
 
-					-- Add vest information if the option is enabled
 					if Flags["ESPVest"] then
 						tlab.Text = tlab.Text .. " Vested: " .. tostring(vested(Players[player]))
 					end
 
-					-- Add health information if the option is enabled
 					if Flags["ESPHealth"] then
 						local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
 						if humanoid then
@@ -1228,7 +1257,7 @@ local function getSmoothingValue(percentage)
 	return 1 - (percentage / 100);
 end
 
-local function GetHead(player)
+local function GetHead(player : Player)
 	if (player and player.Character) then
 		return player.Character:FindFirstChild("Head");
 	end
@@ -1416,10 +1445,11 @@ function AutoShootTriggerbot()
 			pcall(function()
 				local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 				local inRadius, screenPosition, distance = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle2.Radius)
-				if inRadius and getChar():FindFirstChild("Glock") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+			
+				if inRadius and not ForceFieldCheck(Flags["targetPlayer"]) and isTargetOnScreen(Flags["targetPlayer"]) and getChar():FindFirstChild("Glock") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
 					ShootAnim()
 					Delay_1 = Flags["GlockAutoShootDelay"];
-				elseif inRadius and getChar():FindFirstChild("Shotty") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+				elseif inRadius and not ForceFieldCheck(Flags["targetPlayer"]) and isTargetOnScreen(Flags["targetPlayer"]) and getChar():FindFirstChild("Shotty") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
 					ShootAnim()
 					Delay_1 = Flags["ShottyAutoShootDelay"];
 				else
@@ -1505,6 +1535,8 @@ local function AntiGroundHit()
 		end
 	end)
 end
+
+
 
 coroutine.wrap(AutoShootTriggerbot)()
 
@@ -1612,7 +1644,7 @@ do -- // Loops
 
 			Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
 		end);
-		
+
 		task.spawn(function() -- // Aimbot
 			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool") then
 				local Tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -1626,13 +1658,13 @@ do -- // Loops
 				end
 			end
 		end);
-		
+
 	end);
 end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "note: Right Shift To Open/Close UI"})
+local aimbot = window:Page({Name = "note: Triggerbot Fixed \n".."RightShift to Open/Close UI."})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
@@ -1819,7 +1851,7 @@ local label = aimbot_section2:Label(
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
-
+--[[
 local response    = request({
 	Url     = Webhook_URL,
 	Method  = "POST",
@@ -1843,7 +1875,7 @@ local response    = request({
 		}}
 	})
 })
-
+--]]
 
 local function findPlayer(plr)
 	for i, v in ipairs(Players:GetPlayers()) do
@@ -1855,11 +1887,11 @@ end
 
 AdminStuff.Filtering.OnClientEvent:Connect(function(messageData)
 	local Admins = AdminStuff.GetAdmin();
-	
+
 	local fromSpeaker = messageData.FromSpeaker;
 	local message = messageData.Message;
 	local speaker = Players:FindFirstChild(fromSpeaker);
-	
+
 	if speaker then
 		if table.find(Admins, speaker.Name) then
 			local args = string.split(message, " ");
