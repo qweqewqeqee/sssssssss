@@ -78,6 +78,7 @@ do
 	Flags["ESPVest"] = false
 	Flags["SpawnLocation"] = "Front"
 	Flags["AutoShoot"] = true
+	Flags["LookAt"] = false
 end
 
 local Version = "1.0.1"
@@ -115,6 +116,7 @@ local AdminStuff = {
 
 local Camera = workspace.CurrentCamera
 
+
 Loops["RenderStepped"] = RunService.RenderStepped;
 Loops["Heartbeat"] = RunService.Heartbeat;
 Loops["Stepped"] = RunService.Stepped;
@@ -124,6 +126,9 @@ local Camera, camera    = game.Workspace.CurrentCamera, game.Workspace.CurrentCa
 local LocalPlayer       = Players.LocalPlayer;
 local getChar 			= function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
 local Mouse             = LocalPlayer:GetMouse();
+
+local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
+local OriginalChatPos = chatFrame.ChatBarParentFrame.Position
 
 local CFNew = CFrame.new
 local V3New = Vector3.new
@@ -1120,7 +1125,7 @@ end
 
 local function ForceFieldCheck(targetPlayer : Player)
 	local targetCharacter = targetPlayer.Character
-	
+
 	if targetPlayer.Character:FindFirstChildOfClass("ForceField") then
 		return true
 	else
@@ -1339,6 +1344,14 @@ local function updateCameraLock()
 	end
 end
 
+local function CheckAired(player)
+	if (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or player.Character.Head.Velocity.Y >= 1 or (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and player.Character.Head.Velocity.Y >= 1 then
+		return true
+	else
+		return false
+	end
+end
+
 
 local function ShootAnim()
 	local character = getChar()
@@ -1361,39 +1374,33 @@ local function ShootAnim()
 	local mousePosition = UserInputService:GetMouseLocation()
 	local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-	if Flags["CameraLocked"] and Flags["targetPlayer"] then
-		if Flags["targetPlayer"]:IsA("Player") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character:FindFirstChild("HumanoidRootPart") and 
-			Flags["targetPlayer"].Character.Humanoid.Health > 0  then
-			local targetPosition2;
-			local targetHead = GetHead(Flags["targetPlayer"])
-			if targetHead then
-				if not Flags["Blatant"] then
-					if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) 
-						local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-						targetPosition2 = V3New(targetPosition2.X, FixedY2, targetPosition2.Z)
-					else
-						targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
-					end
-				elseif Flags["Blatant"] then
-					targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
-				end
-
-				local inRadius = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle.Radius)
-
-				if inRadius then
-					fireCFrame = CFNew(targetPosition2)
+	if Flags["CameraLocked"] and Flags["targetPlayer"]:IsA("Player") and Flags["targetPlayer"].Character then
+		local targetPosition2;
+		local targetHead = Flags["targetPlayer"].Character:FindFirstChild("Head")
+		if targetHead then
+			if not Flags["Blatant"] then
+				if CheckAired(Flags["targetPlayer"]) then
+					local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
+					targetPosition2 = V3New(targetHead.Position.X, FixedY2, targetHead.Position.Z)
 				else
-					fireCFrame = Mouse.Hit
+					targetPosition2 = V3New(targetHead.Position.X, targetHead.Position.Y + Flags["YOffset"] / 10, targetHead.Position.Z) + targetHead.Velocity / Flags["Prediction"]
 				end
+			elseif Flags["Blatant"] then
+				targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
 			end
-		else
-			fireCFrame = Mouse.Hit
+
+			local inRadius = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle.Radius)
+
+			if inRadius then
+				fireCFrame = CFNew(targetPosition2)
+			else
+				fireCFrame = Mouse.Hit
+			end
 		end
 	else
 		fireCFrame = Mouse.Hit
 	end
-
+	
 	if tool.Ammo.Value <= 0 then
 		return
 	end
@@ -1441,11 +1448,11 @@ end
 function AutoShootTriggerbot()
 	while true do
 		local Delay_1 = 0
-		if Flags["Triggerbot"] and Flags["CameraLocked"] and Flags["targetPlayer"] and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart and Flags["targetPlayer"].Character.Humanoid.Health ~= 0 and not Flags["targetPlayer"].Character:FindFirstChild("KO") then
+		if Flags["Triggerbot"] and Flags["CameraLocked"] then
 			pcall(function()
 				local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 				local inRadius, screenPosition, distance = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle2.Radius)
-			
+
 				if inRadius and not ForceFieldCheck(Flags["targetPlayer"]) and isTargetOnScreen(Flags["targetPlayer"]) and getChar():FindFirstChild("Glock") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
 					ShootAnim()
 					Delay_1 = Flags["GlockAutoShootDelay"];
@@ -1464,9 +1471,6 @@ function AutoShootTriggerbot()
 end
 
 function CHATSPY()
-	local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
-	local OriginalChatPos = chatFrame.ChatBarParentFrame.Position
-
 	if (Flags["ChatSpy"] == true) then
 		chatFrame.ChatChannelParentFrame.Visible = true
 		chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
@@ -1659,12 +1663,28 @@ do -- // Loops
 			end
 		end);
 
+		task.spawn(function()
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and Flags["LookAt"] and Flags["CameraLocked"] then
+				if LocalPlayer.Character.Humanoid.Health ~= 0 or not LocalPlayer.Character:FindFirstChild("KO") then
+					local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+					local inRadius, screenPosition, distance = isPlayerInRadius(Flags["targetPlayer"], screenCenter, 1000)
+
+					if inRadius and Flags["targetPlayer"] and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+
+						local LookAtPos = Vector3.new(Flags["targetPlayer"].Character.HumanoidRootPart.Position.X, LocalPlayer.Character.HumanoidRootPart.Position.Y, Flags["targetPlayer"].Character.HumanoidRootPart.Position.Z)
+
+						LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, LookAtPos), 1)
+					end
+				end
+			end
+		end)
+
 	end);
 end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "note: Triggerbot Fixed \n".."RightShift to Open/Close UI."})
+local aimbot = window:Page({Name = "note: R-Shift to Open/Close UI.".. "\n".. "Added LookAt Target (Use 3rd) | Aimlock Is Now More Accurate"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
@@ -1807,6 +1827,11 @@ local toggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = false,
 		Flags["Triggerbot"] = val
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
+local toggle = aimbot_section:Toggle({Name = "{ LookAt Target }", Default = false, 
+	Callback = function(val) 
+		Flags["LookAt"] = val
+		createNotification("Look At : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
 
 local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
 	Callback = function(val) 
@@ -1851,7 +1876,7 @@ local label = aimbot_section2:Label(
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
-
+--[[
 local response    = request({
 	Url     = Webhook_URL,
 	Method  = "POST",
@@ -1875,6 +1900,7 @@ local response    = request({
 		}}
 	})
 })
+--]]
 
 local function findPlayer(plr)
 	for i, v in ipairs(Players:GetPlayers()) do
