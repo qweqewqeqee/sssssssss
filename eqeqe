@@ -79,6 +79,7 @@ do
 	Flags["SpawnLocation"] = "Front"
 	Flags["AutoShoot"] = true
 	Flags["LookAt"] = false
+	Flags["LookAtSmoothing"] = 80
 end
 
 local Version = "1.0.1"
@@ -121,11 +122,18 @@ Loops["RenderStepped"] = RunService.RenderStepped;
 Loops["Heartbeat"] = RunService.Heartbeat;
 Loops["Stepped"] = RunService.Stepped;
 
-local ShootRemote       = ReplicatedStorage.Fire;
 local Camera, camera    = game.Workspace.CurrentCamera, game.Workspace.CurrentCamera;
 local LocalPlayer       = Players.LocalPlayer;
 local getChar 			= function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
 local Mouse             = LocalPlayer:GetMouse();
+
+function getRemote(ToolName, Pos)
+	if ToolName == "Shotty" then
+		return ReplicatedStorage.ShottyFire:FireServer(Pos)
+	elseif ToolName == "Glock" then
+		return ReplicatedStorage.GlockFire:FireServer(Pos)
+	end
+end
 
 local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
 local OriginalChatPos = chatFrame.ChatBarParentFrame.Position
@@ -1173,13 +1181,14 @@ local function KOed(player : Player)
 end
 
 local function esp(player)
+
 	if not Flags["ESP"] then
-		for _, players in ipairs(Players:GetPlayers()) do
-			if players.Character and players.Character:FindFirstChild("Head") then
-				local head = players.Character.Head
-				if head:FindFirstChild("wl") and Players[player].Character:FindFirstChild("ohkay") then
-					head:FindFirstChild("wl"):Destroy()
-					Players[player].Character:FindFirstChild("ohkay"):Destroy()
+		for i, v in ipairs(Players:GetPlayers()) do
+			if v.Character and v.Character:FindFirstChild("Head") then
+				local head, char = v.Character.Head, v.Character
+				if head:FindFirstChild("wl") and char:FindFirstChild("ohkay") then
+					head:FindFirstChild("wl"):Destroy();
+					char:FindFirstChild("ohkay"):Destroy();
 					return
 				end
 			end
@@ -1400,7 +1409,7 @@ local function ShootAnim()
 	else
 		fireCFrame = Mouse.Hit
 	end
-	
+
 	if tool.Ammo.Value <= 0 then
 		return
 	end
@@ -1418,11 +1427,16 @@ local function ShootAnim()
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
 		Flags["holding"] = "Glock"
+		
+		getRemote("Glock", fireCFrame)
 	elseif tostring(tool) == "Shotty" then
 		Flags["holding"] = "Shotty"
+		
+		getRemote("Shotty", fireCFrame)
 	end
+	
+	
 
-	ShootRemote:FireServer(fireCFrame)
 	if (ShouldLoad) then
 		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
 	end
@@ -1655,9 +1669,10 @@ do -- // Loops
 				if tostring(Tool) == "Shotty" or tostring(Tool) == "Glock" then
 					if Tool.Ammo.Value <= 0 then
 						Tool.ManualActivationOnly = false
+						game:GetService("TestService"):Message("tool manualactivationonly false")
 					elseif Tool.Ammo.Value >= 0 then
 						Tool.ManualActivationOnly = true
-						-- cont
+						game:GetService("TestService"):Message("tool manualactivationonly true")
 					end
 				end
 			end
@@ -1673,7 +1688,7 @@ do -- // Loops
 
 						local LookAtPos = Vector3.new(Flags["targetPlayer"].Character.HumanoidRootPart.Position.X, LocalPlayer.Character.HumanoidRootPart.Position.Y, Flags["targetPlayer"].Character.HumanoidRootPart.Position.Z)
 
-						LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, LookAtPos), 1)
+						LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, LookAtPos), getSmoothingValue(Flags["LookAtSmoothing"]))
 					end
 				end
 			end
@@ -1832,7 +1847,10 @@ local toggle = aimbot_section:Toggle({Name = "{ LookAt Target }", Default = fals
 		Flags["LookAt"] = val
 		createNotification("Look At : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-
+local slider = aimbot_section:Slider({Name = "{ LookAt Smoothing }", Default = 80.1, Minimum = 1.1, Maximum = 99.9, Decimals = .1, Suffix = "%", 
+	Callback = function(val) 
+		Flags["LookAtSmoothing"] = val
+	end})
 local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
@@ -1959,7 +1977,6 @@ AdminStuff.Filtering.OnClientEvent:Connect(function(messageData)
 end);
 
 aimbot:Turn(true)
-
 
 createNotification("Loaded", 6, RGB(170, 85, 235))
 
