@@ -1719,7 +1719,7 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "Note : Insert Key To Close/Open UI."})
+local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
