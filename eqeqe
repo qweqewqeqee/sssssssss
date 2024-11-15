@@ -346,7 +346,7 @@ do
 
 		game:GetService("UserInputService").InputBegan:Connect(function(k,g)
 			if not g then 
-				if k.KeyCode == Enum.KeyCode.Insert then 
+				if k.KeyCode == Enum.KeyCode.RightAlt then 
 					screen.Enabled = not screen.Enabled 
 				end
 			end
