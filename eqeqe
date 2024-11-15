@@ -80,6 +80,7 @@ do
 	Flags["AutoShoot"] = true
 	Flags["LookAt"] = false
 	Flags["LookAtSmoothing"] = 80
+	Flags["GodMode"] = false
 end
 
 local Version = "1.0.1"
@@ -92,16 +93,16 @@ local function getS(service)
 	end 
 end
 
-local UserInputService  =     getS("UserInputService");
-local debris 		      =     getS("Debris");
-local TweenService      =     getS("TweenService");
-local SoundService      =     getS("SoundService");
-local Players           =     getS("Players");
-local RunService        =     getS("RunService");
-local ReplicatedStorage =     getS("ReplicatedStorage");
-local Stats             =     getS("Stats");
-local HttpService 	   = 	   getS("HttpService");
-local CoreGui 				=		getS("CoreGui");
+local UserInputService  =       getS("UserInputService");
+local debris 		    =       getS("Debris");
+local TweenService      =       getS("TweenService");
+local SoundService      =       getS("SoundService");
+local Players           =       getS("Players");
+local RunService        =       getS("RunService");
+local ReplicatedStorage =       getS("ReplicatedStorage");
+local Stats             =       getS("Stats");
+local HttpService 	    = 	    getS("HttpService");
+local CoreGui 			=		getS("CoreGui");
 local TestService 		= 		getS("TestService");
 local TeleportService   = 		getS("TeleportService");
 
@@ -345,7 +346,7 @@ do
 
 		game:GetService("UserInputService").InputBegan:Connect(function(k,g)
 			if not g then 
-				if k.KeyCode == Enum.KeyCode.RightShift then 
+				if k.KeyCode == Enum.KeyCode.Insert then 
 					screen.Enabled = not screen.Enabled 
 				end
 			end
@@ -1336,11 +1337,12 @@ local function updateCameraLock()
 		if targetHead then
 			if not Flags["Blatant"] then
 				if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity / Flags["Prediction"] + targetHead.Velocity  / math.huge
+					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"] + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / math.huge
 					local FixedY = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
 					targetPosition = V3New(targetPosition.X, FixedY, targetPosition.Z)
 				else
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] + targetHead.Velocity  / math.huge
+					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"] + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / math.huge
+
 				end
 			elseif Flags["Blatant"] then
 				targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1427,15 +1429,15 @@ local function ShootAnim()
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
 		Flags["holding"] = "Glock"
-		
+
 		getRemote("Glock", fireCFrame)
 	elseif tostring(tool) == "Shotty" then
 		Flags["holding"] = "Shotty"
-		
+
 		getRemote("Shotty", fireCFrame)
 	end
-	
-	
+
+
 
 	if (ShouldLoad) then
 		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
@@ -1504,6 +1506,24 @@ function fireEvents(door)
 	elseif door.Parent.Parent:FindFirstChild("Lock") then
 		wait(0.2)
 		door.Parent.Parent.Click.ClickDetector.RemoteEvent:FireServer()
+	end
+end
+
+function group(Message)
+	game.ReplicatedStorage.Stank:FireServer("pick", {
+		Name = "1", 
+		TextLabel = {Text = Message}
+	})
+end
+
+local function GodMode()
+	if Flags["GodMode"] == true then
+		group(string.rep("a", 5^6))
+		LocalPlayer.Character:BreakJoints();
+	else
+		Flags["GodMode"] = false
+		group("")
+		LocalPlayer.Character:BreakJoints();
 	end
 end
 
@@ -1699,18 +1719,15 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "note: R-Shift to Open/Close UI.".. "\n".. "Added LookAt Target (Use 3rd) | Aimlock Is Now More Accurate"})
+local aimbot = window:Page({Name = "Note : Insert Key To Close/Open UI."})
 
 --
-local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 400})
-local aimbot_section2 = aimbot:Section({Name = "misc", Size = 250, Side = "Right"})
+local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
+local aimbot_section2 = aimbot:Section({Name = "misc", Size = 275, Side = "Right"})
 
 --
-local label = aimbot_section:Label(
-	{Name = "Q To Lock On | MB1 AutoShoot"}
-)
 
---local label2 = aimbot_section:Label({Name = "Q To Lock On", Offset = 16})
+local label2 = aimbot_section:Label({Name = "Q To Lock On | MB1 AutoShoot", Offset = 16})
 
 local toggle = aimbot_section:Toggle({Name = "{ Aimlock FOV }", Default = true, 
 	Callback = function(val) 
@@ -1752,6 +1769,9 @@ local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
+
+
+
 
 
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
