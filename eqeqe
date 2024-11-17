@@ -347,7 +347,7 @@ do
 
 		game:GetService("UserInputService").InputBegan:Connect(function(k,g)
 			if not g then 
-				if k.KeyCode == Enum.KeyCode.Insert then 
+				if k.KeyCode == Enum.KeyCode.RightAlt then 
 					screen.Enabled = not screen.Enabled 
 				end
 			end
@@ -1722,7 +1722,7 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "Note : Insert Key To Close/Open UI."})
+local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
