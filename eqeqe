@@ -30,14 +30,14 @@ end
 
 local Circle = Drawing_new("Circle", {
 	Radius=250,
-	Visible=false,
+	Visible=true,
 	Color=Color3.new(1, 1, 1),
 	Thickness=2,
 	Filled=false
 }); -- Aimbot Circle
 
 local Circle2 = Drawing_new("Circle", {Radius=50,
-	Visible=false,
+	Visible=true,
 	Color=Color3.new(0, 0, 0),
 	Thickness=2,
 	Filled=false
@@ -81,6 +81,7 @@ do
 	Flags["LookAt"] = false
 	Flags["LookAtSmoothing"] = 80
 	Flags["GodMode"] = false
+	Flags["ClosestPart"] = false
 end
 
 local Version = "1.0.1"
@@ -346,7 +347,7 @@ do
 
 		game:GetService("UserInputService").InputBegan:Connect(function(k,g)
 			if not g then 
-				if k.KeyCode == Enum.KeyCode.RightAlt then 
+				if k.KeyCode == Enum.KeyCode.Insert then 
 					screen.Enabled = not screen.Enabled 
 				end
 			end
@@ -1382,7 +1383,6 @@ local function ShootAnim()
 	local animationTrack
 	local fireCFrame
 
-	local mousePosition = UserInputService:GetMouseLocation()
 	local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
 	if Flags["CameraLocked"] and Flags["targetPlayer"]:IsA("Player") and Flags["targetPlayer"].Character then
@@ -1392,9 +1392,9 @@ local function ShootAnim()
 			if not Flags["Blatant"] then
 				if CheckAired(Flags["targetPlayer"]) then
 					local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-					targetPosition2 = V3New(targetHead.Position.X, FixedY2, targetHead.Position.Z)
+					targetPosition2 = V3New(targetHead.Position.X, FixedY2, targetHead.Position.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
 				else
-					targetPosition2 = V3New(targetHead.Position.X, targetHead.Position.Y + Flags["YOffset"] / 10, targetHead.Position.Z) + targetHead.Velocity / Flags["Prediction"]
+					targetPosition2 = V3New(targetHead.Position.X, targetHead.Position.Y + Flags["YOffset"] / 10, targetHead.Position.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
 				end
 			elseif Flags["Blatant"] then
 				targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1516,6 +1516,7 @@ function group(Message)
 	})
 end
 
+--[[
 local function GodMode()
 	if Flags["GodMode"] == true then
 		group(string.rep("a", 5^6))
@@ -1526,6 +1527,7 @@ local function GodMode()
 		LocalPlayer.Character:BreakJoints();
 	end
 end
+]]--
 
 local function getRandomSpawnCFrame(spawnTable)
 	local keys = {}
@@ -1562,9 +1564,9 @@ local function loadspawn(character)
 end
 
 local function AntiGroundHit()
-	getChar().Humanoid.StateChanged:Connect(function(old, new)
+	getChar().Humanoid.StateChanged:Connect(function(r, current)
 		if Flags["AntiGroundHit"] then
-			if new == Enum.HumanoidStateType.FallingDown or new == Enum.HumanoidStateType.PlatformStanding and not getChar():FindFirstChild("KO") and getChar():FindFirstChildOfClass("Humanoid").Health ~= 0 then
+			if current == Enum.HumanoidStateType.FallingDown or current == Enum.HumanoidStateType.PlatformStanding and not getChar():FindFirstChild("KO") and getChar():FindFirstChildOfClass("Humanoid").Health ~= 0 then
 				getChar().Humanoid.PlatformStand = false
 				getChar().Humanoid.Sit = false
 				getChar().Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
@@ -1575,8 +1577,6 @@ local function AntiGroundHit()
 end
 
 
-
-coroutine.wrap(AutoShootTriggerbot)()
 
 
 do -- // Inputs
@@ -1632,12 +1632,29 @@ do -- // Inputs
 	end)
 end
 
+function Ye()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character.Humanoid.Health > 0 then
+		LocalPlayer.Character.ChildAdded:Connect(function(child)
+			if tostring(child) == "Glock" or tostring(child) == "Shotty" then
+				child.Ammo.Changed:Connect(function()
+					if child.Ammo.Value <= 0 then
+						child.ManualActivationOnly = false
+					elseif child.Ammo.Value > 0 then
+						child.ManualActivationOnly = true
+					end
+				end)
+			end
+		end)
+	end
+end
+
 do
 	LocalPlayer.CharacterAdded:Connect(function(char)
 		task.wait(.2)
 		loadspawn(char);
 		Inf()
 		AntiGroundHit();
+		Ye()
 	end)
 end
 
@@ -1683,20 +1700,6 @@ do -- // Loops
 			Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
 		end);
 
-		task.spawn(function() -- // Aimbot
-			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool") then
-				local Tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
-				if tostring(Tool) == "Shotty" or tostring(Tool) == "Glock" then
-					if Tool.Ammo.Value <= 0 then
-						Tool.ManualActivationOnly = false
-						game:GetService("TestService"):Message("tool manualactivationonly false")
-					elseif Tool.Ammo.Value >= 0 then
-						Tool.ManualActivationOnly = true
-						game:GetService("TestService"):Message("tool manualactivationonly true")
-					end
-				end
-			end
-		end);
 
 		task.spawn(function()
 			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and Flags["LookAt"] and Flags["CameraLocked"] then
@@ -1719,7 +1722,7 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
+local aimbot = window:Page({Name = "Note : Insert Key To Close/Open UI."})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
@@ -1754,6 +1757,7 @@ local slider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default 
 		Circle2.Radius = val
 	end})
 
+
 local toggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
@@ -1769,6 +1773,15 @@ local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
+
+--[[
+local toggle = aimbot_section2:Toggle({Name = "{ God Mode }", Default = false, 
+	Callback = function(val) 
+		Flags["GodMode"] = val 
+		GodMode()
+		createNotification("God Mode : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+]]--
 
 
 
@@ -2000,5 +2013,6 @@ aimbot:Turn(true)
 
 createNotification("Loaded", 6, RGB(170, 85, 235))
 
-Circle.Visible = true;
-Circle2.Visible = true
+coroutine.wrap(AutoShootTriggerbot)()
+
+Ye()
