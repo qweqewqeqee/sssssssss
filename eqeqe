@@ -1,15 +1,11 @@
+
 game:GetService('TestService'):Message("Hello world")
 
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
 else
-  game.Players.LocalPlayer:Kick("Missing Key")
+	game.Players.LocalPlayer:Kick("Missing Key")
 	return;
-end
-
-
-if not _G.Key or _G.Key and _G.Key.z8b9c3 ~= "I LOVE APHIXE" then -- Check if users didnt try exec by any other source
-	--return
 end
 
 if _G.Injected and _G.Injected == true then
@@ -137,11 +133,19 @@ local getChar 			= function() return LocalPlayer.Character or LocalPlayer.Charac
 local Mouse             = LocalPlayer:GetMouse();
 
 function getRemote(ToolName, Pos)
-	if ToolName == "Shotty" then
-		return ReplicatedStorage.ShottyFire:FireServer(Pos)
-	elseif ToolName == "Glock" then
-		return ReplicatedStorage.GlockFire:FireServer(Pos)
-	end
+    if game.PlaceId == 16702351217 then
+        if ToolName == "Shotty" then
+            return LocalPlayer.Character:FindFirstChild("Shotty").Shoot:FireServer(Pos)
+        elseif ToolName == "Glock" then
+            return LocalPlayer.Character:FindFirstChild("Glock").Shoot:FireServer(Pos)
+        end
+    elseif game.PlaceId == 15852982099 then
+        if ToolName == "Shotty" then
+            return ReplicatedStorage.ShottyFire:FireServer(Pos)
+        elseif ToolName == "Glock" then
+            return ReplicatedStorage.GlockFire:FireServer(Pos)
+        end
+    end
 end
 
 local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
@@ -1730,6 +1734,7 @@ end
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
 local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
+local configs = window:Page({Name = "Configs"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
