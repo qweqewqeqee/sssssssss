@@ -1,7 +1,6 @@
 
 game:GetService('TestService'):Message("hello")
 
-
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
 else
@@ -1482,13 +1481,6 @@ local function ShootAnim()
 		return
 	end
 
-	local ShouldLoad = true;
-	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
-		if (x.Animation.AnimationId == fires.AnimationId) then
-			x:Stop(0);
-		end
-	end
-
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
 		Flags["holding"] = "Glock"
@@ -1500,11 +1492,17 @@ local function ShootAnim()
 		getRemote("Shotty", fireCFrame)
 	end
 
-
+	local ShouldLoad = true;
+	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+		if (x.Animation.AnimationId == fires.AnimationId) then
+			x:Stop(0);
+		end
+	end
 
 	if (ShouldLoad) then
 		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
 	end
+	
 	return Flags["holding"]
 end
 
@@ -1699,6 +1697,13 @@ function Ye()
 	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character.Humanoid.Health > 0 then
 		LocalPlayer.Character.ChildAdded:Connect(function(child)
 			if tostring(child) == "Glock" or tostring(child) == "Shotty" then
+				
+				if child.Ammo.Value <= 0 then
+					child.ManualActivationOnly = false
+				elseif child.Ammo.Value > 0 then
+					child.ManualActivationOnly = true
+				end
+				
 				child.Ammo.Changed:Connect(function()
 					if child.Ammo.Value <= 0 then
 						child.ManualActivationOnly = false
@@ -1710,6 +1715,8 @@ function Ye()
 		end)
 	end
 end
+
+
 
 do
 	LocalPlayer.CharacterAdded:Connect(function(char)
@@ -1738,8 +1745,8 @@ do -- // Loops
 			end
 		end);
 
-
-		task.spawn(function()
+		--[[
+					task.spawn(function()
 			if Flags["AutoReset"] and getChar() and getChar():FindFirstChildOfClass("Humanoid") then
 				if getChar():FindFirstChild("KO") then
 					local args = {[1]=LocalPlayer.Backpack.Punch,[3]=false,[4]=false};
@@ -1750,6 +1757,7 @@ do -- // Loops
 				end
 			end
 		end)
+		]]--
 
 		task.spawn(function() -- // Move Mouse To FOV
 			local mouseLocation = UserInputService:GetMouseLocation();
@@ -1760,7 +1768,6 @@ do -- // Loops
 				Flags["Prediction"] = 99999
 			end	
 
-			Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
 		end);
 
 
@@ -1891,7 +1898,7 @@ local toggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = fa
 local button = aimbot_section2:Button({Name = "{ Back Spawn }", 
 	Callback = function() 
 		Flags["SpawnLocation"] = "back"
-		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
+		createNotification("Back Spawn Selected", 4, RGB(170, 85, 235))
 
 	end})
 
@@ -1991,7 +1998,6 @@ local label = aimbot_section2:Label(
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
 
-
 local response    = request({
 	Url     = Webhook_URL,
 	Method  = "POST",
@@ -2015,6 +2021,8 @@ local response    = request({
 		}}
 	})
 })
+
+
 
 
 
