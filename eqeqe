@@ -1,5 +1,6 @@
 
-game:GetService('TestService'):Message("Hello world")
+game:GetService('TestService'):Message("hello")
+
 
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
@@ -59,7 +60,7 @@ do
 	Flags["ShottyAutoShootDelay"] = 0.18;
 	Flags["GlockBoostAmount"] = 90;
 	Flags["GlockBoost"] = false
-	Flags["YOffset"] = -5.5;
+	Flags["YOffset"] = -20;
 	Flags["InfiniteStamina"] = false
 	Flags["AutoReset"] = false
 	Flags["targetPlayer"] = nil
@@ -87,7 +88,7 @@ do
 	Flags["ClosestPart"] = false
 end
 
-local Version = "1.0.1"
+local Version = "1.0.2"
 
 local function getS(service)
 	if cloneref then
@@ -132,20 +133,72 @@ local LocalPlayer       = Players.LocalPlayer;
 local getChar 			= function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
 local Mouse             = LocalPlayer:GetMouse();
 
+local raycast = workspace.Raycast
+local down = Vector3.new(0, -30, 0)
+local r6_up = Vector3.new(0, 6, 0)
+
+local IsGrounded = {}
+local PlayerFloor = {}
+
+local function grounded(player)
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = {player.Character}
+	params.RespectCanCollide = true
+
+	local character = player.Character
+	local primarypart = character and character:FindFirstChild("HumanoidRootPart")
+
+	player.CharacterAdded:Connect(function(chr)
+		params.FilterDescendantsInstances = {chr}
+		character = chr
+		primarypart = chr:WaitForChild("HumanoidRootPart", 9e9)
+	end)
+
+	player.CharacterRemoving:Connect(function()
+		character = nil
+		primarypart = nil
+	end)
+
+	RunService.Heartbeat:Connect(function()
+		if not character or not primarypart then
+			return
+		end
+
+		local primary_position = primarypart.Position
+		local floor = raycast(workspace, primary_position, down, params)
+		if not floor then
+			IsGrounded[player] = false
+			return
+		end
+
+		local f_up = floor.Position + r6_up
+		IsGrounded[player] = true
+		PlayerFloor[player] = f_up
+	end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do
+	task.spawn(grounded, p)
+end
+
+Players.PlayerAdded:Connect(function(p)
+	task.spawn(grounded, p)
+end)
+
 function getRemote(ToolName, Pos)
-    if game.PlaceId == 16702351217 then
-        if ToolName == "Shotty" then
-            return LocalPlayer.Character:FindFirstChild("Shotty").Shoot:FireServer(Pos)
-        elseif ToolName == "Glock" then
-            return LocalPlayer.Character:FindFirstChild("Glock").Shoot:FireServer(Pos)
-        end
-    elseif game.PlaceId == 15852982099 then
-        if ToolName == "Shotty" then
-            return ReplicatedStorage.ShottyFire:FireServer(Pos)
-        elseif ToolName == "Glock" then
-            return ReplicatedStorage.GlockFire:FireServer(Pos)
-        end
-    end
+	if game.PlaceId == 16702351217 then
+		if ToolName == "Shotty" then
+			return LocalPlayer.Character:FindFirstChild("Shotty").Shoot:FireServer(Pos)
+		elseif ToolName == "Glock" then
+			return LocalPlayer.Character:FindFirstChild("Glock").Shoot:FireServer(Pos)
+		end
+	elseif game.PlaceId == 15852982099 then
+		if ToolName == "Shotty" then
+			return ReplicatedStorage.ShottyFire:FireServer(Pos)
+		elseif ToolName == "Glock" then
+			return ReplicatedStorage.GlockFire:FireServer(Pos)
+		end
+	end
 end
 
 local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
@@ -1338,6 +1391,14 @@ local function findClosestPlayer()
 	return closestPlayer
 end
 
+local function CheckAired(player)
+	if (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or player.Character.Head.Velocity.Y >= 1 or (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and player.Character.Head.Velocity.Y >= 1 then
+		return true
+	else
+		return false
+	end
+end
+
 local function updateCameraLock()
 	if (Flags["CameraLocked"] and Flags["targetPlayer"]) then
 		if (Flags["targetPlayer"].Character and Flags["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
@@ -1348,13 +1409,11 @@ local function updateCameraLock()
 		local targetPosition;
 		if targetHead then
 			if not Flags["Blatant"] then
-				if (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or targetHead.Velocity.Y >= 1 or (Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and targetHead.Velocity.Y >= 1 then
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"] + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / math.huge
-					local FixedY = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-					targetPosition = V3New(targetPosition.X, FixedY, targetPosition.Z)
-				else
-					targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"] + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / math.huge
-
+				local targetFloorPos = PlayerFloor[Flags.targetPlayer]
+				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
+				targetPosition = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
+				if Flags["AirShotScale"] ~= 0 and CheckAired(Flags["targetPlayer"]) then
+					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
 				end
 			elseif Flags["Blatant"] then
 				targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1367,13 +1426,6 @@ local function updateCameraLock()
 	end
 end
 
-local function CheckAired(player)
-	if (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or player.Character.Head.Velocity.Y >= 1 or (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and player.Character.Head.Velocity.Y >= 1 then
-		return true
-	else
-		return false
-	end
-end
 
 
 local function ShootAnim()
@@ -1401,11 +1453,11 @@ local function ShootAnim()
 		local targetHead = Flags["targetPlayer"].Character:FindFirstChild("Head")
 		if targetHead then
 			if not Flags["Blatant"] then
-				if CheckAired(Flags["targetPlayer"]) then
-					local FixedY2 = (Flags["CameraOffset"] + ((Flags["YOffset"] / 10) + (Flags["AirShotScale"] / 10)))
-					targetPosition2 = V3New(targetHead.Position.X, FixedY2, targetHead.Position.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
-				else
-					targetPosition2 = V3New(targetHead.Position.X, targetHead.Position.Y + Flags["YOffset"] / 10, targetHead.Position.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
+				local targetFloorPos = PlayerFloor[Flags.targetPlayer]
+				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
+				targetPosition2 = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
+				if Flags["AirShotScale"] > 0 and CheckAired(Flags["targetPlayer"]) then
+					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
 				end
 			elseif Flags["Blatant"] then
 				targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
@@ -1734,7 +1786,6 @@ end
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
 local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
-local configs = window:Page({Name = "Configs"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
@@ -1823,7 +1874,7 @@ local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = f
 		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -5.5, Minimum = -10, Maximum = 10, Decimals = .1, Suffix = "", 
+local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -20, Minimum = -25, Maximum = 15, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
