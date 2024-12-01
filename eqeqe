@@ -1,6 +1,9 @@
 
 game:GetService('TestService'):Message("hello")
 
+_G.ScriptKey = "lololollollololololollollo"
+
+
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
 else
@@ -46,29 +49,27 @@ local Circle2 = Drawing_new("Circle", {Radius=50,
 	Filled=false
 }); -- Triggerbot circle
 
-local Flags = {};
+getgenv().Flags = {};
 local DefaultSettings = {};
 local Loops = {};
 local Notifications = {};
+local _OT = {};
 
 do
 	Flags["Prediction"] = 8;
 	Flags["Smoothing"] = 87;
 	Flags["KOCheck"] = true;
-	Flags["GlockAutoShootDelay"] = 0.27;
-	Flags["ShottyAutoShootDelay"] = 0.18;
 	Flags["GlockBoostAmount"] = 90;
 	Flags["GlockBoost"] = false
 	Flags["YOffset"] = -20;
 	Flags["InfiniteStamina"] = false
 	Flags["AutoReset"] = false
-	Flags["targetPlayer"] = nil
-	Flags["holding"] = nil
+	_OT["targetPlayer"] = nil
+	_OT["holding"] = nil
 	Flags["AirShotScale"] = 0
-	Flags["CameraLocked"] = false
-	Flags["CameraOffset"] = workspace.CurrentCamera.CFrame.Y
-	Flags["Boosted"] = false
-	Flags["Firing"] = false
+	_OT["CameraLocked"] = false
+	_OT["Boosted"] = false
+	_OT["Firing"] = false
 	Flags["AimlockFOVSize"] = 250
 	Flags["TriggerbotFOVSize"] = 70
 	Flags["Triggerbot"] = false
@@ -76,18 +77,25 @@ do
 	Flags["Blatant"] = false
 	Flags["SpawnGamepass"] = false
 	Flags["ChatSpy"] = false
-	Flags["ESPName"] = false
-	Flags["ESPHealth"] = false
-	Flags["ESPVest"] = false
+	_OT["ESP"] = false
+	_OT["ESPName"] = false
+	_OT["ESPHealth"] = false
+	_OT["ESPVest"] = false
 	Flags["SpawnLocation"] = "Front"
 	Flags["AutoShoot"] = true
 	Flags["LookAt"] = false
 	Flags["LookAtSmoothing"] = 80
-	Flags["GodMode"] = false
-	Flags["ClosestPart"] = false
+	Flags["AimlockVisible"] = true
+	Flags["TriggerbotVisible"] = true
 end
 
 local Version = "1.0.2"
+
+local filename = "Oden.txt"
+
+if not isfile(filename) then
+	writefile(filename, [[]])
+end
 
 local function getS(service)
 	if cloneref then
@@ -909,6 +917,12 @@ do
 					function toggle:Set(value)
 						if typeof(value) == "boolean" then
 							toggle.state = value
+
+							if toggle.state == true then
+								toggleInlineGradient.BackgroundColor3 = Color3.fromRGB(170, 85, 235)
+							else
+								toggleInlineGradient.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+							end
 						end
 					end
 					-- // Returning + Other
@@ -1247,7 +1261,7 @@ end
 
 local function esp(player)
 
-	if not Flags["ESP"] then
+	if not _OT["ESP"] then
 		for i, v in ipairs(Players:GetPlayers()) do
 			if v.Character and v.Character:FindFirstChild("Head") then
 				local head, char = v.Character.Head, v.Character
@@ -1302,15 +1316,15 @@ local function esp(player)
 
 					tlab.Text = ""
 
-					if Flags["ESPName"] then
+					if _OT["ESPName"] then
 						tlab.Text = Players[player].DisplayName
 					end
 
-					if Flags["ESPVest"] then
+					if _OT["ESPVest"] then
 						tlab.Text = tlab.Text .. " Vested: " .. tostring(vested(Players[player]))
 					end
 
-					if Flags["ESPHealth"] then
+					if _OT["ESPHealth"] then
 						local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
 						if humanoid then
 							tlab.Text = tlab.Text .. " Health: " .. tostring(math.floor(humanoid.Health))
@@ -1399,19 +1413,19 @@ local function CheckAired(player)
 end
 
 local function updateCameraLock()
-	if (Flags["CameraLocked"] and Flags["targetPlayer"]) then
-		if (Flags["targetPlayer"].Character and Flags["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or Flags["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
-			Flags["CameraLocked"] = false;
+	if (_OT["CameraLocked"] and _OT["targetPlayer"]) then
+		if (_OT["targetPlayer"].Character and _OT["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or _OT["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
+			_OT["CameraLocked"] = false;
 			return;
 		end
-		local targetHead = GetHead(Flags["targetPlayer"]);
+		local targetHead = GetHead(_OT["targetPlayer"]);
 		local targetPosition;
 		if targetHead then
 			if not Flags["Blatant"] then
-				local targetFloorPos = PlayerFloor[Flags.targetPlayer]
+				local targetFloorPos = PlayerFloor[_OT.targetPlayer]
 				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
 				targetPosition = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
-				if Flags["AirShotScale"] ~= 0 and CheckAired(Flags["targetPlayer"]) then
+				if Flags["AirShotScale"] ~= 0 and CheckAired(_OT["targetPlayer"]) then
 					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
 				end
 			elseif Flags["Blatant"] then
@@ -1447,22 +1461,22 @@ local function ShootAnim()
 
 	local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-	if Flags["CameraLocked"] and Flags["targetPlayer"]:IsA("Player") and Flags["targetPlayer"].Character then
+	if _OT["CameraLocked"] and _OT["targetPlayer"]:IsA("Player") and _OT["targetPlayer"].Character then
 		local targetPosition2;
-		local targetHead = Flags["targetPlayer"].Character:FindFirstChild("Head")
+		local targetHead = _OT["targetPlayer"].Character:FindFirstChild("Head")
 		if targetHead then
 			if not Flags["Blatant"] then
-				local targetFloorPos = PlayerFloor[Flags.targetPlayer]
+				local targetFloorPos = PlayerFloor[_OT.targetPlayer]
 				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
 				targetPosition2 = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
-				if Flags["AirShotScale"] > 0 and CheckAired(Flags["targetPlayer"]) then
+				if Flags["AirShotScale"] > 0 and CheckAired(_OT["targetPlayer"]) then
 					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
 				end
 			elseif Flags["Blatant"] then
 				targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
 			end
 
-			local inRadius = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle.Radius)
+			local inRadius = isPlayerInRadius(_OT["targetPlayer"], screenCenter, Circle.Radius)
 
 			if inRadius then
 				fireCFrame = CFNew(targetPosition2)
@@ -1483,11 +1497,11 @@ local function ShootAnim()
 
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
-		Flags["holding"] = "Glock"
+		_OT["holding"] = "Glock"
 
 		getRemote("Glock", fireCFrame)
 	elseif tostring(tool) == "Shotty" then
-		Flags["holding"] = "Shotty"
+		_OT["holding"] = "Shotty"
 
 		getRemote("Shotty", fireCFrame)
 	end
@@ -1502,22 +1516,21 @@ local function ShootAnim()
 	if (ShouldLoad) then
 		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
 	end
-	
-	return Flags["holding"]
+	return _OT["holding"]
 end
 
-local function Lol()
+local function MouseButtonFire()
 	if Flags["AutoShoot"] then
-		while Flags["Firing"] do
+		while _OT["Firing"] do
 			local weaponType = ShootAnim();
 			if (weaponType == "Glock") then
-				task.wait(Flags["GlockAutoShootDelay"]);
+				task.wait(.27);
 			elseif (weaponType == "Shotty") then
-				task.wait(Flags["ShottyAutoShootDelay"]);
+				task.wait(.18);
 			end
-			Loops["Stepped"]:Wait()
+			Loops.Heartbeat:Wait()
 		end
-	elseif not Flags["AutoShoot"] then
+	else
 		ShootAnim();
 	end
 end
@@ -1525,15 +1538,15 @@ end
 function AutoShootTriggerbot()
 	while true do
 		local Delay_1 = 0
-		if Flags["Triggerbot"] and Flags["CameraLocked"] then
+		if Flags["Triggerbot"] and _OT["CameraLocked"] then
 			pcall(function()
 				local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
-				local inRadius, screenPosition, distance = isPlayerInRadius(Flags["targetPlayer"], screenCenter, Circle2.Radius)
+				local inRadius, screenPosition, distance = isPlayerInRadius(_OT["targetPlayer"], screenCenter, Circle2.Radius)
 
-				if inRadius and not ForceFieldCheck(Flags["targetPlayer"]) and isTargetOnScreen(Flags["targetPlayer"]) and getChar():FindFirstChild("Glock") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+				if inRadius and not ForceFieldCheck(_OT["targetPlayer"]) and isTargetOnScreen(_OT["targetPlayer"]) and getChar():FindFirstChild("Glock") and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
 					ShootAnim()
 					Delay_1 = Flags["GlockAutoShootDelay"];
-				elseif inRadius and not ForceFieldCheck(Flags["targetPlayer"]) and isTargetOnScreen(Flags["targetPlayer"]) and getChar():FindFirstChild("Shotty") and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+				elseif inRadius and not ForceFieldCheck(_OT["targetPlayer"]) and isTargetOnScreen(_OT["targetPlayer"]) and getChar():FindFirstChild("Shotty") and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
 					ShootAnim()
 					Delay_1 = Flags["ShottyAutoShootDelay"];
 				else
@@ -1647,13 +1660,13 @@ do -- // Inputs
 		if (input.KeyCode == Keys.Camlock_Key.Value) then
 			if not keyPressing then
 				keyPressing = true;
-				if Flags["CameraLocked"] then
-					Flags["CameraLocked"] = false;
+				if _OT["CameraLocked"] then
+					_OT["CameraLocked"] = false;
 				else
 					local mouseLocation = UserInputService:GetMouseLocation();
-					Flags["targetPlayer"] = findClosestPlayer(V2New(mouseLocation.X, mouseLocation.Y), Circle.Radius);
-					if (Flags["targetPlayer"] and Flags["targetPlayer"]:IsA("Player") and Flags["targetPlayer"].Character and Flags["CameraLocked"] == false) then
-						Flags["CameraLocked"] = true;
+					_OT["targetPlayer"] = findClosestPlayer(V2New(mouseLocation.X, mouseLocation.Y), Circle.Radius);
+					if (_OT["targetPlayer"] and _OT["targetPlayer"]:IsA("Player") and _OT["targetPlayer"].Character and _OT["CameraLocked"] == false) then
+						_OT["CameraLocked"] = true;
 						MakeSound();
 					end
 				end
@@ -1670,16 +1683,16 @@ do -- // Inputs
 
 	UserInputService.InputBegan:Connect(function(input)
 		if (input.UserInputType == Keys.AutoShoot_Key.Value) or (input.KeyCode == Keys.AutoShoot_Key.Value) then
-			if not Flags["Firing"] then
-				Flags["Firing"] = true;
-				Lol();
+			if not _OT["Firing"] then
+				_OT["Firing"] = true;
+				MouseButtonFire();
 			end
 		end
 	end);
 
 	UserInputService.InputEnded:Connect(function(input)
 		if (input.UserInputType == Keys.AutoShoot_Key.Value) or (input.KeyCode == Keys.AutoShoot_Key.Value) then
-			Flags["Firing"] = false;
+			_OT["Firing"] = false;
 		end
 	end);
 
@@ -1697,13 +1710,13 @@ function Ye()
 	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character.Humanoid.Health > 0 then
 		LocalPlayer.Character.ChildAdded:Connect(function(child)
 			if tostring(child) == "Glock" or tostring(child) == "Shotty" then
-				
+
 				if child.Ammo.Value <= 0 then
 					child.ManualActivationOnly = false
 				elseif child.Ammo.Value > 0 then
 					child.ManualActivationOnly = true
 				end
-				
+
 				child.Ammo.Changed:Connect(function()
 					if child.Ammo.Value <= 0 then
 						child.ManualActivationOnly = false
@@ -1735,12 +1748,12 @@ do -- // Loops
 				local hrp = getChar().HumanoidRootPart;
 				local hum = getChar():FindFirstChildOfClass("Humanoid");
 				if (hrp.Velocity.Y > 80) and (hum.FloorMaterial == Enum.Material.Air) then
-					if not Flags["Boosted"] then
+					if not _OT["Boosted"] then
 						hrp.Velocity = V3New(hrp.Velocity.X, hrp.Velocity.Y + Flags["GlockBoostAmount"], hrp.Velocity.Z);
-						Flags["Boosted"] = true;
+						_OT["Boosted"] = true;
 					end
 				else
-					Flags["Boosted"] = false;
+					_OT["Boosted"] = false;
 				end
 			end
 		end);
@@ -1762,24 +1775,29 @@ do -- // Loops
 		task.spawn(function() -- // Move Mouse To FOV
 			local mouseLocation = UserInputService:GetMouseLocation();
 			Circle.Position = mouseLocation;
+			Circle.Radius = Flags["AimlockFOVSize"]
+			Circle.Visible = Flags["AimlockVisible"]
 			Circle2.Position = mouseLocation;
+			Circle2.Radius = Flags["TriggerbotFOVSize"];
+			Circle2.Visible = Flags["TriggerbotVisible"]
 			updateCameraLock();
-			if Flags["CameraLocked"] and Flags["targetPlayer"] and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart and Flags["targetPlayer"].Character.HumanoidRootPart.Velocity.magnitude > 600 then
+			if _OT["CameraLocked"] and _OT["targetPlayer"] and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart and _OT["targetPlayer"].Character.HumanoidRootPart.Velocity.magnitude > 600 then
 				Flags["Prediction"] = 99999
 			end	
+
 
 		end);
 
 
 		task.spawn(function()
-			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and Flags["LookAt"] and Flags["CameraLocked"] then
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and Flags["LookAt"] and _OT["CameraLocked"] then
 				if LocalPlayer.Character.Humanoid.Health ~= 0 or not LocalPlayer.Character:FindFirstChild("KO") then
 					local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
-					local inRadius, screenPosition, distance = isPlayerInRadius(Flags["targetPlayer"], screenCenter, 1000)
+					local inRadius, screenPosition, distance = isPlayerInRadius(_OT["targetPlayer"], screenCenter, 1000)
 
-					if inRadius and Flags["targetPlayer"] and Flags["targetPlayer"].Character and Flags["targetPlayer"].Character.HumanoidRootPart then
+					if inRadius and _OT["targetPlayer"] and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
 
-						local LookAtPos = Vector3.new(Flags["targetPlayer"].Character.HumanoidRootPart.Position.X, LocalPlayer.Character.HumanoidRootPart.Position.Y, Flags["targetPlayer"].Character.HumanoidRootPart.Position.Z)
+						local LookAtPos = Vector3.new(_OT["targetPlayer"].Character.HumanoidRootPart.Position.X, LocalPlayer.Character.HumanoidRootPart.Position.Y, _OT["targetPlayer"].Character.HumanoidRootPart.Position.Z)
 
 						LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, LookAtPos), getSmoothingValue(Flags["LookAtSmoothing"]))
 					end
@@ -1792,54 +1810,58 @@ end
 
 local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
 
-local aimbot = window:Page({Name = "Note : Right Alt Key To Close/Open UI."})
+local aimbot = window:Page({Name = "Aimbot"})
+
+local config = window:Page({Name = "Configs"})
 
 --
 local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
 local aimbot_section2 = aimbot:Section({Name = "misc", Size = 275, Side = "Right"})
 
---
+local config_section = config:Section({Name = "Settings", Size = 275})
+local config_section2 = config:Section({Name = "misc", Size = 200, Side = "Right"})
+
 
 local label2 = aimbot_section:Label({Name = "Q To Lock On | MB1 AutoShoot", Offset = 16})
 
-local toggle = aimbot_section:Toggle({Name = "{ Aimlock FOV }", Default = true, 
+local aimlockfovtoggle = aimbot_section:Toggle({Name = "{ Aimlock FOV }", Default = true, 
 	Callback = function(val) 
-		Circle.Visible = val 
+		Flags["AimlockVisible"] = val 
 		createNotification("Aimlock FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "{ Aimlock FOV Size }", Default = 250, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+local aimlockfovsizeslider = aimbot_section:Slider({Name = "{ Aimlock FOV Size }", Default = 250, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
 	Callback = function(val) 
-		Circle.Radius = val 
+		Flags["AimlockFOVSize"] = val 
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = 8, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
+local aimlockpredictionslider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = 8, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["Prediction"] = val
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "{ Triggerbot FOV }", Default = true, 
+local triggerbotfovtoggle = aimbot_section:Toggle({Name = "{ Triggerbot FOV }", Default = true, 
 	Callback = function(val) 
-		Circle2.Visible = val 
+		Flags["TriggerbotVisible"] = val 
 		createNotification("Triggerbot FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+local triggerbotfovsizeslider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
 	Callback = function(val) 
-		Circle2.Radius = val
+		Flags["TriggerbotFOVSize"] = val
 	end})
 
 
-local toggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
+local autoresettoggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
 		createNotification("Auto Reset : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local toggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = false, 
+local glocklaunchboosttoggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = false, 
 	Callback = function(val) 
 		Flags["GlockBoost"] = val 
 		createNotification("Glock Launch Boost : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local slider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = 90, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
+local glockboostslider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = 90, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
@@ -1867,21 +1889,21 @@ local toggle = aimbot_section2:Toggle({Name = "{ God Mode }", Default = false,
 --local slider = aimbot_section:Slider({Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
 --local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
-local slider = aimbot_section:Slider({Name = "{ Smoothing }", Default = 87, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
+local smoothingslider = aimbot_section:Slider({Name = "{ Smoothing }", Default = 87, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["Smoothing"] = val 
 	end})
-local slider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+local airshotscaleslider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
-local toggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = false, 
+local blatantaimlocktoggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = false, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
 		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
 	end})
 
-local slider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -20, Minimum = -25, Maximum = 15, Decimals = .1, Suffix = "", 
+local yoffsetslider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -20, Minimum = -25, Maximum = 15, Decimals = .1, Suffix = "", 
 	Callback = function(val) 
 		Flags["YOffset"] = val
 	end})
@@ -1890,25 +1912,25 @@ local label = aimbot_section2:Label(
 	{Name = "Spawn GamePass", Offset = 16}
 )
 
-local toggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = false, 
+local spawngamepasstoggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = false, 
 	Callback = function(val) 
 		Flags["SpawnGamepass"] = val
 		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local button = aimbot_section2:Button({Name = "{ Back Spawn }", 
+local backspawnbutton = aimbot_section2:Button({Name = "{ Back Spawn }", 
 	Callback = function() 
 		Flags["SpawnLocation"] = "back"
 		createNotification("Back Spawn Selected", 4, RGB(170, 85, 235))
 
 	end})
 
-local button = aimbot_section2:Button({Name = "{ Front Spawn }", 
+local frontspawnbutton = aimbot_section2:Button({Name = "{ Front Spawn }", 
 	Callback = function() 
 		Flags["SpawnLocation"] = "front"
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = false, 
+local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = false, 
 	Callback = function(val) 
 		Flags["InfiniteStamina"] = val
 		if getChar() and getChar():FindFirstChildOfClass("Humanoid") then
@@ -1917,13 +1939,13 @@ local toggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = 
 		end
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
+local antigroundhittoggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
 	Callback = function(val) 
 		Flags["AntiGroundHit"] = val
 		createNotification("Anti Ground Hit : "..tostring(val), 4, RGB(170, 85, 235))		
 	end})
 
-local toggle = aimbot_section2:Toggle({Name = "Chat Spy", Default = false, 
+local chatspytoggle = aimbot_section2:Toggle({Name = "Chat Spy", Default = false, 
 	Callback = function(val) 
 		Flags["ChatSpy"] = val
 		CHATSPY();
@@ -1934,27 +1956,27 @@ local label = aimbot_section:Label(
 	{Name = "TRIGGERBOT", Offset = 16}
 )
 
-local toggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true, 
+local autoshoottoggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true, 
 	Callback = function(val) 
 		Flags["AutoShoot"] = val
 		createNotification("AutoShoot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
-local toggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = false, 
+local triggerbottoggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = false, 
 	Callback = function(val) 
 		Flags["Triggerbot"] = val
 		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local toggle = aimbot_section:Toggle({Name = "{ LookAt Target }", Default = false, 
+local lookattoggle = aimbot_section:Toggle({Name = "{ LookAt Target }", Default = false, 
 	Callback = function(val) 
 		Flags["LookAt"] = val
 		createNotification("Look At : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
-local slider = aimbot_section:Slider({Name = "{ LookAt Smoothing }", Default = 80.1, Minimum = 1.1, Maximum = 99.9, Decimals = .1, Suffix = "%", 
+local lookatsmoothingslider = aimbot_section:Slider({Name = "{ LookAt Smoothing }", Default = 80.1, Minimum = 1.1, Maximum = 99.9, Decimals = .1, Suffix = "%", 
 	Callback = function(val) 
 		Flags["LookAtSmoothing"] = val
 	end})
-local toggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
+local kochecktoggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
 	Callback = function(val) 
 		Flags["KOCheck"] = val
 		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1966,7 +1988,7 @@ local label = aimbot_section:Label(
 
 local toggle = aimbot_section:Toggle({Name = "Enable ESP", Default = false, 
 	Callback = function(val) 
-		Flags["ESP"] = val
+		_OT["ESP"] = val
 		for _, players in pairs(Players:GetPlayers()) do
 			esp(tostring(players));
 		end
@@ -1975,21 +1997,22 @@ local toggle = aimbot_section:Toggle({Name = "Enable ESP", Default = false,
 
 local toggle = aimbot_section:Toggle({Name = "Vest", Default = false, 
 	Callback = function(val) 
-		Flags["ESPVest"] = val
+		_OT["ESPVest"] = val
 		createNotification("Vest ESP : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
 local toggle = aimbot_section:Toggle({Name = "Name", Default = false, 
 	Callback = function(val) 
-		Flags["ESPName"] = val
+		_OT["ESPName"] = val
 		createNotification("Name ESP : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
 
 local toggle = aimbot_section:Toggle({Name = "Health", Default = false, 
 	Callback = function(val) 
-		Flags["ESPHealth"] = val
+		_OT["ESPHealth"] = val
 		createNotification("Health ESP : "..tostring(val), 4, RGB(170, 85, 235))
 	end})
+
 
 local label = aimbot_section2:Label(
 	{Name = "Open Doors : X", Offset = 16}
@@ -1997,7 +2020,7 @@ local label = aimbot_section2:Label(
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
-
+--[[
 local response    = request({
 	Url     = Webhook_URL,
 	Method  = "POST",
@@ -2021,7 +2044,7 @@ local response    = request({
 		}}
 	})
 })
-
+]]--
 
 
 
@@ -2090,3 +2113,51 @@ createNotification("Loaded", 6, RGB(170, 85, 235))
 coroutine.wrap(AutoShootTriggerbot)()
 
 Ye()
+
+local saveconfig = config_section:Button({Name = "{ Save Configs }",
+	Callback = function()
+		local data = ""
+
+		for key, value in pairs(Flags) do
+			data = data .. 'Flags["' .. key .. '"] = ' .. tostring(value) .. "\n"
+		end
+
+		writefile(filename, data)
+
+		createNotification("Configs Saved Check F9")
+	end,
+})
+
+local loadconfig = config_section:Button({Name = "{ Load Configs }",
+	Callback = function()
+
+
+		loadstring(readfile(filename))();
+
+		airshotscaleslider:Set(Flags["AirShotScale"])
+		autoresettoggle:Set(Flags["AutoReset"])
+		glocklaunchboosttoggle:Set(Flags["GlockBoost"])
+		glockboostslider:Set(Flags["GlockBoostAmount"])
+		smoothingslider:Set(Flags["Smoothing"])
+		blatantaimlocktoggle:Set(Flags["Blatant"])
+		yoffsetslider:Set(Flags["YOffset"])
+		spawngamepasstoggle:Set(Flags["SpawnGamepass"])
+		infinitestaminatoggle:Set(Flags["InfiniteStamina"])
+		antigroundhittoggle:Set(Flags["AntiGroundHit"])
+		chatspytoggle:Set(Flags["ChatSpy"]); chatspytoggle.callback(Flags["ChatSpy"])
+		autoshoottoggle:Set(Flags["AutoShoot"])
+		triggerbottoggle:Set(Flags["Triggerbot"])
+		lookatsmoothingslider:Set(Flags["LookAtSmoothing"])
+		lookattoggle:Set(Flags["LookAt"])
+		kochecktoggle:Set(Flags["KOCheck"])
+		aimlockfovtoggle:Set(Circle.Visible); aimlockfovtoggle.callback(Circle.Visible)
+		aimlockpredictionslider:Set(Flags["Prediction"])
+		triggerbotfovsizeslider:Set(Flags["TriggerbotFOVSize"]); 
+		triggerbotfovtoggle:Set(Circle2.Visible); triggerbotfovtoggle.callback(Circle2.Visible)
+		aimlockfovsizeslider:Set(Flags["AimlockFOVSize"]); 
+
+
+		createNotification("Configs Loaded Check F9")
+	end,
+})
+
