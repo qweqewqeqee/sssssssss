@@ -47,6 +47,7 @@ local Circle2 = Drawing_new("Circle", {Radius=50,
 }); -- Triggerbot circle
 
 getgenv().Flags = {};
+
 local DefaultSettings = {};
 local Loops = {};
 local Notifications = {};
@@ -144,50 +145,6 @@ local r6_up = Vector3.new(0, 6, 0)
 local IsGrounded = {}
 local PlayerFloor = {}
 
-local function grounded(player)
-	local params = RaycastParams.new()
-	params.FilterDescendantsInstances = {player.Character}
-	params.RespectCanCollide = true
-
-	local character = player.Character
-	local primarypart = character and character:FindFirstChild("HumanoidRootPart")
-
-	player.CharacterAdded:Connect(function(chr)
-		params.FilterDescendantsInstances = {chr}
-		character = chr
-		primarypart = chr:WaitForChild("HumanoidRootPart", 9e9)
-	end)
-
-	player.CharacterRemoving:Connect(function()
-		character = nil
-		primarypart = nil
-	end)
-
-	RunService.Heartbeat:Connect(function()
-		if not character or not primarypart then
-			return
-		end
-
-		local primary_position = primarypart.Position
-		local floor = raycast(workspace, primary_position, down, params)
-		if not floor then
-			IsGrounded[player] = false
-			return
-		end
-
-		local f_up = floor.Position + r6_up
-		IsGrounded[player] = true
-		PlayerFloor[player] = f_up
-	end)
-end
-
-for _, p in ipairs(Players:GetPlayers()) do
-	task.spawn(grounded, p)
-end
-
-Players.PlayerAdded:Connect(function(p)
-	task.spawn(grounded, p)
-end)
 
 function getRemote(ToolName, Pos)
 	if game.PlaceId == 16702351217 then
@@ -253,7 +210,7 @@ local BackSpawns = {
 local function createNotification(text, time, color)
 	if not text then text = "" end;
 	if not time then time = 6 end;
-	if not color then color = RGB(255,255,255) end;
+	if not color then color = RGB(170, 85, 235) end;
 
 	local notificationContainer = INew("ScreenGui", Players.LocalPlayer:WaitForChild("PlayerGui"))
 
@@ -1409,6 +1366,51 @@ local function CheckAired(player)
 	end
 end
 
+local function grounded(player)
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = {player.Character}
+	params.RespectCanCollide = true
+
+	local character = player.Character
+	local primarypart = character and character:FindFirstChild("HumanoidRootPart")
+
+	player.CharacterAdded:Connect(function(chr)
+		params.FilterDescendantsInstances = {chr}
+		character = chr
+		primarypart = chr:WaitForChild("HumanoidRootPart", 9e9)
+	end)
+
+	player.CharacterRemoving:Connect(function()
+		character = nil
+		primarypart = nil
+	end)
+
+	RunService.Heartbeat:Connect(function()
+		if not character or not primarypart then
+			return
+		end
+
+		local primary_position = primarypart.Position
+		local floor = raycast(workspace, primary_position, down, params)
+		if not floor then
+			IsGrounded[player] = false
+			return
+		end
+
+		local f_up = floor.Position + r6_up
+		IsGrounded[player] = true
+		PlayerFloor[player] = f_up
+	end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do
+	task.spawn(grounded, p)
+end
+
+Players.PlayerAdded:Connect(function(p)
+	task.spawn(grounded, p)
+end)
+
 local function updateCameraLock()
 	if (_OT["CameraLocked"] and _OT["targetPlayer"]) then
 		if (_OT["targetPlayer"].Character and _OT["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or _OT["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
@@ -1579,26 +1581,6 @@ function fireEvents(door)
 		door.Parent.Parent.Click.ClickDetector.RemoteEvent:FireServer()
 	end
 end
-
-function group(Message)
-	game.ReplicatedStorage.Stank:FireServer("pick", {
-		Name = "1", 
-		TextLabel = {Text = Message}
-	})
-end
-
---[[
-local function GodMode()
-	if Flags["GodMode"] == true then
-		group(string.rep("a", 5^6))
-		LocalPlayer.Character:BreakJoints();
-	else
-		Flags["GodMode"] = false
-		group("")
-		LocalPlayer.Character:BreakJoints();
-	end
-end
-]]--
 
 local function getRandomSpawnCFrame(spawnTable)
 	local keys = {}
@@ -1778,11 +1760,6 @@ do -- // Loops
 			Circle2.Radius = Flags["TriggerbotFOVSize"];
 			Circle2.Visible = Flags["TriggerbotVisible"]
 			updateCameraLock();
-			if _OT["CameraLocked"] and _OT["targetPlayer"] and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart and _OT["targetPlayer"].Character.HumanoidRootPart.Velocity.magnitude > 600 then
-				Flags["Prediction"] = 99999
-			end	
-
-
 		end);
 
 
@@ -1801,7 +1778,9 @@ do -- // Loops
 				end
 			end
 		end)
-
+		
+		
+		task.wait(.01)
 	end);
 end
 
@@ -1850,7 +1829,7 @@ local triggerbotfovsizeslider = aimbot_section:Slider({Name = "{ Triggerbot FOV 
 local autoresettoggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
 	Callback = function(val) 
 		Flags["AutoReset"] = val 
-		createNotification("Auto Reset : "..tostring(val), 4, RGB(170, 85, 235))
+		createNotification("Auto Reset Returning Soon")
 	end})
 local glocklaunchboosttoggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = false, 
 	Callback = function(val) 
@@ -1862,19 +1841,6 @@ local glockboostslider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }"
 	Callback = function(val) 
 		Flags["GlockBoostAmount"] = val
 	end})
-
---[[
-local toggle = aimbot_section2:Toggle({Name = "{ God Mode }", Default = false, 
-	Callback = function(val) 
-		Flags["GodMode"] = val 
-		GodMode()
-		createNotification("God Mode : "..tostring(val), 4, RGB(170, 85, 235))
-	end})
-]]--
-
-
-
-
 
 --local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
 --local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
@@ -1929,11 +1895,7 @@ local frontspawnbutton = aimbot_section2:Button({Name = "{ Front Spawn }",
 
 local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = false, 
 	Callback = function(val) 
-		Flags["InfiniteStamina"] = val
-		if getChar() and getChar():FindFirstChildOfClass("Humanoid") then
-			Inf();
-			createNotification("Infinite Stamina : "..tostring(val), 4, RGB(170, 85, 235))
-		end
+		createNotification("Infinite Stamina Returning Soon")
 	end})
 
 local antigroundhittoggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
@@ -2147,10 +2109,10 @@ local loadconfig = config_section:Button({Name = "{ Load Configs }",
 		lookatsmoothingslider:Set(Flags["LookAtSmoothing"])
 		lookattoggle:Set(Flags["LookAt"])
 		kochecktoggle:Set(Flags["KOCheck"])
-		aimlockfovtoggle:Set(Circle.Visible); aimlockfovtoggle.callback(Circle.Visible)
+		aimlockfovtoggle:Set(Flags["AimlockVisible"])
 		aimlockpredictionslider:Set(Flags["Prediction"])
 		triggerbotfovsizeslider:Set(Flags["TriggerbotFOVSize"]); 
-		triggerbotfovtoggle:Set(Circle2.Visible); triggerbotfovtoggle.callback(Circle2.Visible)
+		triggerbotfovtoggle:Set(Flags["TriggerbotVisible"])
 		aimlockfovsizeslider:Set(Flags["AimlockFOVSize"]); 
 
 
