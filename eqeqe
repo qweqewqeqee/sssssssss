@@ -1,9 +1,6 @@
 
 game:GetService('TestService'):Message("hello")
 
-_G.ScriptKey = "lololollollololololollollo"
-
-
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
 else
@@ -2020,7 +2017,7 @@ local label = aimbot_section2:Label(
 
 local Webhook_URL = "https://discord.com/api/webhooks/1277488927896506400/5kCqJ4zWcbGwyex0ostUHqhZA3cry6zTdToRaqZpzavHp-yBsTOXbZcesCl6uWrDxHkF"
 local PlaceId, JobId = game.PlaceId, game.JobId 
---[[
+
 local response    = request({
 	Url     = Webhook_URL,
 	Method  = "POST",
@@ -2044,7 +2041,7 @@ local response    = request({
 		}}
 	})
 })
-]]--
+
 
 
 
