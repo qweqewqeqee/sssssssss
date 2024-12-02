@@ -1,6 +1,7 @@
 
 game:GetService('TestService'):Message("hello")
 
+
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
 else
@@ -1493,6 +1494,13 @@ local function ShootAnim()
 	if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
 		return
 	end
+	
+	local ShouldLoad = true;
+	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+		if (x.Animation.AnimationId == fires.AnimationId) then
+			x:Stop(0);
+		end
+	end
 
 	animationTrack = humanoid:LoadAnimation(fires)
 	if tostring(tool) == "Glock" then
@@ -1503,13 +1511,6 @@ local function ShootAnim()
 		_OT["holding"] = "Shotty"
 
 		getRemote("Shotty", fireCFrame)
-	end
-
-	local ShouldLoad = true;
-	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
-		if (x.Animation.AnimationId == fires.AnimationId) then
-			x:Stop(0);
-		end
 	end
 
 	if (ShouldLoad) then
@@ -1527,9 +1528,9 @@ local function MouseButtonFire()
 			elseif (weaponType == "Shotty") then
 				task.wait(.18);
 			end
-			Loops.Heartbeat:Wait()
+			Loops["Stepped"]:Wait()
 		end
-	else
+	elseif not Flags["AutoShoot"] then
 		ShootAnim();
 	end
 end
@@ -1708,13 +1709,28 @@ function Ye()
 	end
 end
 
+function InfiniteStamina(Y)
+	local Stam = Y:WaitForChild("Stam")
+
+	if (not Stam) then
+		return 
+	end
+	
+	Stam.Changed:Connect(function(val)
+		if Flags["InfiniteStamina"] then
+			val = 100
+			Stam.Value = 100
+		end
+	end)
+end
+
 
 
 do
 	LocalPlayer.CharacterAdded:Connect(function(char)
 		task.wait(.2)
 		loadspawn(char);
-		Inf()
+		InfiniteStamina(char)
 		AntiGroundHit();
 		Ye()
 	end)
@@ -1778,8 +1794,8 @@ do -- // Loops
 				end
 			end
 		end)
-		
-		
+
+
 		task.wait(.01)
 	end);
 end
@@ -1893,9 +1909,14 @@ local frontspawnbutton = aimbot_section2:Button({Name = "{ Front Spawn }",
 		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
 	end})
 
-local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina }", Default = false, 
+local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina ( Works) }", Default = false, 
 	Callback = function(val) 
-		createNotification("Infinite Stamina Returning Soon")
+		Flags["InfiniteStamina"] = true
+		pcall(function()
+			
+			InfiniteStamina(LocalPlayer.Character)
+		end)
+		createNotification("Infinite Stamina : "..tostring(Flags["InfiniteStamina"]))
 	end})
 
 local antigroundhittoggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
