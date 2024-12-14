@@ -1,6 +1,4 @@
-
 game:GetService('TestService'):Message("hello")
-
 
 if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
 	game:GetService('TestService'):Message("key detected")
@@ -196,13 +194,13 @@ local RandomSpawns = {
 }
 
 local FrontSpawns = {
-	F1 = CFNew(-328, 4, 123),
-	F2 = CFNew(-326, 4, 59)
+	F1 = CFNew(-1320, -38, -1586),
+	F2 = CFNew(-1322, -38, -1522)
 }
 
 local BackSpawns = {
-	B1 = CFNew(-518, 4, 59),
-	B2 = CFNew(-522, 4, 119)
+	B1 = CFNew(-1516, -38, -1522),
+	B2 = CFNew(-1516, -38, -1586)
 }
 
 
@@ -1412,6 +1410,7 @@ Players.PlayerAdded:Connect(function(p)
 	task.spawn(grounded, p)
 end)
 
+
 local function updateCameraLock()
 	if (_OT["CameraLocked"] and _OT["targetPlayer"]) then
 		if (_OT["targetPlayer"].Character and _OT["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or _OT["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
@@ -1494,7 +1493,7 @@ local function ShootAnim()
 	if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
 		return
 	end
-	
+
 	local ShouldLoad = true;
 	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
 		if (x.Animation.AnimationId == fires.AnimationId) then
@@ -1715,7 +1714,7 @@ function InfiniteStamina(Y)
 	if (not Stam) then
 		return 
 	end
-	
+
 	Stam.Changed:Connect(function(val)
 		if Flags["InfiniteStamina"] then
 			val = 100
@@ -1876,6 +1875,7 @@ local airshotscaleslider = aimbot_section:Slider({Name = "{ Air Shot Scale }", D
 	Callback = function(val) 
 		Flags["AirShotScale"] = val 
 	end})
+
 local blatantaimlocktoggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = false, 
 	Callback = function(val) 
 		Flags["Blatant"] = val
@@ -1891,7 +1891,7 @@ local label = aimbot_section2:Label(
 	{Name = "Spawn GamePass", Offset = 16}
 )
 
-local spawngamepasstoggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass }", Default = false, 
+local spawngamepasstoggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass (Fixed) }", Default = false, 
 	Callback = function(val) 
 		Flags["SpawnGamepass"] = val
 		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
@@ -1913,7 +1913,7 @@ local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina
 	Callback = function(val) 
 		Flags["InfiniteStamina"] = true
 		pcall(function()
-			
+
 			InfiniteStamina(LocalPlayer.Character)
 		end)
 		createNotification("Infinite Stamina : "..tostring(Flags["InfiniteStamina"]))
@@ -1935,6 +1935,8 @@ local chatspytoggle = aimbot_section2:Toggle({Name = "Chat Spy", Default = false
 local label = aimbot_section:Label(
 	{Name = "TRIGGERBOT", Offset = 16}
 )
+
+
 
 local autoshoottoggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true, 
 	Callback = function(val) 
@@ -2024,11 +2026,6 @@ local response    = request({
 		}}
 	})
 })
-
-
-
-
-
 
 local function findPlayer(plr)
 	for i, v in ipairs(Players:GetPlayers()) do
