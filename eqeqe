@@ -1,6 +1,6 @@
 --game:GetService('TestService'):Message("hello")
 
-if _G.ScriptKey and _G.ScriptKey == "lololollollololololollollo" then
+if _G.ScriptKey and _G.ScriptKey == "q£4$%1.." then
 	--game:GetService('TestService'):Message("key detected")
 else
 	--game.Players.LocalPlayer:Kick("Missing Key")
