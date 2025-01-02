@@ -1,9 +1,9 @@
 --game:GetService('TestService'):Message("hello")
 
 if _G.ScriptKey and _G.ScriptKey == "skibidigyat1259" then
-	--game:GetService('TestService'):Message("key detected")
+	game:GetService('TestService'):Message("key detected")
 else
-	--game.Players.LocalPlayer:Kick("wrong key stop tryna use my shit")
+	game.Players.LocalPlayer:Kick("wrong key stop tryna use my shit")
 	return;
 end
 
